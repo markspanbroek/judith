@@ -1,0 +1,95 @@
+# Example judith program
+# 2005-01-03
+# Mark Spanbroek
+
+# The Logger object is used to log to standard output:
+
+  Logger.info('logger test')
+  Logger.info('  judith says hello!')
+
+# Arithmetic:
+
+  Logger.info('arithmetic test')
+  Logger.info('  9 + 2 * 3 ^ 2 = ' + (9 + 2 * 3 ^ 2) )
+
+# Creating an object
+
+  object myObject := Object |[
+
+      object a := 1
+      object b := 2
+
+      method foo [
+          Logger.info('object attributes test')
+          Logger.info('  value of a: ' + a)
+          Logger.info('  value of b: ' + b)
+      ]
+
+      method foo(boolean) [
+          Logger.info('if statement test')
+          if boolean ->
+              Logger.info('  boolean is true')
+          || not boolean ->
+              Logger.info('  boolean is false')
+          fi
+      ]
+
+      method bar(count) [
+          Logger.info('repetition test')
+          object i := count
+          do (i > 1) ->
+              Logger.info('  repeat')
+              i := i-1
+          || (i <= 1 and i > 0) ->
+              Logger.info('  last time')
+              i := i-1
+          od
+      ]
+
+  ]|
+
+  myObject.foo
+  myObject.foo(true)
+  myObject.foo(false)
+  myObject.bar(4)
+
+# Exception handling is done using the Exception and ExceptionHandler objects.
+
+  Logger.info('exception handling test')
+
+  ExceptionHandler |[
+
+      method try [
+          Logger.info('  try')
+          Exception.raise
+      ]
+
+      method catch(exception) [
+          Logger.info('  catch')
+      ]
+
+      method finally [
+          Logger.info('  finally')
+      ]
+
+  ]|.start
+
+# Threads and synchronization:
+
+  Logger.info('threads and synchronization test')
+
+  object semaphore := Semaphore.create
+
+  Thread |[
+      method run [
+          semaphore.decrease
+          Logger.info('  i go last')
+      ]
+  ]|.start
+
+  Thread |[
+      method run [
+          Logger.info('  i go first')
+          semaphore.increase
+      ]
+  ]|.start

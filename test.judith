@@ -1,0 +1,144 @@
+Exception := Exception |[
+
+    object cause := ""
+
+    method cause [
+        result := cause
+    ]
+
+    method setCause(c) [
+        cause := c
+    ]
+
+    method create [
+        # skip
+    ]
+
+    method create(cause) [
+        result := self.create
+        result.setCause(cause)
+    ]
+
+]|
+
+object AssertionFailedException := Exception.create("Assertion Failed!")
+
+Object := Object |[
+
+    method assert(assertion) [
+        if not assertion ->
+            AssertionFailedException.throw
+        fi
+    ]
+
+    method colon(obj) [
+        if self = obj ->
+            result := true
+        || not (self = obj) ->
+            if self = parent ->
+                result := false
+            || true ->
+                result := parent : obj
+            fi
+        fi
+    ]
+
+]|
+
+Object.assert(true)
+
+
+
+
+
+# Test parent
+
+object foo := Object |[
+
+  method test1 [
+    # weirdness number 1: you would expect: self.assert(parent = Object)
+    # might be avoided by using 'super' instead of 'parent'
+    self.assert(parent = self)
+  ]
+
+  method test2 [
+    self.test2a
+  ]
+
+  method test3a [
+    self.test3b
+  ]
+
+]|
+foo.test1
+
+object bar := foo |[
+
+  method test2a [
+    # skip
+  ]
+
+  method test3 [
+    parent.test3a
+  ]
+
+  method test3a [
+    Exception.throw
+  ]
+
+  method test3b [
+    #skip
+  ]
+
+  method parent [
+    result := parent
+  ]
+
+]|
+bar.test2
+bar.test3
+
+#object baz := bar |[
+#
+#  method test4 [
+#    #self.parent.test3a
+#    # Weirdness number 2: the following produces an error, while the statement
+#    # above doesn't:
+#     self.parent|[object foo := foo]|.test3a
+#  ]
+#
+#]|
+#baz.test4
+
+
+##
+# Replacement tests
+#
+object replacementTest1 := Object |[
+
+  method identify [
+    result := 1
+  ]
+
+]|
+
+object replacementTest2 := replacementTest1 |[
+
+  method identify [
+    result := parent.identify + 1
+  ]
+
+]|
+
+object replacementTest3 := replacementTest1 |[
+
+  method identify [
+    result := 3
+  ]
+
+]|
+
+replacementTest1.replace(replacementTest3)
+Object.assert(replacementTest1.identify = 3)
+#Object.assert(replacementTest2.identify = 4)
+

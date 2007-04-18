@@ -1,0 +1,169 @@
+/*
+ * conversion of the judith language specification into sablecc
+ * 2007-01-12
+ * Mark Spanbroek
+ */
+Package
+
+  net.spanbroek.judith.parser;
+
+Helpers
+
+  any    = [0x0..0xffff];
+  digit  = ['0'..'9'];
+  letter = ['a'..'z'] | ['A'..'Z'] | '_' | ''';
+
+Tokens
+
+  andsym    = 'and';
+  dosym     = 'do';
+  fisym     = 'fi';
+  ifsym     = 'if';
+  methodsym = 'method';
+  notsym    = 'not';
+  objectsym = 'object';
+  odsym     = 'od';
+  orsym     = 'or';
+
+  atleast      = '>=';
+  atmost       = '<=';
+  arrow        = '->';
+  becomes      = ':=';
+  closebrace   = ')';
+  closebracket = ']';
+  closeobject  = ']|';
+  colon        = ':';
+  comma        = ',';
+  divide       = '/';
+  dot          = '.';
+  equals       = '=';
+  lessthan     = '<';
+  minus        = '-';
+  morethan     = '>';
+  openbrace    = '(';
+  openbracket  = '[';
+  openobject   = '|[';
+  pipes        = '||';
+  plus         = '+';
+  power        = '^';
+  times        = '*';
+
+  boolean         = 'true' | 'false';
+  identifier      = digit* letter (digit|letter)*; 
+  identifierbrace = digit* letter (digit|letter)* '(';
+  number          = digit+ ('.' digit+)?;
+  text            = '"' [any-'"']* '"';
+
+  w = ( ' ' | 0x0a | 0x0d | 0x09 | '#' ([any-[0x0a+0x0d]])* )*;
+
+Ignored Tokens
+
+  w;
+
+Productions
+
+  program = statements;
+
+  statements = {multiple} statements statement
+             | {empty}
+             ;
+
+  statement = {object} object
+            | {assignment} assignment
+            | {if} if
+            | {do} do
+            | {methodcall} methodcall
+            ;
+
+  object = objectsym identifier becomes expression;
+
+  assignment = identifier becomes expression;
+
+  if = ifsym conditionals fisym;
+
+  do = dosym conditionals odsym;
+
+  conditionals = {multiple} conditionals pipes conditional
+               | {single} conditional
+               ;
+
+  conditional = expression arrow statements;
+
+  expression = {and} expression andsym expression1
+             | {or} expression orsym expression1
+             | {simple} expression1
+             ;
+
+  expression1 = {equals} expression1 equals expression2
+              | {atmost} expression1 atmost expression2
+              | {atleast} expression1 atleast expression2
+              | {lessthan} expression1 lessthan expression2
+              | {morethan} expression1 morethan expression2
+              | {colon} expression1 colon expression2
+              | {simple} expression2
+              ;
+
+  expression2 = {plus} expression2 plus expression3
+              | {minus} expression2 minus expression3
+              | {simple} expression3
+              ;
+
+  expression3 = {star} expression3 times expression4
+              | {slash} expression3 divide expression4
+              | {simple} expression4
+              ;
+
+  expression4 = {carrot} expression4 power expression5
+              | {simple} expression5
+              ;
+
+  expression5 = {not} notsym expression5
+              | {minus} minus expression5
+              | {simple} expression6
+              ;
+
+  expression6 = {methodcall} methodcall
+              | {alteration} alteration
+              | {simple} expression7
+              ;
+
+  expression7 = {braces} braces
+              | {identifier} identifier
+              | {text} text
+              | {number} number
+              | {boolean} boolean
+              ;
+
+  methodcall = {parameters} expression6 dot identifierbrace expressions
+             | {simple} expression6 dot identifier
+             ;
+
+  expressions = expressionlist closebrace;
+
+  expressionlist = {multiple} expressions comma expression
+                 | {single} expression
+                 ;
+
+  alteration  = expression6 openobject alterationparts closeobject;
+
+  alterationparts = {multiple} alterationparts alterationpart
+                  | {single} alterationpart
+                  ;
+
+  alterationpart = {object} object
+                 | {method} method
+                 ;
+
+  braces = openbrace expression closebrace;
+
+  method = {parameters} methodsym identifierbrace identifiers
+           openbracket statements closebracket
+         | {simple} methodsym identifier
+           openbracket statements closebracket
+         ;
+
+  identifiers = identifierlist closebrace;
+
+  identifierlist = {multiple} identifierlist comma identifier
+                 | {single} identifier
+                 ;
