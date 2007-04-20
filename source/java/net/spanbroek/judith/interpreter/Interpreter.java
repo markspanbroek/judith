@@ -14,7 +14,7 @@ public class Interpreter {
     }
 
     public Interpreter() {
-        this(new CopyOnWriteScope(World.getInstance()));
+        this(World.getInstance());
     }
 
     public void interpret(Statement... statements) {
