@@ -4,7 +4,7 @@ import net.spanbroek.judith.runtime.Object;
 
 public class Exception extends java.lang.RuntimeException {
 
-    protected Object object;
+    protected Object object = null;
 
     public Exception() {
         super();
@@ -24,6 +24,16 @@ public class Exception extends java.lang.RuntimeException {
 
     public Exception(Object object) {
         this.object = object;
+    }
+
+    public String toString() {
+        if (object != null) {
+            java.lang.Object text = object.call("asText").getNativeObject();
+            if (text != null) {
+                return text.toString();
+            }
+        }
+        return super.toString();
     }
 
 }

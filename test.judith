@@ -19,9 +19,13 @@ Exception := Exception |[
         result.setCause(cause)
     ]
 
+    method asText [
+        result := cause
+    ]
+
 ]|
 
-object AssertionFailedException := Exception.create("Assertion Failed!")
+object AssertionFailedException := Exception.create("Assertion failed.")
 
 Object := Object |[
 
@@ -143,4 +147,3 @@ Object.assert(replacementTest2.identify = 2)
 replacementTest1.replace(replacementTest3)
 Object.assert(replacementTest1.identify = 3)
 Object.assert(replacementTest2.identify = 4)
-
