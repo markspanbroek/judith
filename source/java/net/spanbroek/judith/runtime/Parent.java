@@ -1,28 +1,34 @@
 package net.spanbroek.judith.runtime;
 
 import net.spanbroek.judith.runtime.Object;
+import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.Exception;
 
 public class Parent extends Object {
 
-    public Parent(Object child) {
+    private Object wrapped;
 
-        super(child.state.parent.state);
+    public Parent(Object wrapped) {
+        super((ObjectCore)null);
+        this.wrapped = wrapped;
+    }
 
+    ObjectCore getCurrentCore() {
+        return wrapped.getCurrentCore();
+    }
+
+    void setCore(ObjectCore core) {
+        wrapped.setCore(core);
     }
 
     protected Object call(String name, Object[] parameters,
       Object self, Object caller) {
-
         if (caller.isDescendantOf(self)) {
-            return super.call(name, parameters, caller, caller);
+            return wrapped.call(name, parameters, caller, caller);
         }
         else {
-            throw new Exception(
-              "parent methods may only be called by a descendant"
-            );
+            return wrapped.call(name, parameters, self, caller);
         }
-
     }
 
 }

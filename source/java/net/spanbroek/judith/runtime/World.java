@@ -79,7 +79,7 @@ public class World extends Scope {
         declare("Boolean", new Object(get("Object"), this));
 
         // Set the default value of the Boolean object to false.
-        get("Boolean").setNative(false);
+        get("Boolean").setNativeObject(false);
 
         // Add the Boolean.equals(boolean) method
         class BooleanEqualsMethod extends Method {
@@ -87,8 +87,8 @@ public class World extends Scope {
                 super("boolean");
             }
             protected void execute(Scope scope) {
-                boolean self = (Boolean)scope.get("self").getNative();
-                boolean bool = (Boolean)scope.get("boolean").getNative();
+                boolean self = (Boolean)scope.get("self").getNativeObject();
+                boolean bool = (Boolean)scope.get("boolean").getNativeObject();
                 scope.set("result", wrap(self == bool));
             }
         }
@@ -99,7 +99,7 @@ public class World extends Scope {
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
-                  wrap(!(Boolean)scope.get("self").getNative())
+                  wrap(!(Boolean)scope.get("self").getNativeObject())
                 );
             }
         }
@@ -111,8 +111,8 @@ public class World extends Scope {
                 super("boolean");
             }
             protected void execute(Scope scope) {
-                boolean self = (Boolean)scope.get("self").getNative();
-                boolean bool = (Boolean)scope.get("boolean").getNative();
+                boolean self = (Boolean)scope.get("self").getNativeObject();
+                boolean bool = (Boolean)scope.get("boolean").getNativeObject();
                 scope.set("result", wrap(self && bool));
             }
         }
@@ -124,8 +124,8 @@ public class World extends Scope {
                 super("boolean");
             }
             protected void execute(Scope scope) {
-                boolean self = (Boolean)scope.get("self").getNative();
-                boolean bool = (Boolean)scope.get("boolean").getNative();
+                boolean self = (Boolean)scope.get("self").getNativeObject();
+                boolean bool = (Boolean)scope.get("boolean").getNativeObject();
                 scope.set("result", wrap(self || bool));
             }
         }
@@ -138,7 +138,7 @@ public class World extends Scope {
         declare("Number", new Object(get("Object"), this));
 
         // Set the default value of Number to to 0.
-        get("Number").setNative(0d);
+        get("Number").setNativeObject(0);
 
         // Add the Number.equals(number) method.
         class NumberEqualsMethod extends Method {
@@ -146,8 +146,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self == number));
             }
         }
@@ -159,8 +159,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self <= number));
             }
         }
@@ -172,8 +172,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self >= number));
             }
         }
@@ -185,8 +185,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self < number));
             }
         }
@@ -198,8 +198,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self > number));
             }
         }
@@ -211,8 +211,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self + number));
             }
         }
@@ -224,8 +224,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self - number));
             }
         }
@@ -237,8 +237,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self * number));
             }
         }
@@ -250,8 +250,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(self / number));
             }
         }
@@ -263,8 +263,8 @@ public class World extends Scope {
                 super("number");
             }
             protected void execute(Scope scope) {
-                double self = (Double)scope.get("self").getNative();
-                double number = (Double)scope.get("number").getNative();
+                double self = (Double)scope.get("self").getNativeObject();
+                double number = (Double)scope.get("number").getNativeObject();
                 scope.set("result", wrap(Math.pow(self,number)));
             }
         }
@@ -275,7 +275,7 @@ public class World extends Scope {
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
-                  wrap(-(Double)scope.get("self").getNative())
+                  wrap(-(Double)scope.get("self").getNativeObject())
                 );
             }
         }
@@ -286,7 +286,7 @@ public class World extends Scope {
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
-                  wrap(Math.floor((Double)scope.get("self").getNative()))
+                  wrap(Math.floor((Double)scope.get("self").getNativeObject()))
                 );
             }
         }
@@ -297,7 +297,7 @@ public class World extends Scope {
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
-                  wrap(Math.ceil((Double)scope.get("self").getNative()))
+                  wrap(Math.ceil((Double)scope.get("self").getNativeObject()))
                 );
             }
         }
@@ -310,7 +310,7 @@ public class World extends Scope {
         declare("Text", new Object(get("Object"), this));
 
         // Set the default value of Text to "".
-        get("Text").setNative("");
+        get("Text").setNativeObject("");
 
         // Add the Text.equals(text) method.
         class TextEqualsMethod extends Method {
@@ -318,8 +318,8 @@ public class World extends Scope {
                 super("text");
             }
             protected void execute(Scope scope) {
-                String self = (String)scope.get("self").getNative();
-                String text = (String)scope.get("text").getNative();
+                String self = (String)scope.get("self").getNativeObject();
+                String text = (String)scope.get("text").getNativeObject();
                 scope.set("result", wrap(self.equals(text)));
             }
         }
@@ -331,8 +331,8 @@ public class World extends Scope {
                 super("text");
             }
             protected void execute(Scope scope) {
-                String self = (String)scope.get("self").getNative();
-                String text = (String)scope.get("text").getNative();
+                String self = (String)scope.get("self").getNativeObject();
+                String text = (String)scope.get("text").getNativeObject();
                 scope.set("result", wrap(self + text));
             }
         }
@@ -344,9 +344,9 @@ public class World extends Scope {
                 super("begin","end");
             }
             protected void execute(Scope scope) {
-                String self = (String)scope.get("self").getNative();
-                double begin = (Double)scope.get("begin").getNative();
-                double end = (Double)scope.get("end").getNative();
+                String self = (String)scope.get("self").getNativeObject();
+                double begin = (Double)scope.get("begin").getNativeObject();
+                double end = (Double)scope.get("end").getNativeObject();
                 scope.set("result", wrap(self.substring((int)begin,(int)end)));
             }
         }
@@ -355,7 +355,7 @@ public class World extends Scope {
         // Add the Text.length method.
         class TextLengthMethod extends Method {
             protected void execute(Scope scope) {
-                String self = (String)scope.get("self").getNative();
+                String self = (String)scope.get("self").getNativeObject();
                 scope.set("result", wrap(self.length()));
             }
         }
@@ -369,7 +369,7 @@ public class World extends Scope {
 
         // Add the "message" inner object.
         Object message = get("Text").copy();
-        message.setNative("");
+        message.setNativeObject("");
         get("Exception").declare("message", message);
 
         // Add the Exception.getMessage method.
@@ -416,7 +416,7 @@ public class World extends Scope {
      */
     static public Object wrap(boolean bool) {
         Object result = getInstance().get("Boolean").copy();
-        result.setNative(bool);
+        result.setNativeObject(bool);
         return result;
     }
 
@@ -425,7 +425,7 @@ public class World extends Scope {
      */
     static public Object wrap(double number) {
         Object result = getInstance().get("Number").copy();
-        result.setNative(number);
+        result.setNativeObject(number);
         return result;
     }
 
@@ -434,7 +434,7 @@ public class World extends Scope {
      */
     static public Object wrap(String text) {
         Object result = getInstance().get("Text").copy();
-        result.setNative(text);
+        result.setNativeObject(text);
         return result;
     }
 
@@ -444,15 +444,15 @@ public class World extends Scope {
     static public java.lang.Object unwrap(Object object) {
 
         if (object.isCompatibleWith(getInstance().get("Boolean"))) {
-            return (Boolean)object.getNative();
+            return (Boolean)object.getNativeObject();
         }
 
         if (object.isCompatibleWith(getInstance().get("Number"))) {
-            return (Double)object.getNative();
+            return (Double)object.getNativeObject();
         }
 
         if (object.isCompatibleWith(getInstance().get("Text"))) {
-            return (String)object.getNative();
+            return (String)object.getNativeObject();
         }
 
         return null;

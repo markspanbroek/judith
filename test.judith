@@ -138,7 +138,9 @@ object replacementTest3 := replacementTest1 |[
 
 ]|
 
+Object.assert(replacementTest1.identify = 1)
+Object.assert(replacementTest2.identify = 2)
 replacementTest1.replace(replacementTest3)
 Object.assert(replacementTest1.identify = 3)
-#Object.assert(replacementTest2.identify = 4)
+Object.assert(replacementTest2.identify = 4)
 
