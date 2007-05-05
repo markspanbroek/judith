@@ -1,0 +1,50 @@
+Exception := Exception |[
+
+    object cause := ""
+
+    method cause [
+        result := cause
+    ]
+
+    method setCause(c) [
+        cause := c
+    ]
+
+    method create [
+        result := self.copy
+    ]
+
+    method create(cause) [
+        result := self.create
+        result.setCause(cause)
+    ]
+
+    method asText [
+        result := cause
+    ]
+
+]|
+
+object AssertionFailedException := Exception.create("Assertion failed.")
+
+Object := Object |[
+
+    method assert(assertion) [
+        if not assertion ->
+            AssertionFailedException.throw
+        fi
+    ]
+
+    method colon(obj) [
+        if self = obj ->
+            result := true
+        || not (self = obj) ->
+            if self = parent ->
+                result := false
+            || true ->
+                result := parent : obj
+            fi
+        fi
+    ]
+
+]|

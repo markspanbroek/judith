@@ -1,8 +1,10 @@
 package net.spanbroek.judith.runtime;
 
+import net.spanbroek.judith.interpreter.Interpreter;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.Scope;
 import net.spanbroek.judith.Exception;
+import java.io.*;
 
 /**
  * Represents the global scope of Judith execution, that contains
@@ -14,6 +16,11 @@ public class World extends Scope {
      * The singleton instance of this object.
      */
     private static World INSTANCE = new World();
+
+    /**
+     * Indicates whether world.judith has been executed.
+     */
+    private static boolean initialized = false;
 
     /**
      * Initializes the global context of Judith execution.
@@ -407,7 +414,21 @@ public class World extends Scope {
     /**
      * Returns the singleton instance.
      */
-    public static World getInstance() {
+    public static synchronized World getInstance() {
+        if (!initialized) {
+            initialized = true;
+            try {
+                new Interpreter(INSTANCE).interpret(
+                  new InputStreamReader(
+                    World.class.getResourceAsStream("world.judith"),
+                    "UTF-8"
+                  )
+                );
+            }
+            catch(IOException exception) {
+                throw new Error(exception);
+            }
+        }
         return INSTANCE;
     }
 
