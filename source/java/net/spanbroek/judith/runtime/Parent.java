@@ -4,7 +4,7 @@ import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.Exception;
 
-public class Parent extends Object {
+class Parent extends Object {
 
     private Object wrapped;
 
