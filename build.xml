@@ -39,8 +39,12 @@
 
   <target name='jar' depends='compile'>
     <mkdir dir='build/jar'/>
-    <jar destfile='build/jar/judith.jar'>
+    <jar
+      destfile='build/jar/judith.jar'
+      manifest='source/jar/META-INF/MANIFEST.MF'
+    >
       <fileset dir='build/classes'/>
+      <fileset dir='source/jar'/>
     </jar>
   </target>
 
@@ -60,7 +64,7 @@
     <delete dir='build'/>
   </target>
 
-  <target name='default' depends='clean,compile'/>
-  <target name='all' depends='default,jar,javadoc'/>
+  <target name='default' depends='jar'/>
+  <target name='all' depends='default,javadoc'/>
 
 </project>
