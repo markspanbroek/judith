@@ -37,12 +37,12 @@ class ObjectCore implements Cloneable {
      *   ]|
      * </pre>
      */
-    public Scope scope;
+    private Scope scope;
 
     /**
      * A native Java object that is associated with this judith object.
      */
-    public java.lang.Object aboriginal = null;
+    private java.lang.Object aboriginal = null;
 
     /**
      * Indicates whether or not this object core has been replaced or not.

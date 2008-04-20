@@ -1,0 +1,152 @@
+object Function := Object.copy # is this correct?
+
+object ParserGenerator := Object |[
+
+  method alternation(alternatives) [
+  
+    result := Function |[ method run(context, index, result, continuation) [
+      
+      object iterator := alternatives.iterator
+      do iterator.hasNext ->
+        iterator.next.run(context, index, result, continuation)
+      od
+      
+    ] ]|
+  
+  ]
+  
+  object begin := Function |[ method run(context, index, result, continuation) [
+  
+    if index = 0 ->
+      empty.run(context, index, result, continuation)
+    fi
+    
+  ] ]|
+  
+  method concatenation(elements) [
+    
+    if elements.length > 0 ->
+    
+      object generator := self
+
+      result := Function |[ method run(context, index, result, continuation) [
+          
+        object tail := elements.copy
+        object head := tail.pop
+        
+        object newcontinuation := Function |[ method run(newindex, newresult) [
+        
+          object tailparser := generator.concatenation(tail)
+          tailparser.run(context, newindex, newresult, continuation)
+          
+        ] ]|
+        
+        head.run(context, index, result, newcontinuation)
+          
+      ] ]|
+      
+    || true ->
+    
+      result := empty
+      
+    fi
+  
+  ]
+  
+  object empty := Function |[ method run(context, index, result, continuation) [
+    
+    continuation.run(index, result)
+      
+  ] ]|
+  
+  object end := Function |[ method run(context, index, result, continuation) [
+     
+    if index = context.input.length ->
+      empty.run(context, index, result, continuation)
+    fi
+      
+  ] ]|
+  
+  method literal(literal) [
+  
+    result := Function |[ method run(context, index, result, continuation) [
+    
+      if context.input.excerpt(index, index + literal.length) = literal ->
+        continuation.run(index + literal.length, result.copy.push(literal))
+      fi
+    
+    ] ]|
+  
+  ]
+  
+  object never := Function |[ method run(context, index, result, continuation) [
+  
+    # skip
+  
+  ] ]|
+  
+  method range(lower, upper) [
+  
+    result := Function |[ method run(context, index, result, continuation) [
+    
+      object character := context.input.excerpt(index, index+1)
+      if (lower <= character and character <= upper) ->
+        continuation.run(index+1, result.copy.push(character))
+      fi
+    
+    ] ]|
+    
+  ]
+
+  method repetition(operand) [
+  
+    result := self.alternation(empty, self.repetitionplus(operand))
+  
+  ]
+  
+  method repetitionplus(operand) [
+  
+    object generator := self
+  
+    result := Function |[ method run(context, index, result, continuation) [
+    
+      generator.alternation(
+        operand, 
+        generator.concatenation(
+          operand,
+          generator.repetitionplus(operand)
+        )
+      ).run(context, index, result, continuation)
+    
+    ] ]|
+  
+  ]
+  
+  method rule(name) [
+  
+    result := Function |[ method run(context, index, result, continuation) [
+    
+      context.parser.get(name).run(context, index, result, continuation)
+    
+    ] ]|
+  
+  ]
+  
+  method transform(operand, transform) [
+  
+    result := Function |[ method run(context, index, result, continuation) [
+    
+      object newcontinuation := Function |[ method run(newindex, newresult) [
+      
+        object slice := newresult.slice(result.length, newresult.length)
+        continuation.run(newindex, result.copy.push(transform.run(slice)))
+      
+      ] ]|
+      
+      operand.run(context, index, result, newcontinuation)
+    
+    ] ]|
+  
+  ]
+  
+]|

@@ -16,7 +16,7 @@ public class Object {
      */
     private ObjectCore core;
 
-     /**
+    /**
      * Constructs a new judith object using the specified parent object and 
      * the scope in which the object was created.
      */

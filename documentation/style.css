@@ -1,0 +1,17 @@
+body {
+  max-width: 40em;
+}
+
+.informalexample:before {
+  content: "Example: ";
+}
+
+.markup:before {
+  content: "\"";
+}
+.markup:after {
+  content: "\"";
+}
+.markup {
+  font-family: fixed;
+}

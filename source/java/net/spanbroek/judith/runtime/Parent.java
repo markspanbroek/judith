@@ -4,6 +4,9 @@ import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.Exception;
 
+/**
+ * Wraps an object 
+ */
 class Parent extends Object {
 
     private Object wrapped;
@@ -21,6 +24,12 @@ class Parent extends Object {
         wrapped.setCore(core);
     }
 
+    /**
+     * Calls the specified method of the wrapped object using the caller
+     * of the method as the 'self' value, when the caller is a descendant of the
+     * wrapped object. If the caller is not a descendant of the wrapped object,
+     * the call is forwarded to the 
+     */
     protected Object call(String name, Object[] parameters,
       Object self, Object caller) {
         if (caller.isDescendantOf(self)) {

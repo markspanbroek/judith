@@ -140,7 +140,7 @@ Productions
 
   expressions = expressionlist closebrace;
 
-  expressionlist = {multiple} expressions comma expression
+  expressionlist = {multiple} expressionlist comma expression
                  | {single} expression
                  ;
 
