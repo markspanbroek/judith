@@ -17,4 +17,46 @@ Defining Methods
       assert(result:Boolean)
       
     ]
+
+Ensuring that prototypes aren't poluted:
+
+  object net := Object |[
+
+    method spanbroek [
+    
+      result := Object |[
+      
+        method judith [
         
+          result := Object |[
+          
+            object List := Object |[
+            
+              # list declaration here
+            
+            ]|
+          
+            method List [
+            
+              result := List.copy
+            
+            ]
+          
+          ]|
+        
+        ]
+      
+      ]|
+    
+    ]
+
+  ]|
+
+  object List := net.spanbroek.judith.List
+
+  # when we forget to copy list here
+  object list := List
+  # and polute it here
+  list.push("foo")
+  # the global list isn't affected
+
