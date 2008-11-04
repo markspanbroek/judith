@@ -77,7 +77,9 @@ Productions
 
   object = objectsym identifier becomes expression;
 
-  assignment = identifier becomes expression;
+  assignment = {simple} identifier becomes expression
+             | {method} expression6 dot identifier becomes expression
+             ;
 
   if = ifsym conditionals fisym;
 
@@ -147,7 +149,7 @@ Productions
   alteration  = expression6 openobject alterationparts closeobject;
 
   alterationparts = {multiple} alterationparts alterationpart
-                  | {single} alterationpart
+                  | {empty}
                   ;
 
   alterationpart = {object} object

@@ -1,5 +1,5 @@
 # judith language specification
-# 2007-01-12
+# 2008-05-05
 # Mark Spanbroek
 
 program      = w statements w
@@ -7,7 +7,7 @@ statements   = (statement (w statement)*)?
 statement    = object | assignment | if | do | methodcall
 
 object       = "object" w identifier w ":=" w expression
-assignment   = identifier w ":=" w expression
+assignment   = (expression6 ".")? identifier w ":=" w expression
 if           = "if" w conditionals w "fi"
 do           = "do" w conditionals w "od"
 conditionals = conditional (w "||" w conditional)*
@@ -24,7 +24,7 @@ expression7  = braces | identifier | text | number | boolean
 
 methodcall   = expression6 "." identifier (expressions)?
 expressions  = "(" w expression (w "," w expression)* w ")"
-alteration   = expression 6 w "|[" (w (object|method))+ w "]|"
+alteration   = expression 6 w "|[" (w (object|method))* w "]|"
 braces       = "(" w expression w ")"
 method       = "method" w identifier (identifiers)? w "[" w statements w "]"
 identifiers  = "(" w identifier (w "," w identifier)* w ")"
