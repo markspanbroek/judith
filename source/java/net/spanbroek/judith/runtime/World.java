@@ -358,6 +358,14 @@ public class World extends Scope {
             }
         }
         get("Text").declare("excerpt", new TextExcerptMethod());
+        
+        // Add the Text.quote method.
+        class TextQuoteMethod extends Method {
+            protected void execute(Scope scope) {
+                scope.set("result", wrap("\""));
+            }
+        }
+        get("Text").declare("quote", new TextQuoteMethod());
 
         // Add the Text.length method.
         class TextLengthMethod extends Method {
@@ -379,13 +387,13 @@ public class World extends Scope {
         message.setNativeObject("");
         get("Exception").declare("message", message);
 
-        // Add the Exception.getMessage method.
-        class ExceptionGetMessageMethod extends Method {
+        // Add the Exception.message method.
+        class ExceptionMessageMethod extends Method {
             protected void execute(Scope scope) {
                 scope.set("result",scope.get("message"));
             }
         }
-        get("Exception").declare("getMessage",new ExceptionGetMessageMethod());
+        get("Exception").declare("message",new ExceptionMessageMethod());
 
         // Add the Exception.setMessage(message') method.
         class ExceptionSetMessageMethod extends Method {
