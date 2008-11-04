@@ -32,26 +32,13 @@ class Visitor extends DepthFirstAdapter {
         stack.push(object);
     }
 
-    public void outASimpleAssignment(ASimpleAssignment node) {
+    public void outAAssignment(AAssignment node) {
         Expression expression = (Expression)stack.pop();
         String identifier = (String)stack.pop();
         Assignment assignment = new Assignment(identifier, expression);
         stack.push(assignment);
     }
     
-    public void outAMethodAssignment(AMethodAssignment node) {
-        Expression expression = (Expression)stack.pop();
-        String identifier = (String)stack.pop();
-        Expression operand = (Expression)stack.pop();
-        stack.push(
-          new MethodCall(
-            operand, 
-            identifier + "Becomes", 
-            new Expression[]{expression}
-          )
-        );
-    }
-
     public void outAIf(AIf node) {
         List conditionals = (List)stack.pop();
         If i = new If(

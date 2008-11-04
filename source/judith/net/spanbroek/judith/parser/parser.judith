@@ -224,29 +224,29 @@ ParserGenerator := ParserGenerator |[
 
     self.assert(not initialized)
 
-    self.begin := self.begin |[
+    self.beginBecomes(self.begin |[
       method asText [
         result := "^"
       ]
-    ]|
+    ]|)
     
-    self.end := self.end |[
+    self.endBecomes(self.end |[
       method asText [
         result := "$"
       ]
-    ]|
+    ]|)
     
-    self.empty := self.empty |[
+    self.emptyBecomes(self.empty |[
       method asText [
         result := "()"
       ]
-    ]|
+    ]|)
     
-    self.never := self.never |[
+    self.neverBecomes(self.never |[
       method asText [
         result := "0"
       ]
-    ]|
+    ]|)
   
     initialized := true
     
@@ -457,8 +457,8 @@ ParserGenerator := ParserGenerator |[
           object newcontinuation := Function |[ method run(index, value) [
           
               object result := Result.copy
-              result.index := index
-              result.value := value
+              result.indexBecomes(index)
+              result.valueBecomes(value)
               entry.results.push(result)
               
               object iterator := entry.continuations.iterator

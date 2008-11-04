@@ -77,9 +77,7 @@ Productions
 
   object = objectsym identifier becomes expression;
 
-  assignment = {simple} identifier becomes expression
-             | {method} expression6 dot identifier becomes expression
-             ;
+  assignment = identifier becomes expression;
 
   if = ifsym conditionals fisym;
 
