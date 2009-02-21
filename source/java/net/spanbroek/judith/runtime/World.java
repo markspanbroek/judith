@@ -145,7 +145,7 @@ public class World extends Scope {
         declare("Number", new Object(get("Object"), this));
 
         // Set the default value of Number to to 0.
-        get("Number").setNativeObject(0);
+        get("Number").setNativeObject(0d);
 
         // Add the Number.equals(number) method.
         class NumberEqualsMethod extends Method {

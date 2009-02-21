@@ -96,3 +96,52 @@ Object.assert(replacementTest2.identify = 2)
 replacementTest1.replace(replacementTest3)
 Object.assert(replacementTest1.identify = 3)
 Object.assert(replacementTest2.identify = 4)
+
+
+object Point := Object
+|[
+  object x := 0
+  object y := 0
+  
+  method create(x',y') 
+  [
+    result := self.copy.initialize(x',y')
+  ]
+  
+  method initialize(x',y') 
+  [
+    self.assert(caller : self)
+
+    self.assert(x : Number)
+    self.assert(y : Number)
+
+    x := x'
+    y := y'
+  ]
+  
+  method x 
+  [
+    result := x
+  ]
+  
+  method y 
+  [
+    result := y
+  ]  
+]|
+
+Point := Point
+|[
+  method translate(dx,dy)
+  [
+    self.assert(dx : Number)
+    self.assert(dy : Number)
+    
+    result := self.create(self.x + dx, self.y + dy)
+  ]
+]|
+
+Point.create(1,2).translate(-1,-2).x
+
+## This should fail:
+#Point.initialize(1,2)

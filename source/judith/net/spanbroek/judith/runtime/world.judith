@@ -26,20 +26,19 @@ Object.replace(Object |[
     fi
   ]
 
-  method colon(obj) [
-    if self = obj ->
-      result := true
-    || true ->
-      if self = parent ->
-        result := false
-      || true ->
-        result := parent : obj
-      fi
-    fi
-  ]
-
 ]|)
 
 object null := Object.copy
 
 object Function := Object |[ ]|
+
+Number := Number
+|[
+  method plus(x) [
+    self.assert(x : Number)
+    result := parent.plus(x)
+  ]
+  
+  # TODO: check parameters of rest of Number's methods
+]|
+
