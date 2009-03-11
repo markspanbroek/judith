@@ -58,3 +58,21 @@ Number := Number
   # TODO: check parameters of rest of Number's methods
 ]|
 
+List := List |[
+
+  method get(index) [
+    self.assert(index : Number)
+    result := parent.get(index)
+  ]
+  
+  method set(index, element) [
+    self.assert(index : Number)
+    parent.set(index, element)
+  ]
+  
+  method pop [
+    self.assert(self.size > 0)
+    result := parent.pop
+  ]
+  
+]|

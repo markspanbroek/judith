@@ -5,6 +5,7 @@ import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.Scope;
 import net.spanbroek.judith.Exception;
 import java.io.*;
+import java.util.*;
 
 /**
  * Represents the global scope of Judith execution, that contains
@@ -440,6 +441,88 @@ public class World extends Scope {
             }
         }
         get("ExceptionHandler").declare("run", new ExceptionHandlerRunMethod());
+        
+        /*
+         * The List object.
+         */
+        declare("List", new Object(get("Object"), this));
+        
+        get("List").setNativeObject(new ArrayList<Object>());
+        
+        // Add the List.copy method
+        class ListCopyMethod extends Method {
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                Object parent = scope.get("parent");
+                Object result = parent.call("copy", new Object[]{}, self);
+                List<Object> original = (List<Object>)self.getNativeObject();
+                List<Object> copy = new ArrayList<Object>(original);
+                result.setNativeObject(copy);
+                scope.set("result", result);
+            }
+        }
+        get("List").declare("copy", new ListCopyMethod());
+        
+        // Add the List.length method
+        class ListLengthMethod extends Method {
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                List<Object> list = (List<Object>)self.getNativeObject();
+                scope.set("result", wrap(list.size()));
+            }
+        }
+        get("List").declare("length", new ListLengthMethod());
+        
+        // Add the List.get(index) method
+        class ListGetMethod extends Method {
+            public ListGetMethod() {
+                super("index");
+            }
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                List<Object> list = (List<Object>)self.getNativeObject();
+                double index = (Double)unwrap(scope.get("index"));
+                scope.set("result", list.get((int)index));
+            }
+        }   
+        get("List").declare("get", new ListGetMethod());
+        
+        // Add the List.set(index, element) method
+        class ListSetMethod extends Method {
+            public ListSetMethod() {
+                super("index", "element");
+            }
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                List<Object> list = (List<Object>)self.getNativeObject();
+                double index = (Double)unwrap(scope.get("index"));
+                list.set((int)index, scope.get("element"));
+            }
+        }
+        get("List").declare("set", new ListSetMethod());
+        
+        // Add the List.push(element) method
+        class ListPushMethod extends Method {
+            public ListPushMethod() {
+                super("element");
+            }
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                List<Object> list = (List<Object>)self.getNativeObject();
+                list.add(scope.get("element"));
+            }
+        }
+        get("List").declare("push", new ListPushMethod());
+        
+        // Add the List.pop() method
+        class ListPopMethod extends Method {
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                List<Object> list = (List<Object>)self.getNativeObject();
+                scope.set("result", list.remove(list.size() - 1));
+            }
+        }
+        get("List").declare("pop", new ListPopMethod());
 
         // Add a 'self' object
         declare("self", get("Object").copy());
