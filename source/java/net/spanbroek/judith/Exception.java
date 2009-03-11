@@ -26,6 +26,10 @@ public class Exception extends java.lang.RuntimeException {
         this.object = object;
     }
 
+    public Object getObject() {
+        return object;
+    }
+
     public String toString() {
         if (object != null) {
             java.lang.Object text = object.call("asText").getNativeObject();

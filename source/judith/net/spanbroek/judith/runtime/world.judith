@@ -6,6 +6,22 @@ Exception := Exception |[
 
 ]|
 
+ExceptionHandler := ExceptionHandler |[
+
+  method try [
+    # skip
+  ]
+  
+  method catch [
+    # skip
+  ]
+  
+  method finally [
+    # skip
+  ]
+
+]|
+
 object AssertionFailedException := Exception |[
 
   method asText[

@@ -143,5 +143,17 @@ Point := Point
 
 Point.create(1,2).translate(-1,-2).x
 
-## This should fail:
-#Point.initialize(1,2)
+ExceptionHandler |[
+
+  method try [
+    Point.initialize(1,2)
+    self.assert(false)
+  ]
+  
+  method catch(exception) [
+    # skip
+  ]
+  
+]|.run
+
+

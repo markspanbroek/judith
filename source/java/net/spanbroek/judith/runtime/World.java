@@ -414,6 +414,33 @@ public class World extends Scope {
         }
         get("Exception").declare("throw",new ExceptionThrowMethod());
 
+        /*
+         * The ExceptionHandler object.
+         */
+        declare("ExceptionHandler", new Object(get("Object"), this));
+
+        // Add the ExceptionHandler.run method
+        class ExceptionHandlerRunMethod extends Method {
+            protected void execute(Scope scope) {
+                try {
+                    scope.get("self").call("try");
+                }
+                catch(Exception exception) {
+                    Object object = exception.getObject();
+                    if (object != null) {
+                        scope.get("self").call("catch", object);
+                    }
+                    else {
+                        throw exception;
+                    }
+                }
+                finally {
+                    scope.get("self").call("finally");
+                }
+            }
+        }
+        get("ExceptionHandler").declare("run", new ExceptionHandlerRunMethod());
+
         // Add a 'self' object
         declare("self", get("Object").copy());
 
