@@ -5,6 +5,13 @@ public class MethodCall implements Expression, Statement{
     private Expression operand;
     private String identifier;
     private Expression[] parameters;
+    private Location location = Location.undefined;
+
+    public MethodCall(Expression operand, String identifier
+      , Expression[] parameters, Location location) {
+        this(operand, identifier, parameters);
+        this.location = location;
+    }
 
     public MethodCall(Expression operand, String identifier
       , Expression[] parameters) {
@@ -23,6 +30,10 @@ public class MethodCall implements Expression, Statement{
 
     public Expression[] getParameters() {
         return parameters;
+    }
+    
+    public Location getLocation() {
+        return location;
     }
 
     public void accept(Visitor visitor) {

@@ -28,7 +28,7 @@ public class JudithScriptEngine extends AbstractScriptEngine {
     public Object eval(Reader reader, ScriptContext context)
       throws ScriptException {
         try {
-            new Interpreter().interpret(reader);
+            new Interpreter().interpret(reader, null);
         }
         catch(IOException exception) {
             throw new ScriptException(exception);

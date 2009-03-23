@@ -2,6 +2,7 @@ package net.spanbroek.judith.interpreter;
 
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.*;
+import net.spanbroek.judith.Exception;
 import java.util.*;
 
 public class Visitor extends net.spanbroek.judith.tree.Visitor {
@@ -134,7 +135,16 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         }
 
         // call the method
-        stack.push(operand.call(node.getIdentifier(), parameters, self));
+        try {
+            stack.push(operand.call(node.getIdentifier(), parameters, self));
+        }
+        catch(Exception exception) {
+            // update stack trace when exception is caught
+            exception.addToStackTrace(
+              node.getLocation().toString() + ": " + node.getIdentifier()
+            );
+            throw exception;
+        }
 
     }
 

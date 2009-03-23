@@ -540,7 +540,8 @@ public class World extends Scope {
                   new InputStreamReader(
                     World.class.getResourceAsStream("world.judith"),
                     "UTF-8"
-                  )
+                  ),
+                  "world.judith"
                 );
             }
             catch(IOException exception) {

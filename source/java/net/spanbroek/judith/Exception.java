@@ -1,10 +1,13 @@
 package net.spanbroek.judith;
 
 import net.spanbroek.judith.runtime.Object;
+import java.util.*;
 
 public class Exception extends java.lang.RuntimeException {
 
     protected Object object = null;
+    
+    protected List<String> stackTrace = new LinkedList<String>();
 
     public Exception() {
         super();
@@ -26,18 +29,33 @@ public class Exception extends java.lang.RuntimeException {
         this.object = object;
     }
 
+    public void addToStackTrace(String traceElement) {
+        stackTrace.add(0, traceElement);
+    }
+
     public Object getObject() {
         return object;
     }
 
     public String toString() {
+        String result = getObjectAsText();
+        if (result == null) {
+            result = super.toString();
+        }
+        for (String element : stackTrace) {
+            result = result + "\n    " + element;
+        }
+        return result;
+    }
+    
+    private String getObjectAsText() {
         if (object != null) {
             java.lang.Object text = object.call("asText").getNativeObject();
             if (text != null) {
                 return text.toString();
             }
         }
-        return super.toString();
+        return null;    
     }
 
 }

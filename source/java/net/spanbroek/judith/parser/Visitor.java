@@ -10,7 +10,13 @@ import java.util.*;
 
 class Visitor extends DepthFirstAdapter {
 
+    private String filename;
+
     private Stack stack = new Stack();
+
+    public Visitor(String filename) {
+        this.filename = filename;
+    }
 
     public Program getResult() {
         return (Program)stack.peek();
@@ -75,14 +81,35 @@ class Visitor extends DepthFirstAdapter {
         List expressions = (List)stack.pop();
         String identifier = (String)stack.pop();
         Expression operand = (Expression)stack.pop();
-        stack.push(new MethodCall(operand, identifier,
-          (Expression[])expressions.toArray(new Expression[]{})));
+        stack.push(
+          new MethodCall(
+            operand, 
+            identifier,
+            (Expression[])expressions.toArray(new Expression[]{}),
+            new Location(
+              filename,
+              node.getIdentifierbrace().getLine(),
+              node.getIdentifierbrace().getPos()
+            )
+          )
+        );
     }
 
     public void outASimpleMethodcall(ASimpleMethodcall node) {
         String identifier = (String)stack.pop();
         Expression operand = (Expression)stack.pop();
-        stack.push(new MethodCall(operand, identifier, new Expression[]{}));
+        stack.push(
+          new MethodCall(
+            operand, 
+            identifier, 
+            new Expression[]{},
+            new Location(
+              filename,
+              node.getIdentifier().getLine(),
+              node.getIdentifier().getPos()
+            )
+          )
+        );
     }
 
     public void outAAlteration(AAlteration node) {
@@ -157,78 +184,84 @@ class Visitor extends DepthFirstAdapter {
     // operators
 
     public void outAAndExpression(AAndExpression node) {
-        binaryOperation("and");
+        binaryOperation("and", node.getAndsym());
     }
 
     public void outAOrExpression(AOrExpression node) {
-        binaryOperation("or");
+        binaryOperation("or", node.getOrsym());
     }
 
     public void outAEqualsExpression1(AEqualsExpression1 node) {
-        binaryOperation("equals");
+        binaryOperation("equals", node.getEquals());
     }
 
     public void outAAtmostExpression1(AAtmostExpression1 node) {
-        binaryOperation("atmost");
+        binaryOperation("atmost", node.getAtmost());
     }
 
     public void outAAtleastExpression1(AAtleastExpression1 node) {
-        binaryOperation("atleast");
+        binaryOperation("atleast", node.getAtleast());
     }
 
     public void outALessthanExpression1(ALessthanExpression1 node) {
-        binaryOperation("lessthan");
+        binaryOperation("lessthan", node.getLessthan());
     }
 
     public void outAMorethanExpression1(AMorethanExpression1 node) {
-        binaryOperation("morethan");
+        binaryOperation("morethan", node.getMorethan());
     }
 
     public void outAColonExpression1(AColonExpression1 node) {
-        binaryOperation("colon");
+        binaryOperation("colon", node.getColon());
     }
 
     public void outAPlusExpression2(APlusExpression2 node) {
-        binaryOperation("plus");
+        binaryOperation("plus", node.getPlus());
     }
 
     public void outAMinusExpression2(AMinusExpression2 node) {
-        binaryOperation("minus");
+        binaryOperation("minus", node.getMinus());
     }
 
     public void outAStarExpression3(AStarExpression3 node) {
-        binaryOperation("star");
+        binaryOperation("star", node.getTimes());
     }
 
     public void outASlashExpression3(ASlashExpression3 node) {
-        binaryOperation("slash");
+        binaryOperation("slash", node.getDivide());
     }
 
     public void outACarrotExpression4(ACarrotExpression4 node) {
-        binaryOperation("carrot");
+        binaryOperation("carrot", node.getPower());
     }
 
     public void outAMinusExpression5(AMinusExpression5 node) {
-        unaryOperation("minus");
+        unaryOperation("minus", node.getMinus());
     }
 
     public void outANotExpression5(ANotExpression5 node) {
-        unaryOperation("not");
+        unaryOperation("not", node.getNotsym());
     }
 
-    private void binaryOperation(String methodname) {
+    private void binaryOperation(String methodname, Token operator) {
         Expression right = (Expression)stack.pop();
         Expression left = (Expression)stack.pop();
         MethodCall methodCall = new MethodCall(
-          left, methodname, new Expression[]{right}
+          left, 
+          methodname, 
+          new Expression[]{right}, 
+          new Location(filename, operator.getLine(), operator.getPos())
         );
         stack.push(methodCall);
     }
 
-    private void unaryOperation(String methodname) {
+    private void unaryOperation(String methodname, Token operator) {
         Expression operand = (Expression)stack.pop();
         MethodCall methodCall = new MethodCall(
-          operand, methodname, new Expression[]{}
+          operand, 
+          methodname, 
+          new Expression[]{}, 
+          new Location(filename, operator.getLine(), operator.getPos())
         );
         stack.push(methodCall);
     }

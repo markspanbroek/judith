@@ -9,7 +9,8 @@ import java.io.*;
 
 public class Parser {
 
-    static public Program parse(Reader reader) throws Exception {
+    static public Program parse(Reader reader, String filename) 
+      throws Exception {
 
         net.spanbroek.judith.parser.parser.Parser parser;
         parser = new net.spanbroek.judith.parser.parser.Parser(
@@ -19,7 +20,7 @@ public class Parser {
         );
 
         try {
-            Visitor visitor = new Visitor();
+            Visitor visitor = new Visitor(filename);
             parser.parse().apply(visitor);
             return visitor.getResult();
         }
