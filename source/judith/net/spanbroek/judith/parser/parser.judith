@@ -7,9 +7,10 @@ object ParserGenerator := Object |[
   
     result := Function |[ method run(context, index, result, continuation) [
       
-      object iterator := alternatives.iterator
-      do iterator.hasNext ->
-        iterator.next.run(context, index, result, continuation)
+      object i := 0
+      do i < alternatives.length ->
+        alternatives.get(i).run(context, index, result, continuation)
+        i := i + 1
       od
       
     ] ]|
@@ -113,7 +114,7 @@ object ParserGenerator := Object |[
   method literal(literal) [
   
     result := Function |[ method run(context, index, result, continuation) [
-    
+
       if context.input.excerpt(index, index + literal.length) = literal ->
         continuation.run(index + literal.length, result.copy.push(literal))
       fi
@@ -251,13 +252,15 @@ ParserGenerator := ParserGenerator |[
   method alternation(alternatives) [
   
     object text := "("
-    object iterator := alternatives.iterator
-    if iterator.hasNext ->
-      text := text + iterator.next.asText
+    object i := 0
+    if i < alternatives.length ->
+      text := text + alternatives.get(i).asText
+      i := i + 1
     fi
-    do iterator.hasNext ->
+    do i < alternatives.length ->
       text := text + "|"
-      text := text + iterator.next.asText
+      text := text + alternatives.get(i).asText
+      i := i + 1
     od
     text := text + ")"
 
@@ -493,21 +496,115 @@ ParserGenerator := ParserGenerator |[
 ]|
 
 
-# Test
+# Test literal
+Function |[ method run [
 
-object context := Object |[ 
-  method input [
-    result := "foo"
-  ]
-]|
+  object continuationCalled := false
 
-object continuation := Function |[
-  method run(index, result) [
-    self.assert(index = 3)
-    self.assert(result : List)
-    self.assert(result.length = 1)
-    self.assert("foo" = result.get(0))
-  ]
-]|
+  object context := Object |[ 
+    method input [
+      result := "foo"
+    ]
+  ]|
 
-ParserGenerator.literal("foo").run(context, 0, List.copy, continuation)
+  object continuation := Function |[
+    method run(index, result) [
+      self.assert(index = 3)
+      self.assert(result : List)
+      self.assert(result.length = 1)
+      self.assert("foo" = result.get(0))
+      continuationCalled := true
+    ]
+  ]|
+
+  ParserGenerator.literal("bar").run(context, 0, List.copy, continuation)
+  self.assert(not continuationCalled)
+  ParserGenerator.literal("foo").run(context, 0, List.copy, continuation)
+  self.assert(continuationCalled)
+  
+]]|.run
+
+# Test alternation
+Function |[ method run [
+
+  object continuation1Called := false
+  object continuation2Called := false
+
+  object context1 := Object |[
+    method input [
+      result := "foo"
+    ]
+  ]|
+
+  object context2 := Object |[
+    method input [
+      result := "bar"
+    ]
+  ]|
+  
+  object continuation1 := Function |[
+    method run(index, result) [
+      self.assert(index = 3)
+      self.assert(result : List)
+      self.assert(result.length = 1)
+      self.assert("foo" = result.get(0))
+      continuation1Called := true
+    ]
+  ]|
+  
+  object continuation2 := Function |[
+    method run(index, result) [
+      self.assert(index = 3)
+      self.assert(result : List)
+      self.assert(result.length = 1)
+      self.assert("bar" = result.get(0))
+      continuation2Called := true
+    ]
+  ]|
+
+  object alternatives := List.copy
+  alternatives.push(ParserGenerator.literal("foo"))
+  alternatives.push(ParserGenerator.literal("bar"))
+
+  object parser := ParserGenerator.alternation(alternatives)
+  
+  parser.run(context1, 0, List.copy, continuation1)
+  self.assert(continuation1Called)
+  
+  parser.run(context2, 0, List.copy, continuation2)
+  self.assert(continuation2Called)
+
+]]|.run
+
+
+
+## acceptance test
+#Function |[ method run [
+
+#    object parser := ParserGenerator
+#    # program = w statements w
+#    .newrule("program")
+#      .begin
+#        .rule("w")
+#        .rule("statements")
+#        .rule("w")
+#      .end
+#      .concatenate
+#    # statements = (statement (w statement)*)?
+#    .newrule("statements")
+#      .begin
+#        .rule("statement")
+#        .begin
+#          .rule("w")
+#          .rule("statement")
+#        .end
+#        .concatenate
+#        .repeat
+#      .end
+#      .concatenate
+
+#]]|.run
+
+
+
+
