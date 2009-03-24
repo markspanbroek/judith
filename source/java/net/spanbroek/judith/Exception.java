@@ -30,7 +30,7 @@ public class Exception extends java.lang.RuntimeException {
     }
 
     public void addToStackTrace(String traceElement) {
-        stackTrace.add(0, traceElement);
+        stackTrace.add(traceElement);
     }
 
     public Object getObject() {
