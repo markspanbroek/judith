@@ -47,6 +47,14 @@
       <fileset dir='source/jar'/>
     </jar>
   </target>
+  
+  <target name='test' depends='jar'>
+    <property name='testdir' location='test'/>
+    <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
+      <arg value='${testdir}/AssertTests.judith'/>
+      <arg value='${testdir}/MiscellaneousTests.judith'/>
+    </java>
+  </target>
 
   <target name='javadoc' depends='source'>
     <mkdir dir='build/javadoc'/>
@@ -65,6 +73,6 @@
   </target>
 
   <target name='default' depends='jar'/>
-  <target name='all' depends='default,javadoc'/>
+  <target name='all' depends='default,test,javadoc'/>
 
 </project>

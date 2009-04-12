@@ -1,0 +1,35 @@
+object AssertTests := Object |[
+
+  method DoesNotThrowOnTrue 
+  [
+    self.assert(true)
+  ] 
+  
+  method ThrowsOnFalse 
+  [
+    object exceptionWasThrown := false
+    
+    ExceptionHandler |[
+    
+      method try 
+      [
+        self.assert(false)
+      ]
+      
+      method catch(exception) 
+      [
+        exceptionWasThrown := true
+      ]
+      
+    ]|.run
+    
+    if not exceptionWasThrown ->
+      AssertionFailedException.throw
+    fi
+  ]
+  
+]|
+
+AssertTests
+  .DoesNotThrowOnTrue
+  .ThrowsOnFalse

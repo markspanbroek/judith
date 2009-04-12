@@ -40,16 +40,28 @@ public class Interpreter {
         }
     }
 
-    public static void main(String[] arguments) throws IOException {
-        try {        
-            new Interpreter().interpret(
-              new InputStreamReader(System.in), 
-              "stdin"
-            );
+    public static void main(String[] arguments) throws IOException, Exception {
+    
+        Interpreter interpreter = new Interpreter();
+        
+        try {
+            if (arguments.length > 0) {
+                for(String file : arguments) {
+                    interpreter.interpret(new FileReader(file), file);
+                }
+            }
+            else {
+                interpreter.interpret(
+                  new InputStreamReader(System.in), 
+                  "stdin"
+                );
+            }        
         }
         catch(Exception exception) {
             System.err.println("Exception: " + exception);
+            System.exit(1);
         }
+        
     }
 
 }
