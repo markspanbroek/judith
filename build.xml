@@ -49,10 +49,9 @@
   </target>
   
   <target name='test' depends='jar'>
-    <property name='testdir' location='test'/>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
-      <arg value='${testdir}/AssertTests.judith'/>
-      <arg value='${testdir}/MiscellaneousTests.judith'/>
+      <arg file='test/AssertTests.judith'/>
+      <arg file='test/MiscellaneousTests.judith'/>
     </java>
   </target>
 
