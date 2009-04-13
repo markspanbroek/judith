@@ -563,14 +563,19 @@ public class World extends Scope {
                     protected void execute(Scope scope) {
                         // TODO: something goes wrong here, when using 'parent' and 'replace'
                         //scope.get("parent").call("write", new Object[]{scope.get("text")}, scope.get("self"));
-                        System.console().writer().write((String)unwrap(scope.get("text")));
-                        System.console().flush();
+                        System.out.print((String)unwrap(scope.get("text")));
+                        System.out.flush();
                     }
                 }
                 
                 class ReadLineMethod extends Method {
                     protected void execute(Scope scope) {
-                        scope.set("result", wrap(System.console().readLine()));
+                        try {
+                            scope.set("result", wrap(new BufferedReader(new InputStreamReader(System.in)).readLine()));
+                        }
+                        catch(IOException exception) {
+                            throw new Exception(exception.getMessage());
+                        }
                     }
                 }
 
