@@ -47,11 +47,32 @@
       <fileset dir='source/jar'/>
     </jar>
   </target>
-  
-  <target name='test' depends='jar'>
+
+  <target name='testStandardOutput' depends='jar'>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
-      <arg file='test/AssertTests.judith'/>
-      <arg file='test/MiscellaneousTests.judith'/>
+      <arg file='tests/StandardOutputTest'/>
+      <redirector outputproperty='output'/>
+    </java>
+    <fail>
+      <condition>
+        <not>
+          <equals arg1='The quick brown fox' arg2='${output}'/>
+        </not>
+      </condition>
+    </fail>
+  </target>
+  
+  <target name='testStandardInput' depends='jar'>
+    <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
+      <arg file='tests/StandardInputTest'/>
+      <redirector inputstring='jumps over the lazy dog.'/>
+    </java>
+  </target>
+    
+  <target name='test' depends='jar,testStandardOutput,testStandardInput'>
+    <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
+      <arg file='tests/AssertTests.judith'/>
+      <arg file='tests/MiscellaneousTests.judith'/>
     </java>
   </target>
 

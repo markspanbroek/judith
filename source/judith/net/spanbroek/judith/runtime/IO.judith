@@ -1,0 +1,32 @@
+Function |[ 
+  method run [
+  
+    object StandardInput := Object |[
+      method readLine [
+        # skip
+      ]
+    ]|
+    
+    object StandardOutput := Object |[
+      method write(text) [
+        self.assert(text : Text)
+      ]
+    ]|
+    
+    object IO := Object |[
+      method StandardInput [
+        result := StandardInput
+      ]
+      method StandardOutput [
+        result := StandardOutput
+      ]
+    ]|
+    
+    Objects := Objects |[
+      method IO [
+        result := IO
+      ]
+    ]|
+  
+  ] 
+]|.run

@@ -536,6 +536,7 @@ public class World extends Scope {
         if (!initialized) {
             initialized = true;
             try {
+ 
                 new Interpreter(INSTANCE).interpret(
                   new InputStreamReader(
                     World.class.getResourceAsStream("world.judith"),
@@ -543,7 +544,52 @@ public class World extends Scope {
                   ),
                   "world.judith"
                 );
-            }
+ 
+                new Interpreter(INSTANCE).interpret(
+                  new InputStreamReader(
+                    World.class.getResourceAsStream("IO.judith"),
+                    "UTF-8"
+                  ),
+                  "IO.judith"
+                );
+ 
+ 
+                class WriteMethod extends Method {
+                
+                    public WriteMethod() {
+                        super("text");
+                    }
+                    
+                    protected void execute(Scope scope) {
+                        // TODO: something goes wrong here, when using 'parent' and 'replace'
+                        //scope.get("parent").call("write", new Object[]{scope.get("text")}, scope.get("self"));
+                        System.console().writer().write((String)unwrap(scope.get("text")));
+                        System.console().flush();
+                    }
+                }
+                
+                class ReadLineMethod extends Method {
+                    protected void execute(Scope scope) {
+                        scope.set("result", wrap(System.console().readLine()));
+                    }
+                }
+
+                Scope scope = INSTANCE;
+         
+                Object io = scope.get("Objects").call("IO");
+                Object standardOutput = io.call("StandardOutput");
+                Object standardInput  = io.call("StandardInput" );
+                
+                Object newStandardOutput = new Object(standardOutput, scope);
+                Object newStandardInput  = new Object(standardInput,  scope);
+                
+                newStandardOutput.declare("write", new WriteMethod());
+                newStandardInput.declare("readLine", new ReadLineMethod());
+                
+                standardOutput.replace(newStandardOutput);
+                standardInput.replace(newStandardInput);                
+                
+             }
             catch(IOException exception) {
                 throw new Error(exception);
             }

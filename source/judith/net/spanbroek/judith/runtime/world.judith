@@ -76,3 +76,5 @@ List := List |[
   ]
   
 ]|
+
+object Objects := Object.copy

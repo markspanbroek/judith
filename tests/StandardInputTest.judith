@@ -1,0 +1,3 @@
+object input := Objects.IO.StandardInput
+
+self.assert("jumps over the lazy dog." = input.readLine)
