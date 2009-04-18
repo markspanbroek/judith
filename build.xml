@@ -1,6 +1,14 @@
 <project default='default' basedir='.'>
 
-  <target name='sablecc'>
+  <target name='sablecc.check'>
+    <uptodate
+        property='sablecc.notneeded'
+        srcfile='source/sablecc/judith.sablecc'
+        targetfile='build/java/net/spanbroek/judith/parser/lexer/Lexer.java'
+    />
+  </target>
+  
+  <target name='sablecc' depends='sablecc.check' unless='sablecc.notneeded'>
     <mkdir dir='build/java'/>
     <taskdef name='sablecc' classname='org.sablecc.ant.taskdef.Sablecc'>
       <classpath>
