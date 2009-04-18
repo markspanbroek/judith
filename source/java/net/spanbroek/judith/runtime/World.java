@@ -23,10 +23,7 @@ public class World extends Scope {
      */
     private static boolean initialized = false;
 
-    /**
-     * Initializes the global context of Judith execution.
-     */
-    private World() {
+    private void createObject() {
 
         /*
          * The "Object" object.
@@ -80,6 +77,9 @@ public class World extends Scope {
         }
         get("Object").declare("colon", new ObjectColonMethod());
 
+    }
+    
+    private void createBoolean() {
 
         /*
          * The Boolean object.
@@ -138,6 +138,17 @@ public class World extends Scope {
             }
         }
         get("Boolean").declare("or", new BooleanOrMethod());
+
+    }
+
+    /**
+     * Initializes the global context of Judith execution.
+     */
+    private World() {
+
+        createObject();
+        createBoolean();
+
 
 
         /*
