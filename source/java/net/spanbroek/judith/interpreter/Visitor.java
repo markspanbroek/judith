@@ -8,10 +8,12 @@ import java.util.*;
 public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     protected Stack stack = new Stack();
+    protected World world;
     protected Scope scope;
     protected Object self;
 
-    public Visitor(Scope scope, Object self) {
+    public Visitor(World world, Scope scope, Object self) {
+        this.world = world;
         this.scope = scope;
         this.self = self;
     }
@@ -37,7 +39,8 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         for (int i=0; i<methods.length; i++) {
             Method method = new InterpretedMethod(
               methods[i].getParameters(),
-              methods[i].getStatements()
+              methods[i].getStatements(),
+              world
             );
             result.declare(
               methods[i].getIdentifier(),
@@ -62,14 +65,14 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     public void visit(net.spanbroek.judith.tree.Boolean node) {
-        stack.push(World.wrap(node.getValue()));
+        stack.push(world.wrap(node.getValue()));
     }
 
     public void visit(net.spanbroek.judith.tree.Conditional node) {
 
         // evaluate the expression
         node.getExpression().accept(this);
-        java.lang.Object value = World.unwrap((Object)stack.peek());
+        java.lang.Object value = world.unwrap((Object)stack.peek());
 
         // execute statements when expression is true
         if (value instanceof Boolean && (Boolean)value) {
@@ -90,7 +93,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
             resume = false;
             for (int i=0; !resume && i<conditionals.length; i++) {
                 conditionals[i].accept(this);
-                java.lang.Object value = World.unwrap((Object)stack.pop());
+                java.lang.Object value = world.unwrap((Object)stack.pop());
                 resume = value instanceof Boolean && (Boolean)value;
             }
         }
@@ -105,7 +108,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         boolean done = false;
         for (int i=0; !done && i<conditionals.length; i++) {
             conditionals[i].accept(this);
-            java.lang.Object value = World.unwrap((Object)stack.pop());
+            java.lang.Object value = world.unwrap((Object)stack.pop());
             done = value instanceof Boolean && (Boolean)value;
         }
 
@@ -149,7 +152,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     public void visit(net.spanbroek.judith.tree.Number node) {
-        stack.push(World.wrap(node.getValue()));
+        stack.push(world.wrap(node.getValue()));
     }
 
     public void visit(net.spanbroek.judith.tree.Object node) {
@@ -162,7 +165,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     public void visit(net.spanbroek.judith.tree.Text node) {
-        stack.push(World.wrap(node.getValue()));
+        stack.push(world.wrap(node.getValue()));
     }
 
     protected void visit(net.spanbroek.judith.tree.Statement[] nodes) {

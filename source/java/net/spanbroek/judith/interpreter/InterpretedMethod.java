@@ -13,16 +13,19 @@ public class InterpretedMethod extends Method {
      * The statements that make up this judith method.
      */
     private net.spanbroek.judith.tree.Statement[] statements;
+    
+    private World world;
 
     /**
      * Constructs a new interpreted judith method with the specified parameter 
      * names and statements.
      */
     public InterpretedMethod(String[] parameters,
-      net.spanbroek.judith.tree.Statement[] statements) {
+      net.spanbroek.judith.tree.Statement[] statements, World world) {
 
         super(parameters);
         this.statements = statements;
+        this.world = world;
 
     }
 
@@ -31,7 +34,7 @@ public class InterpretedMethod extends Method {
      */
     protected void execute(Scope scope) {
 
-        new Visitor(scope, scope.get("self")).visit(statements);
+        new Visitor(world, scope, scope.get("self")).visit(statements);
 
     }
 

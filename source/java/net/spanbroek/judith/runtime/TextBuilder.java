@@ -4,10 +4,10 @@ import net.spanbroek.judith.runtime.Object;
 
 class TextBuilder {
 
-    private Scope scope;
+    private World world;
     
-    public static void build(Scope scope) {
-        TextBuilder builder = new TextBuilder(scope);
+    public static void build(World world) {
+        TextBuilder builder = new TextBuilder(world);
         builder.declareText();
         builder.declareEqualsMethod();
         builder.declarePlusMethod();
@@ -16,13 +16,13 @@ class TextBuilder {
         builder.declareLengthMethod();
     }
 
-    private TextBuilder(Scope scope) {
-        this.scope = scope;
+    private TextBuilder(World world) {
+        this.world = world;
     }
     
     private void declareText() {
-        scope.declare("Text", new Object(scope.get("Object"), scope));
-        scope.get("Text").setNativeObject("");
+        world.declare("Text", new Object(world.get("Object"), world));
+        world.get("Text").setNativeObject("");
     }
     
     private void declareEqualsMethod() {
@@ -33,10 +33,10 @@ class TextBuilder {
             protected void execute(Scope scope) {
                 String self = (String)scope.get("self").getNativeObject();
                 String text = (String)scope.get("text").getNativeObject();
-                scope.set("result", World.wrap(self.equals(text)));
+                scope.set("result", world.wrap(self.equals(text)));
             }
         }
-        scope.get("Text").declare("equals", new TextEqualsMethod());
+        world.get("Text").declare("equals", new TextEqualsMethod());
     }
     
     private void declarePlusMethod() {
@@ -47,10 +47,10 @@ class TextBuilder {
             protected void execute(Scope scope) {
                 String self = (String)scope.get("self").getNativeObject();
                 String text = (String)scope.get("text").getNativeObject();
-                scope.set("result", World.wrap(self + text));
+                scope.set("result", world.wrap(self + text));
             }
         }
-        scope.get("Text").declare("plus", new TextPlusMethod());
+        world.get("Text").declare("plus", new TextPlusMethod());
     }
     
     private void declareExcerptMethod() {
@@ -64,30 +64,30 @@ class TextBuilder {
                 double end = (Double)scope.get("end").getNativeObject();
                 scope.set(
                   "result", 
-                  World.wrap(self.substring((int)begin,(int)end))
+                  world.wrap(self.substring((int)begin,(int)end))
                 );
             }
         }
-        scope.get("Text").declare("excerpt", new TextExcerptMethod());
+        world.get("Text").declare("excerpt", new TextExcerptMethod());
     }
     
     private void declareQuoteMethod() {
         class TextQuoteMethod extends Method {
             protected void execute(Scope scope) {
-                scope.set("result", World.wrap("\""));
+                scope.set("result", world.wrap("\""));
             }
         }
-        scope.get("Text").declare("quote", new TextQuoteMethod());
+        world.get("Text").declare("quote", new TextQuoteMethod());
     }
     
     private void declareLengthMethod() {
         class TextLengthMethod extends Method {
             protected void execute(Scope scope) {
                 String self = (String)scope.get("self").getNativeObject();
-                scope.set("result", World.wrap(self.length()));
+                scope.set("result", world.wrap(self.length()));
             }
         }
-        scope.get("Text").declare("length", new TextLengthMethod());    
+        world.get("Text").declare("length", new TextLengthMethod());    
     }
 
 }

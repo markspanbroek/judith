@@ -1,0 +1,28 @@
+object AlternativesTest := Object |[
+    
+    object parser := 
+        ParserGenerator.alternation(
+          List.copy
+            .push(ParserGenerator.literal("foo"))
+            .push(ParserGenerator.literal("bar"))
+        )
+    
+    method parsingSucceedsWithLeftOperand [
+        self.assert(parser.parse("foo") = "foo")
+    ]
+    
+    method parsingSucceedsWithRightOperand [
+        self.assert(parser.parse("bar") = "bar")
+    ]
+    
+    method parsingFails [
+        self.assert(parser.parse("baz") = null)
+    ]
+
+]|
+
+AlternativesTest
+    .parsingSucceedsWithLeftOperand
+    .parsingSucceedsWithRightOperand
+    .parsingFails
+

@@ -1,0 +1,17 @@
+object LiteralTests := Object |[
+
+    object parser := ParserGenerator.literal("foo")
+
+    method parsingSucceeds [
+        self.assert(parser.parse("foo") = "foo")
+    ]
+    
+    method parsingFails [
+        self.assert(parser.parse("bar") = null)
+    ]
+    
+]|
+
+LiteralTests
+    .parsingSucceeds
+    .parsingFails

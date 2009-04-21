@@ -1,0 +1,542 @@
+object ParserGenerator := null
+
+Function |[
+    method run [
+
+        object Parser := Function |[
+
+            method parse(input) [
+
+                self.assert(input : Text)
+            
+                object parseResult := null
+            
+                object continuation := Function |[
+                    method run(index, result) [
+                        parseResult := result
+                    ]
+                ]|
+                
+                object context := Object |[
+                    method input [
+                        result := input
+                    ]
+                ]|
+                
+                self.run(context, 0, List.copy, continuation)
+                
+                if parseResult : List ->
+                    if parseResult.length > 0 ->
+                        result := parseResult.get(0)
+                    fi
+                || true ->
+                    result := null
+                fi
+                
+            ]
+            
+        ]|
+
+        ##
+        # A recursive descent parser in continuation passing style.
+        #
+        ParserGenerator := Object |[
+
+          method alternation(alternatives) [
+          
+            result := Parser |[ method run(context, index, result, continuation) [
+              
+              object i := 0
+              do i < alternatives.length ->
+                alternatives.get(i).run(context, index, result, continuation)
+                i := i + 1
+              od
+              
+            ] ]|
+          
+          ]
+          
+          object begin := Parser |[ method run(context, index, result, continuation) [
+          
+            if index = 0 ->
+              ParserGenerator.empty.run(context, index, result, continuation)
+            fi
+            
+          ] ]|
+          
+          method begin [ 
+          
+            result := begin 
+            
+          ]
+          
+          method beginBecomes(begin') [
+
+            self.assert(caller : self)
+            
+            begin := begin'
+          
+          ]
+          
+          method concatenation(elements) [
+            
+            if elements.length > 0 ->
+            
+              object generator := self
+
+              result := Parser |[ method run(context, index, result, continuation) [
+                  
+                object tail := elements.copy
+                object head := tail.get(0)
+                tail.remove(0)
+                
+                object newcontinuation := Function |[ method run(newindex, newresult) [
+                
+                  object tailparser := generator.concatenation(tail)
+                  tailparser.run(context, newindex, newresult, continuation)
+                  
+                ] ]|
+                
+                head.run(context, index, result, newcontinuation)
+                  
+              ] ]|
+              
+            || true ->
+            
+              result := empty
+              
+            fi
+          
+          ]
+          
+          object empty := Parser |[ method run(context, index, result, continuation) [
+            
+            continuation.run(index, result)
+              
+          ] ]|
+          
+          method empty [
+          
+            result := empty
+          
+          ]
+          
+          method emptyBecomes(empty') [
+
+            self.assert(caller : self)
+          
+            empty := empty'
+          
+          ]
+          
+          object end := Parser |[ method run(context, index, result, continuation) [
+             
+            if index = context.input.length ->
+              empty.run(context, index, result, continuation)
+            fi
+              
+          ] ]|
+          
+          method end [
+          
+            result := end
+          
+          ]
+          
+          method endBecomes(end') [
+
+            self.assert(caller : self)
+          
+            end := end'
+          
+          ]
+          
+          method literal(literal) [
+          
+            result := Parser |[ method run(context, index, result, continuation) [
+
+              if context.input.excerpt(index, index + literal.length) = literal ->
+                continuation.run(index + literal.length, result.copy.push(literal))
+              fi
+            
+            ] ]|
+          
+          ]
+          
+          object never := Parser |[ method run(context, index, result, continuation) [
+          
+            # skip
+          
+          ] ]|
+          
+          method never [
+          
+            result := never
+          
+          ]
+          
+          method neverBecomes(never') [
+          
+            self.assert(caller : self)
+          
+            never := never'
+          
+          ]
+          
+          method range(lower, upper) [
+          
+            result := Parser |[ method run(context, index, result, continuation) [
+            
+              object character := context.input.excerpt(index, index+1)
+              if (lower <= character and character <= upper) ->
+                continuation.run(index+1, result.copy.push(character))
+              fi
+            
+            ] ]|
+            
+          ]
+
+          method repetition(operand) [
+          
+            result := self.alternation(empty, self.repetitionplus(operand))
+          
+          ]
+          
+          method repetitionplus(operand) [
+          
+            object generator := self
+          
+            result := Parser |[ method run(context, index, result, continuation) [
+            
+              generator.alternation(
+                operand, 
+                generator.concatenation(
+                  operand,
+                  generator.repetitionplus(operand)
+                )
+              ).run(context, index, result, continuation)
+            
+            ] ]|
+          
+          ]
+          
+          method rule(name) [
+          
+            result := Parser |[ method run(context, index, result, continuation) [
+            
+              context.parser.get(name).run(context, index, result, continuation)
+            
+            ] ]|
+          
+          ]
+          
+          method transform(operand, transform) [
+          
+            result := Parser |[ method run(context, index, result, continuation) [
+            
+              object newcontinuation := Function |[ method run(newindex, newresult) [
+              
+                object slice := newresult.slice(result.length, newresult.length)
+                continuation.run(newindex, result.copy.push(transform.run(slice)))
+              
+              ] ]|
+              
+              operand.run(context, index, result, newcontinuation)
+            
+            ] ]|
+          
+          ]
+          
+        ]|
+
+        ##
+        # Add string representation to the generated parser parts. This is needed for
+        # the memoization algorithm below.
+        #
+        ParserGenerator := ParserGenerator |[
+
+          object initialized := false
+
+          method initialize [
+
+            self.assert(not initialized)
+
+            self.beginBecomes(self.begin |[
+              method asText [
+                result := "^"
+              ]
+            ]|)
+            
+            self.endBecomes(self.end |[
+              method asText [
+                result := "$"
+              ]
+            ]|)
+            
+            self.emptyBecomes(self.empty |[
+              method asText [
+                result := "()"
+              ]
+            ]|)
+            
+            self.neverBecomes(self.never |[
+              method asText [
+                result := "0"
+              ]
+            ]|)
+          
+            initialized := true
+            
+          ]
+          
+          method alternation(alternatives) [
+          
+            object text := "("
+            object i := 0
+            if i < alternatives.length ->
+              text := text + alternatives.get(i).asText
+              i := i + 1
+            fi
+            do i < alternatives.length ->
+              text := text + "|"
+              text := text + alternatives.get(i).asText
+              i := i + 1
+            od
+            text := text + ")"
+
+            result := parent.alternation(alternatives) |[
+            
+              method asText [
+                result := text
+              ]
+            
+            ]|
+          
+          ]
+          
+          method concatenation(elements) [
+          
+            object text := "("
+            
+            object i := 0
+            do i < elements.length ->
+                if i > 0 ->
+                    text := text + " "
+                fi
+                text := text + elements.get(i)
+                i := i + 1
+            od
+
+            text := text + ")"
+
+            result := parent.concatenation(elements) |[
+                
+              method asText [
+                result := text
+              ]
+            
+            ]|
+          
+          ]
+          
+          method literal(literal) [
+          
+            object text := Text.quote + literal + Text.quote
+                
+            result := parent.literal(literal) |[
+            
+              method asText [
+                result := text
+              ]
+            
+            ]|
+          
+          ]
+          
+          method range(lower, upper) [
+
+            object text := "[" + lower + ".." + upper + "]"
+                
+            result := parent.range(lower, upper) |[
+
+              method asText [
+                result := text
+              ]
+              
+            ]|
+          
+          ]
+          
+          method repetition(operand) [
+          
+            object text := operand.asText + "*"
+
+            result := parent.repetition(operand) |[
+            
+              method asText [
+                result := text
+              ]
+            
+            ]| 
+          
+          ]
+          
+          method repetitionplus(operand) [
+          
+            object text := operand.asText + "+"
+
+            result := parent.repetition(operand) |[
+            
+              method asText [
+                result := text
+              ]
+            
+            ]| 
+          
+          ]
+          
+          method rule(name) [
+
+            result := parent.rule(name) |[
+            
+              method asText [
+                result := name
+              ]
+            
+            ]|  
+          
+          ]
+
+          method transform(operand, transform) [
+          
+            object text := "{" + operand.asText + "}"
+          
+            result := parent.transform(operand, transform) |[
+            
+              method asText [
+                result := text
+              ]
+            
+            ]|
+          
+          ]
+          
+        ]|.initialize
+
+        ##
+        # Add memoization to support left-recursion, and improve the time complexity
+        # from exponential to polynomial.
+        #
+        ParserGenerator := ParserGenerator |[
+
+          object Result := Object |[
+          
+            object index := null
+            object value := null
+            
+            method index [
+              result := index
+            ]
+            
+            method indexBecomes(index') [
+              index := index'
+            ]
+
+            method value [
+              result := value
+            ]
+            
+            method valueBecomes(value') [
+              value := value'
+            ]
+          
+          ]|
+
+          object CacheEntry := Object |[
+          
+            object results := List.copy
+            object continuations := List.copy
+            
+            method results [ 
+              result := results 
+            ]
+            
+            method continuations [ 
+              result := results 
+            ]
+          
+          ]|
+
+          method memoize(function) [
+          
+            object text := function.asText
+            
+            result := Parser |[ 
+            
+              method run(context, index, result, continuation) [
+
+                object key   := function.asText + "," + index.asText
+                
+                if (context.cache.has(key)) ->
+                
+                  object entry := context.cache.at(key)
+                  
+                  entry.continuations.push(continuation)
+                  object iterator := entry.results.iterator
+                  do iterator.hasNext ->
+                    object result := iterator.next
+                    continuation.run(result.index, result.value)
+                  od
+                  
+                || true ->
+
+                  object entry := CacheEntry.copy
+                  context.cache.set(key, entry)
+                  
+                  entry.continuations.push(continuation)
+                  
+                  object newcontinuation := Function |[ method run(index, value) [
+                  
+                      object result := Result.copy
+                      result.indexBecomes(index)
+                      result.valueBecomes(value)
+                      entry.results.push(result)
+                      
+                      object iterator := entry.continuations.iterator
+                      do iterator.hasNext ->
+                        iterator.next.run(index, value)
+                      od
+                      
+                  ] ]|
+                  
+                  function.run(context, index, result, newcontinuation)
+                  
+                fi
+                
+              ]
+              
+              method asText [
+                result := text
+              ]
+            
+            ]|
+          
+          ]
+          
+          method rule(name) [
+          
+            result := self.memoize(parent.rule(name))
+          
+          ]
+          
+          method repetitionplus(operand) [
+          
+            result := self.memoize(parent.repetitionplus(operand))
+          
+          ]
+
+        ]|
+        
+    ]
+]|.run
+

@@ -5,26 +5,26 @@ import java.util.*;
 
 class ListBuilder {
 
-    private Scope scope;
+    private World world;
     
-    public static void build(Scope scope) {
-        ListBuilder builder = new ListBuilder(scope);
+    public static void build(World world) {
+        ListBuilder builder = new ListBuilder(world);
         builder.declareList();
         builder.declareCopyMethod();
         builder.declareLengthMethod();
         builder.declareGetMethod();
         builder.declareSetMethod();
         builder.declarePushMethod();
-        builder.declarePopMethod();
+        builder.declareRemoveMethod();
     }
 
-    private ListBuilder(Scope scope) {
-        this.scope = scope;
+    private ListBuilder(World world) {
+        this.world = world;
     }
     
     private void declareList() {
-        scope.declare("List", new Object(scope.get("Object"), scope));
-        scope.get("List").setNativeObject(new ArrayList<Object>());
+        world.declare("List", new Object(world.get("Object"), world));
+        world.get("List").setNativeObject(new ArrayList<Object>());
     }
     
     private void declareCopyMethod() {
@@ -39,7 +39,7 @@ class ListBuilder {
                 scope.set("result", result);
             }
         }
-        scope.get("List").declare("copy", new ListCopyMethod());
+        world.get("List").declare("copy", new ListCopyMethod());
     }
         
     private void declareLengthMethod() {
@@ -47,10 +47,10 @@ class ListBuilder {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 List<Object> list = (List<Object>)self.getNativeObject();
-                scope.set("result", World.wrap(list.size()));
+                scope.set("result", world.wrap(list.size()));
             }
         }
-        scope.get("List").declare("length", new ListLengthMethod());
+        world.get("List").declare("length", new ListLengthMethod());
     }
     
     private void declareGetMethod() {
@@ -61,11 +61,11 @@ class ListBuilder {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 List<Object> list = (List<Object>)self.getNativeObject();
-                double index = (Double)World.unwrap(scope.get("index"));
+                double index = (Double)world.unwrap(scope.get("index"));
                 scope.set("result", list.get((int)index));
             }
         }   
-        scope.get("List").declare("get", new ListGetMethod());
+        world.get("List").declare("get", new ListGetMethod());
     }
     
     private void declareSetMethod() {
@@ -76,11 +76,11 @@ class ListBuilder {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 List<Object> list = (List<Object>)self.getNativeObject();
-                double index = (Double)World.unwrap(scope.get("index"));
+                double index = (Double)world.unwrap(scope.get("index"));
                 list.set((int)index, scope.get("element"));
             }
         }
-        scope.get("List").declare("set", new ListSetMethod());
+        world.get("List").declare("set", new ListSetMethod());
     }
     
     private void declarePushMethod() {
@@ -94,18 +94,22 @@ class ListBuilder {
                 list.add(scope.get("element"));
             }
         }
-        scope.get("List").declare("push", new ListPushMethod());
+        world.get("List").declare("push", new ListPushMethod());
     }
     
-    private void declarePopMethod() {
-        class ListPopMethod extends Method {
+    private void declareRemoveMethod() {
+        class ListRemoveMethod extends Method {
+            public ListRemoveMethod() {
+                super("index");
+            }
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
+                double index = (Double)world.unwrap(scope.get("index"));
                 List<Object> list = (List<Object>)self.getNativeObject();
-                scope.set("result", list.remove(list.size() - 1));
+                scope.set("result", list.remove((int)index));
             }
         }
-        scope.get("List").declare("pop", new ListPopMethod());
+        world.get("List").declare("remove", new ListRemoveMethod());
     }
 
 }

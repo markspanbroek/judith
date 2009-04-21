@@ -71,9 +71,16 @@ List := List |[
   ]
   
   method pop [
-    self.assert(self.size > 0)
-    result := parent.pop
+    self.assert(self.length > 0)
+    result := self.get(self.length - 1)
+    self.remove(self.length - 1)
   ]
+  
+  method remove(index) [
+    self.assert(0 <= index and index < self.length)
+    parent.remove(index)
+  ]
+  
   
 ]|
 

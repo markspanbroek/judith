@@ -1,0 +1,16 @@
+object booleanTests := Object |[
+
+    method testConditionalEvaluationOfAnd [
+        object irrelevant := false and self.assert(false)
+    ]
+    
+    method testConditionalEvaluationOfOr [
+        object irrelevant := true or self.assert(false)
+    ]
+
+]|
+
+#PENDING
+#booleanTests
+#    .testConditionalEvaluationOfAnd
+#    .testConditionalEvaluationOfOr

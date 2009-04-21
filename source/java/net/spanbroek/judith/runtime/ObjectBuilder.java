@@ -4,10 +4,10 @@ import net.spanbroek.judith.runtime.Object;
 
 class ObjectBuilder {
 
-    private Scope scope;
+    private World world;
     
-    public static void build(Scope scope) {
-        ObjectBuilder builder = new ObjectBuilder(scope);
+    public static void build(World world) {
+        ObjectBuilder builder = new ObjectBuilder(world);
         builder.declareObject();
         builder.declareCopyMethod();
         builder.declareReplaceMethod();
@@ -15,12 +15,12 @@ class ObjectBuilder {
         builder.declareColonMethod();
     }
 
-    private ObjectBuilder(Scope scope) {
-        this.scope = scope;
+    private ObjectBuilder(World world) {
+        this.world = world;
     }
 
     public void declareObject() {
-        scope.declare("Object", new Object(scope));
+        world.declare("Object", new Object(world));
     }
 
     public void declareCopyMethod() {
@@ -31,7 +31,7 @@ class ObjectBuilder {
                 );
             }
         }
-        scope.get("Object").declare("copy", new ObjectCopyMethod());
+        world.get("Object").declare("copy", new ObjectCopyMethod());
     }
     
     public void declareReplaceMethod() {
@@ -43,7 +43,7 @@ class ObjectBuilder {
                 scope.get("self").replace(scope.get("object"));
             }
         }
-        scope.get("Object").declare("replace", new ObjectReplaceMethod());
+        world.get("Object").declare("replace", new ObjectReplaceMethod());
     }
     
     public void declareEqualsMethod() {
@@ -53,11 +53,11 @@ class ObjectBuilder {
             }
             protected void execute(Scope scope) {
                 scope.set("result",
-                  World.wrap(scope.get("self").equals(scope.get("object")))
+                  world.wrap(scope.get("self").equals(scope.get("object")))
                 );
             }
         }
-        scope.get("Object").declare("equals", new ObjectEqualsMethod());
+        world.get("Object").declare("equals", new ObjectEqualsMethod());
     }
     
     public void declareColonMethod() {
@@ -67,11 +67,11 @@ class ObjectBuilder {
             }
             protected void execute(Scope scope) {
                 scope.set("result",
-                  World.wrap(scope.get("self").isCompatibleWith(scope.get("object")))
+                  world.wrap(scope.get("self").isCompatibleWith(scope.get("object")))
                 );
             }
         }
-        scope.get("Object").declare("colon", new ObjectColonMethod());
+        world.get("Object").declare("colon", new ObjectColonMethod());
     }
 
 }

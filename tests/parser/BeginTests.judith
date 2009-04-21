@@ -1,0 +1,27 @@
+object BeginTests := Object |[
+
+    method parseSucceeds [
+        object parser := 
+            ParserGenerator.concatenation(
+                List.copy
+                    .push(ParserGenerator.begin)
+                    .push(ParserGenerator.literal("foo"))
+            )
+        self.assert("foo" = parser.parse("foo"))
+    ]
+    
+    method parseFails [
+        object parser := 
+            ParserGenerator.concatenation(
+                List.copy
+                    .push(ParserGenerator.literal("foo"))
+                    .push(ParserGenerator.begin)
+            )
+        self.assert(null = parser.parse("foo"))
+    ]
+
+]|
+
+BeginTests
+    .parseSucceeds
+    .parseFails

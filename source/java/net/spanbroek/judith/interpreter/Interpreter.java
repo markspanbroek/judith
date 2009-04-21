@@ -8,18 +8,24 @@ import java.io.*;
 
 public class Interpreter {
 
+    protected World world;
     protected Scope scope;
 
-    public Interpreter(Scope scope) {
+    public Interpreter() {
+        this(new World());
+    }
+
+    public Interpreter(World world) {
+        this(world, world);
+    }
+
+    public Interpreter(World world, Scope scope) {
+        this.world = world;
         this.scope = scope;
     }
 
-    public Interpreter() {
-        this(World.getInstance());
-    }
-
     public void interpret(Statement... statements) {
-        new Visitor(scope, World.getInstance().get("self")).visit(statements);
+        new Visitor(world, scope, scope.get("self")).visit(statements);
     }
 
     public void interpret(Program program) {

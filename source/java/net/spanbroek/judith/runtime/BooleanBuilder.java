@@ -4,10 +4,10 @@ import net.spanbroek.judith.runtime.Object;
 
 class BooleanBuilder {
 
-    private Scope scope;
+    private World world;
     
-    public static void build(Scope scope) {
-        BooleanBuilder builder = new BooleanBuilder(scope);
+    public static void build(World world) {
+        BooleanBuilder builder = new BooleanBuilder(world);
         builder.declareBoolean();
         builder.declareEqualsMethod();
         builder.declareNotMethod();
@@ -15,13 +15,13 @@ class BooleanBuilder {
         builder.declareOrMethod();
     }
 
-    private BooleanBuilder(Scope scope) {
-        this.scope = scope;
+    private BooleanBuilder(World world) {
+        this.world = world;
     }
     
     private void declareBoolean() {
-        scope.declare("Boolean", new Object(scope.get("Object"), scope));
-        scope.get("Boolean").setNativeObject(false);
+        world.declare("Boolean", new Object(world.get("Object"), world));
+        world.get("Boolean").setNativeObject(false);
     }
     
     private void declareEqualsMethod() {
@@ -32,10 +32,10 @@ class BooleanBuilder {
             protected void execute(Scope scope) {
                 boolean self = (Boolean)scope.get("self").getNativeObject();
                 boolean bool = (Boolean)scope.get("boolean").getNativeObject();
-                scope.set("result", World.wrap(self == bool));
+                scope.set("result", world.wrap(self == bool));
             }
         }
-        scope.get("Boolean").declare("equals", new BooleanEqualsMethod());
+        world.get("Boolean").declare("equals", new BooleanEqualsMethod());
     }
     
     private void declareNotMethod() {
@@ -43,11 +43,11 @@ class BooleanBuilder {
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
-                  World.wrap(!(Boolean)scope.get("self").getNativeObject())
+                  world.wrap(!(Boolean)scope.get("self").getNativeObject())
                 );
             }
         }
-        scope.get("Boolean").declare("not", new BooleanNotMethod());
+        world.get("Boolean").declare("not", new BooleanNotMethod());
     }
     
     private void declareAndMethod() {
@@ -58,10 +58,10 @@ class BooleanBuilder {
             protected void execute(Scope scope) {
                 boolean self = (Boolean)scope.get("self").getNativeObject();
                 boolean bool = (Boolean)scope.get("boolean").getNativeObject();
-                scope.set("result", World.wrap(self && bool));
+                scope.set("result", world.wrap(self && bool));
             }
         }
-        scope.get("Boolean").declare("and", new BooleanAndMethod());
+        world.get("Boolean").declare("and", new BooleanAndMethod());
     }
     
     private void declareOrMethod() {
@@ -72,10 +72,10 @@ class BooleanBuilder {
             protected void execute(Scope scope) {
                 boolean self = (Boolean)scope.get("self").getNativeObject();
                 boolean bool = (Boolean)scope.get("boolean").getNativeObject();
-                scope.set("result", World.wrap(self || bool));
+                scope.set("result", world.wrap(self || bool));
             }
         }
-        scope.get("Boolean").declare("or", new BooleanOrMethod());
+        world.get("Boolean").declare("or", new BooleanOrMethod());
     }
 
 }
