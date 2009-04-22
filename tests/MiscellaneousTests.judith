@@ -3,9 +3,9 @@
 object foo := Object |[
 
   method test1 [
-    # weirdness number 1: you would expect: self.assert(parent = Object)
+    # weirdness number 1: you would expect: Assert.that(parent = Object)
     # might be avoided by using 'super' instead of 'parent'
-    self.assert(parent = self)
+    Assert.that(parent = self)
   ]
 
   method test2 [
@@ -85,11 +85,11 @@ object replacementTest3 := replacementTest1 |[
 
 ]|
 
-Object.assert(replacementTest1.identify = 1)
-Object.assert(replacementTest2.identify = 2)
+Assert.that(replacementTest1.identify = 1)
+Assert.that(replacementTest2.identify = 2)
 replacementTest1.replace(replacementTest3)
-Object.assert(replacementTest1.identify = 3)
-Object.assert(replacementTest2.identify = 4)
+Assert.that(replacementTest1.identify = 3)
+Assert.that(replacementTest2.identify = 4)
 
 
 object Point := Object
@@ -104,10 +104,10 @@ object Point := Object
   
   method initialize(x',y') 
   [
-    self.assert(caller : self)
+    Assert.that(caller : self)
 
-    self.assert(x : Number)
-    self.assert(y : Number)
+    Assert.that(x : Number)
+    Assert.that(y : Number)
 
     x := x'
     y := y'
@@ -128,8 +128,8 @@ Point := Point
 |[
   method translate(dx,dy)
   [
-    self.assert(dx : Number)
-    self.assert(dy : Number)
+    Assert.that(dx : Number)
+    Assert.that(dy : Number)
     
     result := self.create(self.x + dx, self.y + dy)
   ]
@@ -141,7 +141,7 @@ ExceptionHandler |[
 
   method try [
     Point.initialize(1,2)
-    self.assert(false)
+    Assert.that(false)
   ]
   
   method catch(exception) [

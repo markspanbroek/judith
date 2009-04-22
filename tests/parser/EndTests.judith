@@ -1,11 +1,11 @@
-object BeginTests := Object |[
+object EndTests := Object |[
 
     method parseSucceeds [
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
-                    .push(ParserGenerator.begin)
                     .push(ParserGenerator.literal("foo"))
+                    .push(ParserGenerator.end)
             )
         Assert.that("foo" = parser.parse("foo").get(0))
     ]
@@ -14,14 +14,14 @@ object BeginTests := Object |[
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
+                    .push(ParserGenerator.end)
                     .push(ParserGenerator.literal("foo"))
-                    .push(ParserGenerator.begin)
             )
         Assert.that(null = parser.parse("foo"))
     ]
 
 ]|
 
-BeginTests
+EndTests
     .parseSucceeds
     .parseFails

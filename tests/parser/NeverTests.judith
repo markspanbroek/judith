@@ -1,0 +1,16 @@
+object NeverTests := Object |[
+
+    method parseFails [
+        object parser := 
+            ParserGenerator.concatenation(
+                List.copy
+                    .push(ParserGenerator.literal("foo"))
+                    .push(ParserGenerator.never)
+            )
+        Assert.that(null = parser.parse("foo"))
+    ]
+
+]|
+
+NeverTests
+    .parseFails

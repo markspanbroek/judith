@@ -9,7 +9,7 @@ Function |[
     
     object StandardOutput := Object |[
       method write(text) [
-        self.assert(text : Text)
+        Assert.that(text : Text)
       ]
     ]|
     

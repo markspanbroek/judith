@@ -14,6 +14,7 @@ class TextBuilder {
         builder.declareExcerptMethod();
         builder.declareQuoteMethod();
         builder.declareLengthMethod();
+        builder.declareAtmostMethod();
     }
 
     private TextBuilder(World world) {
@@ -88,6 +89,20 @@ class TextBuilder {
             }
         }
         world.get("Text").declare("length", new TextLengthMethod());    
+    }
+    
+    private void declareAtmostMethod() {
+        class TextAtmostMethod extends Method {
+            public TextAtmostMethod() {
+                super("other");
+            }
+            protected void execute(Scope scope) {
+                String self = (String)scope.get("self").getNativeObject();
+                String other = (String)scope.get("other").getNativeObject();
+                scope.set("result", world.wrap(self.compareTo(other) <= 0));
+            }
+        }
+        world.get("Text").declare("atmost", new TextAtmostMethod());
     }
 
 }

@@ -8,15 +8,21 @@ object AlternativesTest := Object |[
         )
     
     method parsingSucceedsWithLeftOperand [
-        self.assert(parser.parse("foo") = "foo")
+        object parseResult := parser.parse("foo")
+        Assert.that(parseResult : List)
+        Assert.that(parseResult.length = 1)
+        Assert.that(parseResult.get(0) = "foo")
     ]
     
     method parsingSucceedsWithRightOperand [
-        self.assert(parser.parse("bar") = "bar")
+        object parseResult := parser.parse("bar")
+        Assert.that(parseResult : List)
+        Assert.that(parseResult.length = 1)
+        Assert.that(parseResult.get(0) = "bar")
     ]
     
     method parsingFails [
-        self.assert(parser.parse("baz") = null)
+        Assert.that(parser.parse("baz") = null)
     ]
 
 ]|

@@ -1,27 +1,27 @@
-object BeginTests := Object |[
+object EmptyTests := Object |[
 
     method parseSucceeds [
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
-                    .push(ParserGenerator.begin)
                     .push(ParserGenerator.literal("foo"))
+                    .push(ParserGenerator.empty)
             )
         Assert.that("foo" = parser.parse("foo").get(0))
     ]
     
-    method parseFails [
+    method doesNotProduceResult [
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
+                    .push(ParserGenerator.empty)
                     .push(ParserGenerator.literal("foo"))
-                    .push(ParserGenerator.begin)
             )
-        Assert.that(null = parser.parse("foo"))
+        Assert.that("foo" = parser.parse("foo").get(0))
     ]
 
 ]|
 
-BeginTests
+EmptyTests
     .parseSucceeds
-    .parseFails
+    .doesNotProduceResult

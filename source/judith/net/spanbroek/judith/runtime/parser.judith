@@ -7,7 +7,7 @@ Function |[
 
             method parse(input) [
 
-                self.assert(input : Text)
+                Assert.that(input : Text)
             
                 object parseResult := null
             
@@ -25,13 +25,7 @@ Function |[
                 
                 self.run(context, 0, List.copy, continuation)
                 
-                if parseResult : List ->
-                    if parseResult.length > 0 ->
-                        result := parseResult.get(0)
-                    fi
-                || true ->
-                    result := null
-                fi
+                result := parseResult                
                 
             ]
             
@@ -72,7 +66,7 @@ Function |[
           
           method beginBecomes(begin') [
 
-            self.assert(caller : self)
+            Assert.that(caller : self)
             
             begin := begin'
           
@@ -123,7 +117,7 @@ Function |[
           
           method emptyBecomes(empty') [
 
-            self.assert(caller : self)
+            Assert.that(caller : self)
           
             empty := empty'
           
@@ -132,7 +126,7 @@ Function |[
           object end := Parser |[ method run(context, index, result, continuation) [
              
             if index = context.input.length ->
-              empty.run(context, index, result, continuation)
+              ParserGenerator.empty.run(context, index, result, continuation)
             fi
               
           ] ]|
@@ -145,7 +139,7 @@ Function |[
           
           method endBecomes(end') [
 
-            self.assert(caller : self)
+            Assert.that(caller : self)
           
             end := end'
           
@@ -155,8 +149,10 @@ Function |[
           
             result := Parser |[ method run(context, index, result, continuation) [
 
-              if context.input.excerpt(index, index + literal.length) = literal ->
-                continuation.run(index + literal.length, result.copy.push(literal))
+              if index + literal.length <= context.input.length ->
+                if context.input.excerpt(index, index + literal.length) = literal ->
+                  continuation.run(index + literal.length, result.copy.push(literal))
+                fi
               fi
             
             ] ]|
@@ -177,7 +173,7 @@ Function |[
           
           method neverBecomes(never') [
           
-            self.assert(caller : self)
+            Assert.that(caller : self)
           
             never := never'
           
@@ -198,7 +194,11 @@ Function |[
 
           method repetition(operand) [
           
-            result := self.alternation(empty, self.repetitionplus(operand))
+            result := self.alternation(
+                List.copy
+                    .add(self.empty)
+                    .add(self.repetitionplus(operand))
+            )
           
           ]
           
@@ -208,13 +208,14 @@ Function |[
           
             result := Parser |[ method run(context, index, result, continuation) [
             
-              generator.alternation(
-                operand, 
-                generator.concatenation(
-                  operand,
-                  generator.repetitionplus(operand)
-                )
-              ).run(context, index, result, continuation)
+              object newcontinuation := Function |[
+                  method run(index, result) [
+                      continuation.run(index, result)
+                      generator.repetitionplus(operand).run(context, index, result, continuation)
+                  ]
+              ]|
+            
+              operand.run(context, index, result, newcontinuation)
             
             ] ]|
           
@@ -259,7 +260,7 @@ Function |[
 
           method initialize [
 
-            self.assert(not initialized)
+            Assert.that(not initialized)
 
             self.beginBecomes(self.begin |[
               method asText [
@@ -385,7 +386,7 @@ Function |[
           
             object text := operand.asText + "+"
 
-            result := parent.repetition(operand) |[
+            result := parent.repetitionplus(operand) |[
             
               method asText [
                 result := text
@@ -475,7 +476,7 @@ Function |[
             
               method run(context, index, result, continuation) [
 
-                object key   := function.asText + "," + index.asText
+                object key := function.asText + "," + index.asText
                 
                 if (context.cache.has(key)) ->
                 

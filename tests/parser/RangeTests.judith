@@ -1,0 +1,27 @@
+object RangeTests := Object |[
+
+    object parser := ParserGenerator.range("b", "y")
+
+    method parseSucceeds [
+        Assert.that("k" = parser.parse("k").get(0))
+    ]
+    
+    method parseFails [
+        Assert.that(null = parser.parse("a"))
+    ]
+
+    method rangeBeginIsInclusive [
+        Assert.that("b" = parser.parse("b").get(0))
+    ]
+    
+    method rangeEndIsInclusive [
+        Assert.that("y" = parser.parse("y").get(0))
+    ]
+
+]|
+
+RangeTests
+    .parseSucceeds
+    .parseFails
+    .rangeBeginIsInclusive
+    .rangeEndIsInclusive

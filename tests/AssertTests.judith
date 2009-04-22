@@ -2,7 +2,7 @@ object AssertTests := Object |[
 
   method DoesNotThrowOnTrue 
   [
-    self.assert(true)
+    Assert.that(true)
   ] 
   
   method ThrowsOnFalse 
@@ -13,7 +13,7 @@ object AssertTests := Object |[
     
       method try 
       [
-        self.assert(false)
+        Assert.that(false)
       ]
       
       method catch(exception) 

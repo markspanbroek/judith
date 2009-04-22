@@ -34,15 +34,15 @@ object AssertionFailedException := Exception |[
 
 ]|
 
-Object.replace(Object |[
+object Assert := Object |[
 
-  method assert(assertion) [
-    if not assertion ->
-      AssertionFailedException.throw
-    fi
-  ]
+    method that(assertion) [
+        if not assertion ->
+            AssertionFailedException.throw
+        fi
+    ]
 
-]|)
+]|
 
 object null := Object.copy
 
@@ -51,7 +51,7 @@ object Function := Object |[ ]|
 Number := Number
 |[
   method plus(x) [
-    self.assert(x : Number)
+    Assert.that(x : Number)
     result := parent.plus(x)
   ]
   
@@ -61,27 +61,48 @@ Number := Number
 List := List |[
 
   method get(index) [
-    self.assert(index : Number)
+    Assert.that(index : Number)
     result := parent.get(index)
   ]
   
   method set(index, element) [
-    self.assert(index : Number)
+    Assert.that(index : Number)
     parent.set(index, element)
   ]
   
   method pop [
-    self.assert(self.length > 0)
+    Assert.that(self.length > 0)
     result := self.get(self.length - 1)
     self.remove(self.length - 1)
   ]
   
+  method add(element) [
+    self.push(element)
+  ]
+  
   method remove(index) [
-    self.assert(0 <= index and index < self.length)
+    Assert.that(0 <= index and index < self.length)
     parent.remove(index)
   ]
   
   
 ]|
+
+Text.replace(Text |[
+
+    method excerpt(begin, end) [
+        Assert.that(0 <= begin and begin < end and end <= self.length)
+        result := parent.excerpt(begin, end)
+    ]
+    
+    method equals(other) [
+        if other : Text ->
+            result := parent.equals(other)
+        || true ->
+            result := false
+        fi
+    ]
+
+]|)
 
 object Objects := Object.copy
