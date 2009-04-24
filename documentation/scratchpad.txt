@@ -60,3 +60,15 @@ Ensuring that prototypes aren't poluted:
   list.push("foo")
   # the global list isn't affected
 
+Scoping:
+
+  [ and ] should be available wherever a statement is allowed, introducing
+  a new scope.
+
+  Example:
+
+    object a := 42
+    [
+      object b := 3
+    ]
+    # object b is not available here, but object a is
