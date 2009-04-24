@@ -60,31 +60,43 @@ Number := Number
 
 List := List |[
 
-  method get(index) [
-    Assert.that(index : Number)
-    result := parent.get(index)
-  ]
+    object elementType := Object
+    
+    method setElementType(elementType') [
+        Assert.that(self.length = 0)
+        elementType := elementType'
+    ]
+
+    method get(index) [
+        Assert.that(index : Number)
+        result := parent.get(index)
+    ]
   
-  method set(index, element) [
-    Assert.that(index : Number)
-    parent.set(index, element)
-  ]
+    method set(index, element) [
+      Assert.that(index : Number)
+      Assert.that(element : elementType)
+      parent.set(index, element)
+    ]
   
-  method pop [
-    Assert.that(self.length > 0)
-    result := self.get(self.length - 1)
-    self.remove(self.length - 1)
-  ]
+    method pop [
+      Assert.that(self.length > 0)
+      result := self.get(self.length - 1)
+      self.remove(self.length - 1)
+    ]
   
-  method add(element) [
-    self.push(element)
-  ]
+    method add(element) [
+        self.push(element)
+    ]
+    
+    method push(element) [
+        Assert.that(element : elementType)
+        parent.push(element)
+    ]
   
-  method remove(index) [
-    Assert.that(0 <= index and index < self.length)
-    parent.remove(index)
-  ]
-  
+    method remove(index) [
+        Assert.that(0 <= index and index < self.length)
+        parent.remove(index)
+    ] 
   
 ]|
 

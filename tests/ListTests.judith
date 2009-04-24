@@ -1,0 +1,26 @@
+object ListTests := Object |[
+
+    object list := List.copy.setElementType(Text)
+
+    method objectsOfCorrectTypeCanBeAdded [
+        list.add("foo")        
+    ]
+    
+    method objectsOfIncorrectTypeCannotBeAdded [
+        object exceptionWasThrown := false
+        ExceptionHandler |[
+            method try [
+                list.add(1)
+            ]            
+            method catch(exception) [
+                exceptionWasThrown := true
+            ]
+        ]|.run
+        Assert.that(exceptionWasThrown)
+    ]
+
+]|
+
+ListTests
+    .objectsOfCorrectTypeCanBeAdded
+    .objectsOfIncorrectTypeCannotBeAdded
