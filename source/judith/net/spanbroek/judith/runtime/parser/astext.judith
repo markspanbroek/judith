@@ -1,0 +1,177 @@
+Function |[ method run [
+
+    ##
+    # Add string representation to the generated parser parts. This is needed for
+    # the memoization algorithm below.
+    #
+    ParserGenerator := ParserGenerator |[
+
+      object initialized := false
+
+      method initialize [
+
+        Assert.that(not initialized)
+
+        self.beginBecomes(self.begin |[
+          method asText [
+            result := "^"
+          ]
+        ]|)
+        
+        self.endBecomes(self.end |[
+          method asText [
+            result := "$"
+          ]
+        ]|)
+        
+        self.emptyBecomes(self.empty |[
+          method asText [
+            result := "()"
+          ]
+        ]|)
+        
+        self.neverBecomes(self.never |[
+          method asText [
+            result := "0"
+          ]
+        ]|)
+      
+        initialized := true
+        
+      ]
+      
+      method alternation(alternatives) [
+      
+        object text := "("
+        object i := 0
+        if i < alternatives.length ->
+          text := text + alternatives.get(i).asText
+          i := i + 1
+        fi
+        do i < alternatives.length ->
+          text := text + "|"
+          text := text + alternatives.get(i).asText
+          i := i + 1
+        od
+        text := text + ")"
+
+        result := parent.alternation(alternatives) |[
+        
+          method asText [
+            result := text
+          ]
+        
+        ]|
+      
+      ]
+      
+      method concatenation(elements) [
+      
+        object text := "("
+        
+        object i := 0
+        do i < elements.length ->
+            if i > 0 ->
+                text := text + " "
+            fi
+            text := text + elements.get(i)
+            i := i + 1
+        od
+
+        text := text + ")"
+
+        result := parent.concatenation(elements) |[
+            
+          method asText [
+            result := text
+          ]
+        
+        ]|
+      
+      ]
+      
+      method literal(literal) [
+      
+        object text := Text.quote + literal + Text.quote
+            
+        result := parent.literal(literal) |[
+        
+          method asText [
+            result := text
+          ]
+        
+        ]|
+      
+      ]
+      
+      method range(lower, upper) [
+
+        object text := "[" + lower + ".." + upper + "]"
+            
+        result := parent.range(lower, upper) |[
+
+          method asText [
+            result := text
+          ]
+          
+        ]|
+      
+      ]
+      
+      method repetition(operand) [
+      
+        object text := operand.asText + "*"
+
+        result := parent.repetition(operand) |[
+        
+          method asText [
+            result := text
+          ]
+        
+        ]| 
+      
+      ]
+      
+      method repetitionplus(operand) [
+      
+        object text := operand.asText + "+"
+
+        result := parent.repetitionplus(operand) |[
+        
+          method asText [
+            result := text
+          ]
+        
+        ]| 
+      
+      ]
+      
+      method rule(name) [
+
+        result := parent.rule(name) |[
+        
+          method asText [
+            result := name
+          ]
+        
+        ]|  
+      
+      ]
+
+      method transform(operand, transform) [
+      
+        object text := "{" + operand.asText + "}"
+      
+        result := parent.transform(operand, transform) |[
+        
+          method asText [
+            result := text
+          ]
+        
+        ]|
+      
+      ]
+      
+    ]|.initialize
+
+]]|.run

@@ -1,0 +1,117 @@
+Function |[ method run [
+
+    ##
+    # Add memoization to support left-recursion, and improve the time complexity
+    # from exponential to polynomial.
+    #
+    ParserGenerator := ParserGenerator |[
+
+      object Result := Object |[
+      
+        object index := null
+        object value := null
+        
+        method index [
+          result := index
+        ]
+        
+        method indexBecomes(index') [
+          index := index'
+        ]
+
+        method value [
+          result := value
+        ]
+        
+        method valueBecomes(value') [
+          value := value'
+        ]
+      
+      ]|
+
+      object CacheEntry := Object |[
+      
+        object results := List.copy
+        object continuations := List.copy
+        
+        method results [ 
+          result := results 
+        ]
+        
+        method continuations [ 
+          result := results 
+        ]
+      
+      ]|
+
+      method memoize(function) [
+      
+        object text := function.asText
+        
+        result := Parser |[ 
+        
+          method run(context, index, result, continuation) [
+
+            object key := function.asText + "," + index.asText
+            
+            if (context.cache.has(key)) ->
+            
+              object entry := context.cache.at(key)
+              
+              entry.continuations.push(continuation)
+              object iterator := entry.results.iterator
+              do iterator.hasNext ->
+                object result := iterator.next
+                continuation.run(result.index, result.value)
+              od
+              
+            || true ->
+
+              object entry := CacheEntry.copy
+              context.cache.set(key, entry)
+              
+              entry.continuations.push(continuation)
+              
+              object newcontinuation := Function |[ method run(index, value) [
+              
+                  object result := Result.copy
+                  result.indexBecomes(index)
+                  result.valueBecomes(value)
+                  entry.results.push(result)
+                  
+                  object iterator := entry.continuations.iterator
+                  do iterator.hasNext ->
+                    iterator.next.run(index, value)
+                  od
+                  
+              ] ]|
+              
+              function.run(context, index, result, newcontinuation)
+              
+            fi
+            
+          ]
+          
+          method asText [
+            result := text
+          ]
+        
+        ]|
+      
+      ]
+      
+      method rule(name) [
+      
+        result := self.memoize(parent.rule(name))
+      
+      ]
+      
+      method repetitionplus(operand) [
+      
+        result := self.memoize(parent.repetitionplus(operand))
+      
+      ]
+
+    ]|
+
+]]|.run
