@@ -1,3 +1,5 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
 object AlternativesTest := Object |[
     
     object parser := 

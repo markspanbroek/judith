@@ -1,10 +1,8 @@
-Function |[ method run [
+Object |[ method keepGlobalScopeTidy [
 
-    ##
-    # Add string representation to the generated parser parts. This is needed for
-    # the memoization algorithm below.
-    #
-    ParserGenerator := ParserGenerator |[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+
+    ParserGenerator.replace( ParserGenerator |[
 
       object initialized := false
 
@@ -172,6 +170,8 @@ Function |[ method run [
       
       ]
       
-    ]|.initialize
+    ]| )
+    
+    ParserGenerator.initialize
 
-]]|.run
+]]|.keepGlobalScopeTidy

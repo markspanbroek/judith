@@ -1,40 +1,12 @@
-object ParserGenerator := null
-object Parser := null
+Object |[ method keepGlobalScopeTidy [
 
-Function |[ method run [
-
-    Parser := Function |[
-
-        method parse(input) [
-
-            Assert.that(input : Text)
-        
-            object parseResult := null
-        
-            object continuation := Function |[
-                method run(index, result) [
-                    parseResult := result
-                ]
-            ]|
-            
-            object context := Object |[
-                method input [
-                    result := input
-                ]
-            ]|
-            
-            self.run(context, 0, List.copy, continuation)
-            
-            result := parseResult                
-            
-        ]
-        
-    ]|
+    object Parser := Objects.Parsing.Parser
 
     ##
     # A recursive descent parser in continuation passing style.
     #
-    ParserGenerator := Object |[
+    object ParserGenerator := Object 
+    |[
 
       method alternation(alternatives) [
       
@@ -250,5 +222,11 @@ Function |[ method run [
       
     ]|
     
-]]|.run
-
+    Objects.Parsing.replace( Objects.Parsing |[
+        method ParserGenerator
+        [
+            result := ParserGenerator
+        ]
+    ]| )
+    
+] ]|.keepGlobalScopeTidy

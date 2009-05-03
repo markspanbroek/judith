@@ -1,32 +1,42 @@
-Function |[ 
-  method run [
-  
-    object StandardInput := Object |[
-      method readLine [
+Function 
+|[ 
+  method run 
+  [  
+    object StandardInput := Object 
+    |[
+      method readLine 
+      [
         # skip
       ]
     ]|
     
-    object StandardOutput := Object |[
-      method write(text) [
+    object StandardOutput := Object 
+    |[
+      method write(text) 
+      [
         Assert.that(text : Text)
       ]
     ]|
     
-    object IO := Object |[
-      method StandardInput [
+    object IO := Object 
+    |[
+      method StandardInput 
+      [
         result := StandardInput
       ]
-      method StandardOutput [
+      
+      method StandardOutput 
+      [
         result := StandardOutput
       ]
     ]|
     
-    Objects := Objects |[
-      method IO [
+    Objects := Objects 
+    |[
+      method IO 
+      [
         result := IO
       ]
     ]|
-  
   ] 
 ]|.run

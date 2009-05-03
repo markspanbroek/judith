@@ -1,3 +1,5 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
 object RangeTests := Object |[
 
     object parser := ParserGenerator.range("b", "y")

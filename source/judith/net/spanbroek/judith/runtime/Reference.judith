@@ -1,0 +1,37 @@
+Object |[ method keepGlobalScopeTidy [
+    
+    object Reference := Object
+    |[
+        object value := null
+        
+        method initialize(value')
+        [
+            Assert.that(caller : self)
+            value := value'
+        ]
+        
+        method create(value)
+        [
+            result := self.copy.initialize(value)
+        ]
+        
+        method get
+        [
+            result := value
+        ]
+        
+        method set(value')
+        [
+            value := value'
+        ]
+    ]|
+    
+    Objects := Objects
+    |[
+        method Reference 
+        [
+            result := Reference.copy
+        ]
+    ]|
+        
+] ]|.keepGlobalScopeTidy

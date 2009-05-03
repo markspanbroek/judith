@@ -35,9 +35,11 @@ public class World extends Scope {
 
         interpret("world.judith");
         interpret("IO.judith");
-        interpret("parser/basics.judith");
-        interpret("parser/astext.judith");
-        interpret("parser/memoization.judith");
+        interpret("Reference.judith");
+        interpret("parsing/Parser.judith");
+        interpret("parsing/basics.judith");
+        interpret("parsing/astext.judith");
+        interpret("parsing/memoization.judith");
  
         IOBuilder.build(this);
 

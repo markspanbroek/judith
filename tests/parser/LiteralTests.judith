@@ -1,3 +1,5 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
 object LiteralTests := Object |[
 
     object parser := ParserGenerator.literal("foo")

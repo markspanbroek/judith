@@ -1,0 +1,64 @@
+Object |[ method keepGlobalScopeTidy [
+
+    object Reference := Objects.Reference
+
+    object Parser := Object
+    |[
+        method parse(input) 
+        [
+            Assert.that(input : Text)
+
+            object parseResult := Reference.create(null)
+            object continuation := self.createContinuation(parseResult)
+            object context := self.createContext(input)
+            
+            self.run(context, 0, List.copy, continuation)
+            
+            result := parseResult.get
+        ]
+        
+        method createContext(input)
+        [
+            Assert.that(self = caller)
+
+            result := Object 
+            |[
+                method input 
+                [
+                    result := input
+                ]
+            ]|
+        ]
+        
+        method createContinuation(parseResult)
+        [
+            Assert.that(self = caller)
+            Assert.that(parseResult : Reference)
+            
+            result := Function 
+            |[
+                method run(index, result) 
+                [
+                    parseResult.set(result)
+                ]
+            ]|
+        ]
+    ]|
+    
+    object Parsing := Object
+    |[
+        method Parser
+        [
+            result := Parser
+        ]
+    ]|
+    
+    Objects := Objects
+    |[
+        method Parsing
+        [
+            result := Parsing
+        ]
+    ]|
+    
+] ]|.keepGlobalScopeTidy

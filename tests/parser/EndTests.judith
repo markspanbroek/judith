@@ -1,3 +1,5 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
 object EndTests := Object |[
 
     method parseSucceeds [

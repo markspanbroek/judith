@@ -1,3 +1,5 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
 object NeverTests := Object |[
 
     method parseFails [

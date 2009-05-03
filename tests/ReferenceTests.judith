@@ -1,0 +1,24 @@
+object Reference := Objects.Reference
+
+object ReferenceTests := Object
+|[
+    method initialValueIsNull
+    [
+        Assert.that(Reference.get = null)
+    ]
+
+    method creationStoresValue
+    [
+        Assert.that(Reference.create(10).get = 10)
+    ]
+    
+    method setChangesValue
+    [
+        Assert.that(Reference.create(10).set(5).get = 5)
+    ]
+]|
+
+ReferenceTests
+    .initialValueIsNull
+    .creationStoresValue
+    .setChangesValue

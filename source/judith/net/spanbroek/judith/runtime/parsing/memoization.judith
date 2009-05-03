@@ -1,10 +1,13 @@
-Function |[ method run [
+Object |[ method keepGlobalScopeTidy [
+
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Parser := Objects.Parsing.Parser
 
     ##
     # Add memoization to support left-recursion, and improve the time complexity
     # from exponential to polynomial.
     #
-    ParserGenerator := ParserGenerator |[
+    ParserGenerator.replace( ParserGenerator |[
 
       object Result := Object |[
       
@@ -112,6 +115,6 @@ Function |[ method run [
       
       ]
 
-    ]|
+    ]| )
 
-]]|.run
+] ]|.keepGlobalScopeTidy
