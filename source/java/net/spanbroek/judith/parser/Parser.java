@@ -2,7 +2,6 @@ package net.spanbroek.judith.parser;
 
 import net.spanbroek.judith.parser.parser.*;
 import net.spanbroek.judith.parser.lexer.*;
-import net.spanbroek.judith.parser.Visitor;
 import net.spanbroek.judith.tree.Program;
 import net.spanbroek.judith.Exception;
 import java.io.*;
