@@ -57,18 +57,18 @@ Object |[ method keepGlobalScopeTidy [
 
             object key := function.asText + "," + index.asText
             
-            if (context.cache.has(key)) ->
+            if (context.cache.has(key)) 
             
               object entry := context.cache.at(key)
               
               entry.continuations.push(continuation)
               object iterator := entry.results.iterator
-              do iterator.hasNext ->
+              do iterator.hasNext 
                 object result := iterator.next
                 continuation.run(result.index, result.value)
               od
               
-            || true ->
+            || true 
 
               object entry := CacheEntry.copy
               context.cache.set(key, entry)
@@ -83,7 +83,7 @@ Object |[ method keepGlobalScopeTidy [
                   entry.results.push(result)
                   
                   object iterator := entry.continuations.iterator
-                  do iterator.hasNext ->
+                  do iterator.hasNext 
                     iterator.next.run(index, value)
                   od
                   

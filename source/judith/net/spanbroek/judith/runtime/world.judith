@@ -25,9 +25,9 @@ ExceptionHandler := ExceptionHandler |[
 object AssertionFailedException := Exception |[
 
   method asText[
-    if self.message = "" ->
+    if self.message = "" 
       result := "Assertion failed."
-    || true ->
+    || true 
       result := "Assertion failed: " + self.message
     fi
   ]
@@ -37,7 +37,7 @@ object AssertionFailedException := Exception |[
 object Assert := Object |[
 
     method that(assertion) [
-        if not assertion ->
+        if not assertion 
             AssertionFailedException.throw
         fi
     ]
@@ -108,9 +108,9 @@ Text.replace(Text |[
     ]
     
     method equals(other) [
-        if other : Text ->
+        if other : Text 
             result := parent.equals(other)
-        || true ->
+        || true 
             result := false
         fi
     ]

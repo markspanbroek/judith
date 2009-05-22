@@ -13,7 +13,7 @@ Object |[ method keepGlobalScopeTidy [
         result := Parser |[ method run(context, index, result, continuation) [
           
           object i := 0
-          do i < alternatives.length ->
+          do i < alternatives.length 
             alternatives.get(i).run(context, index, result, continuation)
             i := i + 1
           od
@@ -24,7 +24,7 @@ Object |[ method keepGlobalScopeTidy [
       
       object begin := Parser |[ method run(context, index, result, continuation) [
       
-        if index = 0 ->
+        if index = 0 
           ParserGenerator.empty.run(context, index, result, continuation)
         fi
         
@@ -46,7 +46,7 @@ Object |[ method keepGlobalScopeTidy [
       
       method concatenation(elements) [
         
-        if elements.length > 0 ->
+        if elements.length > 0 
         
           object generator := self
 
@@ -67,7 +67,7 @@ Object |[ method keepGlobalScopeTidy [
               
           ] ]|
           
-        || true ->
+        || true 
         
           result := empty
           
@@ -97,7 +97,7 @@ Object |[ method keepGlobalScopeTidy [
       
       object end := Parser |[ method run(context, index, result, continuation) [
          
-        if index = context.input.length ->
+        if index = context.input.length 
           ParserGenerator.empty.run(context, index, result, continuation)
         fi
           
@@ -121,8 +121,8 @@ Object |[ method keepGlobalScopeTidy [
       
         result := Parser |[ method run(context, index, result, continuation) [
 
-          if index + literal.length <= context.input.length ->
-            if context.input.excerpt(index, index + literal.length) = literal ->
+          if index + literal.length <= context.input.length 
+            if context.input.excerpt(index, index + literal.length) = literal 
               continuation.run(index + literal.length, result.copy.push(literal))
             fi
           fi
@@ -156,7 +156,7 @@ Object |[ method keepGlobalScopeTidy [
         result := Parser |[ method run(context, index, result, continuation) [
         
           object character := context.input.excerpt(index, index+1)
-          if (lower <= character and character <= upper) ->
+          if (lower <= character and character <= upper) 
             continuation.run(index+1, result.copy.push(character))
           fi
         

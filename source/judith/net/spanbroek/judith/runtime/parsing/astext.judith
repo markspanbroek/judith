@@ -42,11 +42,11 @@ Object |[ method keepGlobalScopeTidy [
       
         object text := "("
         object i := 0
-        if i < alternatives.length ->
+        if i < alternatives.length 
           text := text + alternatives.get(i).asText
           i := i + 1
         fi
-        do i < alternatives.length ->
+        do i < alternatives.length 
           text := text + "|"
           text := text + alternatives.get(i).asText
           i := i + 1
@@ -68,8 +68,8 @@ Object |[ method keepGlobalScopeTidy [
         object text := "("
         
         object i := 0
-        do i < elements.length ->
-            if i > 0 ->
+        do i < elements.length 
+            if i > 0 
                 text := text + " "
             fi
             text := text + elements.get(i)

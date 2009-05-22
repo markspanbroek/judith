@@ -23,7 +23,7 @@ object AssertTests := Object |[
       
     ]|.run
     
-    if not exceptionWasThrown ->
+    if not exceptionWasThrown
       AssertionFailedException.throw
     fi
   ]

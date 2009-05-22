@@ -1,6 +1,6 @@
 /*
  * conversion of the judith language specification into sablecc
- * 2007-01-12
+ * 2009-05-22
  * Mark Spanbroek
  */
 Package
@@ -27,7 +27,6 @@ Tokens
 
   atleast      = '>=';
   atmost       = '<=';
-  arrow        = '->';
   becomes      = ':=';
   closebrace   = ')';
   closebracket = ']';
@@ -87,7 +86,7 @@ Productions
                | {single} conditional
                ;
 
-  conditional = expression arrow statements;
+  conditional = expression statements;
 
   expression = {and} expression andsym expression1
              | {or} expression orsym expression1

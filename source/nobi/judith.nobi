@@ -1,5 +1,5 @@
 # judith language specification
-# 2008-11-04
+# 2009-05-22
 # Mark Spanbroek
 
 program      = w statements w
@@ -11,7 +11,7 @@ assignment   = identifier w ":=" w expression
 if           = "if" w conditionals w "fi"
 do           = "do" w conditionals w "od"
 conditionals = conditional (w "||" w conditional)*
-conditional  = expression w "->" w statements
+conditional  = expression w statements
 
 expression   = (expression w ("and"|"or") w)? expression1
 expression1  = (expression1 w ("="|"<="|">="|"<"|">"|":") w)? expression2
