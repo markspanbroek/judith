@@ -72,6 +72,14 @@ class Visitor extends DepthFirstAdapter {
         stack.push(conditional);
     }
 
+    public void outABlock(ABlock node) {
+        List statements = (List)stack.pop();
+        Block block = new Block(
+          (Statement[])statements.toArray(new Statement[]{})
+        );
+        stack.push(block);
+    }
+
     public void outAIdentifierExpression7(AIdentifierExpression7 node) {
         String identifier = (String)stack.pop();
         stack.push(new Reference(identifier));

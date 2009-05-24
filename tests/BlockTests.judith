@@ -1,0 +1,14 @@
+object BlockTests := Object |[
+
+    method blockHasOwnScope [
+        object foo := true
+        [
+            object foo := false
+        ]
+        Assert.that(foo)
+    ]
+
+]|
+
+BlockTests
+    .blockHasOwnScope

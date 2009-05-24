@@ -1,0 +1,10 @@
+object LambdaTests |[
+
+    method lambdaExpressionCreatesFunction [
+        Assert.that([x->x] : Function)
+    ]
+
+]|
+
+LambdaTests
+    .lambdaExpressionCreatesFunction

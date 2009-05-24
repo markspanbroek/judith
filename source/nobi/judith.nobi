@@ -1,10 +1,10 @@
 # judith language specification
-# 2009-05-22
+# 2009-05-24
 # Mark Spanbroek
 
 program      = w statements w
 statements   = (statement (w statement)*)?
-statement    = object | assignment | if | do | methodcall
+statement    = object | assignment | if | do | methodcall | block
 
 object       = "object" w identifier w ":=" w expression
 assignment   = identifier w ":=" w expression
@@ -12,6 +12,7 @@ if           = "if" w conditionals w "fi"
 do           = "do" w conditionals w "od"
 conditionals = conditional (w "||" w conditional)*
 conditional  = expression w statements
+block        = "[" w statements w "]"
 
 expression   = (expression w ("and"|"or") w)? expression1
 expression1  = (expression1 w ("="|"<="|">="|"<"|">"|":") w)? expression2
@@ -19,12 +20,13 @@ expression2  = (expression2 w ("+"|"-") w)? expression3
 expression3  = (expression3 w ("*"|"/") w)? expression4
 expression4  = (expression4 w "^" w)? expression5
 expression5  = ("not"|"-") w expression5 | expression6
-expression6  = methodcall | alteration | expression7
+expression6  = methodcall | alteration | lambda | expression7
 expression7  = braces | identifier | text | number | boolean
 
 methodcall   = expression6 "." identifier (expressions)?
 expressions  = "(" w expression (w "," w expression)* w ")"
 alteration   = expression 6 w "|[" (w (object|method))* w "]|"
+lambda       = "[" w identifier (w "," w identifier)* w "->" w expression w "]"
 braces       = "(" w expression w ")"
 method       = "method" w identifier (identifiers)? w "[" w statements w "]"
 identifiers  = "(" w identifier (w "," w identifier)* w ")"

@@ -64,6 +64,13 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    public void visit(net.spanbroek.judith.tree.Block node) {
+        stack.push(scope);
+        scope = new Scope(scope);
+        visit(node.getStatements());
+        scope = (Scope)stack.pop();
+    }
+
     public void visit(net.spanbroek.judith.tree.Boolean node) {
         stack.push(world.wrap(node.getValue()));
     }

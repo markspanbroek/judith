@@ -1,6 +1,6 @@
 /*
  * conversion of the judith language specification into sablecc
- * 2009-05-22
+ * 2009-05-24
  * Mark Spanbroek
  */
 Package
@@ -27,6 +27,7 @@ Tokens
 
   atleast      = '>=';
   atmost       = '<=';
+  arrow        = '->';
   becomes      = ':=';
   closebrace   = ')';
   closebracket = ']';
@@ -72,6 +73,7 @@ Productions
             | {if} if
             | {do} do
             | {methodcall} methodcall
+            | {block} block
             ;
 
   object = objectsym identifier becomes expression;
@@ -87,6 +89,8 @@ Productions
                ;
 
   conditional = expression statements;
+
+  block = openbracket statement statements closebracket;
 
   expression = {and} expression andsym expression1
              | {or} expression orsym expression1
@@ -123,6 +127,7 @@ Productions
 
   expression6 = {methodcall} methodcall
               | {alteration} alteration
+              | {lambda} lambda
               | {simple} expression7
               ;
 
@@ -152,6 +157,8 @@ Productions
   alterationpart = {object} object
                  | {method} method
                  ;
+
+  lambda = openbracket identifierlist arrow expression closebracket;
 
   braces = openbrace expression closebrace;
 

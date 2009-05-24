@@ -4,6 +4,7 @@ public abstract class Visitor {
 
     public void visit(Alteration node) {}
     public void visit(Assignment node) {}
+    public void visit(Block node) {}
     public void visit(Boolean node) {}
     public void visit(Conditional node) {}
     public void visit(Do node) {}

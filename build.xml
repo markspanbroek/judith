@@ -80,7 +80,9 @@
   <target name='test' depends='jar,testStandardOutput,testStandardInput'>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
       <arg file='tests/AssertTests.judith'/>
+      <!--arg file='tests/BlockTests.judith'/-->
       <arg file='tests/BooleanTests.judith'/>
+      <!--arg file='tests/LambdaTests.judith'/-->
       <arg file='tests/ListTests.judith'/>
       <arg file='tests/ReferenceTests.judith'/>
       <arg file='tests/TextTests.judith'/>
