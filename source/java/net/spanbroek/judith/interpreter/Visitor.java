@@ -1,5 +1,6 @@
 package net.spanbroek.judith.interpreter;
 
+import net.spanbroek.judith.tree.Assignment;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.*;
 import net.spanbroek.judith.Exception;
@@ -122,7 +123,24 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     public void visit(net.spanbroek.judith.tree.Lambda node) {
-        // TODO
+
+        Object function = new Object(world.get("Function"), scope);
+
+        Assignment resultAssignment = new Assignment(
+          "result",
+          node.getExpression()
+        );
+
+        Method evaluateMethod = new InterpretedMethod(
+          node.getIdentifiers(),
+          new Assignment[]{ resultAssignment },
+          world
+        );
+
+        function.declare("evaluate", evaluateMethod);
+        
+        stack.push(function);
+
     }
 
     public void visit(net.spanbroek.judith.tree.Method node) {

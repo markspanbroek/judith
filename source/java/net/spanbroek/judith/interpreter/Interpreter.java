@@ -16,7 +16,7 @@ public class Interpreter {
     }
 
     public Interpreter(World world) {
-        this(world, world);
+        this(world, new Scope(world));
     }
 
     public Interpreter(World world, Scope scope) {

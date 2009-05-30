@@ -11,11 +11,6 @@ import java.io.*;
  * the initial objects. It is implemented as a Java singleton object.
  */
 public class World extends Scope {
-
-    /**
-     * Indicates whether world.judith has been executed.
-     */
-    private static boolean initialized = false;
     
     /**
      * Initializes the global context of Judith execution.
@@ -96,7 +91,7 @@ public class World extends Scope {
     private void interpret(String file) {
 
         try {    
-            Interpreter interpreter = new Interpreter(this);
+            Interpreter interpreter = new Interpreter(this, this);
             InputStream in = World.class.getResourceAsStream(file);
             Reader reader = new InputStreamReader(in, "UTF-8");
             interpreter.interpret(reader, file);
