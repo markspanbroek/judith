@@ -74,6 +74,7 @@ class Visitor extends DepthFirstAdapter {
 
     public void outABlock(ABlock node) {
         List statements = (List)stack.pop();
+        statements.add(stack.pop());
         Block block = new Block(
           (Statement[])statements.toArray(new Statement[]{})
         );
