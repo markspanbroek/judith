@@ -1,5 +1,6 @@
 package net.spanbroek.judith.parser;
 
+import net.spanbroek.judith.tree.Lambda;
 import net.spanbroek.judith.parser.analysis.*;
 import net.spanbroek.judith.parser.node.*;
 import net.spanbroek.judith.tree.Object;
@@ -141,6 +142,17 @@ class Visitor extends DepthFirstAdapter {
             (Method[])methods.toArray(new Method[]{})
         );
         stack.push(alteration);
+    }
+
+    public void outALambda(ALambda node) {
+        Expression expression = (Expression)stack.pop();
+        List identifiers = (List)stack.pop();
+        stack.push(
+          new Lambda(
+            (String[])identifiers.toArray(new String[]{}),
+            expression
+          )
+        );
     }
 
     public void outAParametersMethod(AParametersMethod node) {

@@ -121,8 +121,8 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
-    public void visit(net.spanbroek.judith.tree.Program node) {
-        visit(node.getStatements());
+    public void visit(net.spanbroek.judith.tree.Lambda node) {
+        // TODO
     }
 
     public void visit(net.spanbroek.judith.tree.Method node) {
@@ -165,6 +165,10 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     public void visit(net.spanbroek.judith.tree.Object node) {
         node.getExpression().accept(this);
         scope.declare(node.getIdentifier(), (Object)stack.pop());
+    }
+
+    public void visit(net.spanbroek.judith.tree.Program node) {
+        visit(node.getStatements());
     }
 
     public void visit(net.spanbroek.judith.tree.Reference node) {

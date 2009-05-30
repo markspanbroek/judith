@@ -1,4 +1,4 @@
-object LambdaTests |[
+object LambdaTests := Object |[
 
     method lambdaExpressionCreatesFunction [
         Assert.that([x->x] : Function)
