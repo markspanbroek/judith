@@ -3,7 +3,6 @@ package net.spanbroek.judith.scriptapi;
 import net.spanbroek.judith.interpreter.*;
 import javax.script.*;
 import java.io.*;
-import java.util.*;
 
 public class JudithScriptEngine extends AbstractScriptEngine {
 

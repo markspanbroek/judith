@@ -71,7 +71,17 @@ public class JudithScriptEngineFactory implements ScriptEngineFactory {
     }
 
     public String getOutputStatement(String toDisplay) {
-        return ""; // TODO
+        String result = "Objects.IO.StandardOutput.write(";
+        boolean isFirst = true;
+        for(String s : toDisplay.split("\"")) {
+            if(!isFirst) {
+                result += " + Text.quote + ";
+            }
+            result += "\"" + s + "\"";
+            isFirst = false;
+        }
+        result = result + ")";
+        return result;
     }
 
     public String getProgram(String... statements) {
