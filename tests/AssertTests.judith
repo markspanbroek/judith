@@ -1,11 +1,11 @@
 object AssertTests := Object |[
 
-  method DoesNotThrowOnTrue 
+  method doesNotThrowOnTrue 
   [
     Assert.that(true)
   ] 
   
-  method ThrowsOnFalse 
+  method throwsOnFalse 
   [
     object exceptionWasThrown := false
     
@@ -31,5 +31,5 @@ object AssertTests := Object |[
 ]|
 
 AssertTests
-  .DoesNotThrowOnTrue
-  .ThrowsOnFalse
+  .doesNotThrowOnTrue
+  .throwsOnFalse

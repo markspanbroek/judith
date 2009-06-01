@@ -19,6 +19,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         this.self = self;
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Alteration node) {
 
         // calculate the operand
@@ -54,6 +55,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Assignment node) {
 
         // evaluate the expression
@@ -65,6 +67,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Block node) {
         stack.push(scope);
         scope = new Scope(scope);
@@ -72,10 +75,12 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         scope = (Scope)stack.pop();
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Boolean node) {
         stack.push(world.wrap(node.getValue()));
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Conditional node) {
 
         // evaluate the expression
@@ -92,6 +97,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Do node) {
 
         // go through all conditionals until no condition holds
@@ -108,6 +114,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.If node) {
 
         // go through all conditionals until one condition holds
@@ -122,6 +129,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Lambda node) {
 
         Object function = new Object(world.get("Function"), scope);
@@ -143,10 +151,12 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Method node) {
         // skip
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.MethodCall node) {
 
         // calculate the operand
@@ -176,23 +186,28 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Number node) {
         stack.push(world.wrap(node.getValue()));
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Object node) {
         node.getExpression().accept(this);
         scope.declare(node.getIdentifier(), (Object)stack.pop());
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Program node) {
         visit(node.getStatements());
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Reference node) {
         stack.push(scope.get(node.getIdentifier()));
     }
 
+    @Override
     public void visit(net.spanbroek.judith.tree.Text node) {
         stack.push(world.wrap(node.getValue()));
     }

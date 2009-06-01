@@ -4,6 +4,7 @@ object BlockTests := Object |[
         object foo := true
         [
             object foo := false
+            Assert.that(not foo)
         ]
         Assert.that(foo)
     ]

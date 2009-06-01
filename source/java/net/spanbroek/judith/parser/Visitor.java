@@ -1,6 +1,5 @@
 package net.spanbroek.judith.parser;
 
-import net.spanbroek.judith.tree.Lambda;
 import net.spanbroek.judith.parser.analysis.*;
 import net.spanbroek.judith.parser.node.*;
 import net.spanbroek.judith.tree.Object;
@@ -23,6 +22,7 @@ class Visitor extends DepthFirstAdapter {
         return (Program)stack.peek();
     }
 
+    @Override
     public void outAProgram(AProgram node) {
         List statements = (List)stack.pop();
         stack.push(
@@ -32,6 +32,7 @@ class Visitor extends DepthFirstAdapter {
         );
     }
 
+    @Override
     public void outAObject(AObject node) {
         Expression expression = (Expression)stack.pop();
         String identifier = (String)stack.pop();
@@ -39,6 +40,7 @@ class Visitor extends DepthFirstAdapter {
         stack.push(object);
     }
 
+    @Override
     public void outAAssignment(AAssignment node) {
         Expression expression = (Expression)stack.pop();
         String identifier = (String)stack.pop();
@@ -46,6 +48,7 @@ class Visitor extends DepthFirstAdapter {
         stack.push(assignment);
     }
     
+    @Override
     public void outAIf(AIf node) {
         List conditionals = (List)stack.pop();
         If i = new If(
@@ -54,6 +57,7 @@ class Visitor extends DepthFirstAdapter {
         stack.push(i);
     }
 
+    @Override
     public void outADo(ADo node) {
         List conditionals = (List)stack.pop();
         Do d = new Do(
@@ -63,6 +67,7 @@ class Visitor extends DepthFirstAdapter {
     }
 
 
+    @Override
     public void outAConditional(AConditional node) {
         List statements = (List)stack.pop();
         Expression expression = (Expression)stack.pop();
@@ -73,20 +78,23 @@ class Visitor extends DepthFirstAdapter {
         stack.push(conditional);
     }
 
+    @Override
     public void outABlock(ABlock node) {
         List statements = (List)stack.pop();
-        statements.add(stack.pop());
+        statements.add(0, stack.pop());
         Block block = new Block(
           (Statement[])statements.toArray(new Statement[]{})
         );
         stack.push(block);
     }
 
+    @Override
     public void outAIdentifierExpression7(AIdentifierExpression7 node) {
         String identifier = (String)stack.pop();
         stack.push(new Reference(identifier));
     }
 
+    @Override
     public void outAParametersMethodcall(AParametersMethodcall node) {
         List expressions = (List)stack.pop();
         String identifier = (String)stack.pop();
@@ -105,6 +113,7 @@ class Visitor extends DepthFirstAdapter {
         );
     }
 
+    @Override
     public void outASimpleMethodcall(ASimpleMethodcall node) {
         String identifier = (String)stack.pop();
         Expression operand = (Expression)stack.pop();
@@ -122,6 +131,7 @@ class Visitor extends DepthFirstAdapter {
         );
     }
 
+    @Override
     public void outAAlteration(AAlteration node) {
         List alterationParts = (List)stack.pop();
         Expression operand = (Expression)stack.pop();
@@ -144,6 +154,7 @@ class Visitor extends DepthFirstAdapter {
         stack.push(alteration);
     }
 
+    @Override
     public void outALambda(ALambda node) {
         Expression expression = (Expression)stack.pop();
         List identifiers = (List)stack.pop();
@@ -155,6 +166,7 @@ class Visitor extends DepthFirstAdapter {
         );
     }
 
+    @Override
     public void outAParametersMethod(AParametersMethod node) {
         List statements = (List)stack.pop();
         List identifiers = (List)stack.pop();
@@ -167,6 +179,7 @@ class Visitor extends DepthFirstAdapter {
         stack.push(method);
     }
 
+    @Override
     public void outASimpleMethod(ASimpleMethod node) {
         List statements = (List)stack.pop();
         String identifier = (String)stack.pop();
@@ -178,24 +191,29 @@ class Visitor extends DepthFirstAdapter {
         stack.push(method);
     }
 
+    @Override
     public void caseTBoolean(TBoolean node) {
         stack.push(new Boolean("true".equals(node.getText())));
     }
 
+    @Override
     public void caseTNumber(TNumber node) {
         stack.push(new Number(Double.parseDouble(node.getText())));
     }
 
+    @Override
     public void caseTText(TText node) {
         String text = node.getText();
         text = text.substring(1,text.length()-1);
         stack.push(new Text(text));
     }
 
+    @Override
     public void caseTIdentifier(TIdentifier node) {
         stack.push(node.getText());
     }
 
+    @Override
     public void caseTIdentifierbrace(TIdentifierbrace node) {
         String identifier = node.getText();
         identifier = identifier.substring(0,identifier.length()-1);
@@ -204,62 +222,77 @@ class Visitor extends DepthFirstAdapter {
 
     // operators
 
+    @Override
     public void outAAndExpression(AAndExpression node) {
         binaryOperation("and", node.getAndsym());
     }
 
+    @Override
     public void outAOrExpression(AOrExpression node) {
         binaryOperation("or", node.getOrsym());
     }
 
+    @Override
     public void outAEqualsExpression1(AEqualsExpression1 node) {
         binaryOperation("equals", node.getEquals());
     }
 
+    @Override
     public void outAAtmostExpression1(AAtmostExpression1 node) {
         binaryOperation("atmost", node.getAtmost());
     }
 
+    @Override
     public void outAAtleastExpression1(AAtleastExpression1 node) {
         binaryOperation("atleast", node.getAtleast());
     }
 
+    @Override
     public void outALessthanExpression1(ALessthanExpression1 node) {
         binaryOperation("lessthan", node.getLessthan());
     }
 
+    @Override
     public void outAMorethanExpression1(AMorethanExpression1 node) {
         binaryOperation("morethan", node.getMorethan());
     }
 
+    @Override
     public void outAColonExpression1(AColonExpression1 node) {
         binaryOperation("colon", node.getColon());
     }
 
+    @Override
     public void outAPlusExpression2(APlusExpression2 node) {
         binaryOperation("plus", node.getPlus());
     }
 
+    @Override
     public void outAMinusExpression2(AMinusExpression2 node) {
         binaryOperation("minus", node.getMinus());
     }
 
+    @Override
     public void outAStarExpression3(AStarExpression3 node) {
         binaryOperation("star", node.getTimes());
     }
 
+    @Override
     public void outASlashExpression3(ASlashExpression3 node) {
         binaryOperation("slash", node.getDivide());
     }
 
+    @Override
     public void outACarrotExpression4(ACarrotExpression4 node) {
         binaryOperation("carrot", node.getPower());
     }
 
+    @Override
     public void outAMinusExpression5(AMinusExpression5 node) {
         unaryOperation("minus", node.getMinus());
     }
 
+    @Override
     public void outANotExpression5(ANotExpression5 node) {
         unaryOperation("not", node.getNotsym());
     }
@@ -290,42 +323,52 @@ class Visitor extends DepthFirstAdapter {
 
     // lists
 
+    @Override
     public void outAMultipleStatements(AMultipleStatements node) {
         addtoList();
     }
 
+    @Override
     public void outAEmptyStatements(AEmptyStatements node) {
         startEmptyList();
     }
 
+    @Override
     public void outAMultipleConditionals(AMultipleConditionals node) {
         addtoList();
     }
 
+    @Override
     public void outASingleConditionals(ASingleConditionals node) {
         startList();
     }
 
+    @Override
     public void outAMultipleExpressionlist(AMultipleExpressionlist node) {
         addtoList();
     }
 
+    @Override
     public void outASingleExpressionlist(ASingleExpressionlist node) {
         startList();
     }
 
+    @Override
     public void outAMultipleAlterationparts(AMultipleAlterationparts node) {
         addtoList();
     }
 
+    @Override
     public void outAEmptyAlterationparts(AEmptyAlterationparts node) {
         startEmptyList();
     }
 
+    @Override
     public void outAMultipleIdentifierlist(AMultipleIdentifierlist node) {
         addtoList();
     }
 
+    @Override
     public void outASingleIdentifierlist(ASingleIdentifierlist node) {
         startList();
     }
