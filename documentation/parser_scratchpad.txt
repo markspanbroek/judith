@@ -1,0 +1,114 @@
+# define what we expect a parser to produce
+object ParseResult := Object |[
+
+    object result' := null
+    object index'  := null
+    
+    method result [
+        result := result'
+    ]
+    
+    method index [
+        result := index'
+    ]
+    
+    method create(result, index) [
+        result := self.copy
+        result.setResult(result)
+        result.setIndex(index)
+    ]
+    
+    method setResult(result) [
+        Assert.that(self = caller)
+        result' := result
+    ]
+    
+    method setIndex(index) [
+        Assert.that(self = caller)
+        index' := index
+    ]
+
+]|
+
+# define what we expect a parser to do
+object Parser := Object |[
+
+    method parse(text) 
+    [
+        result := null
+    ]
+
+]|
+
+# divide and conquer: let a parslet do a part of the work of parsing
+object Parslet := Object |[
+
+    method parse(text, index)
+    [
+        result := null
+    ]
+
+]|
+
+# modify our parser so that it uses a parslet to do the work
+Parser := Parser |[
+
+    object grammar := Parslet
+    
+    method grammar [
+        result := grammar
+    ]
+    
+    method setGrammar(grammar') [
+        grammar := grammar'
+    ]
+    
+    method parse(text) [
+        result := self.grammar.parse(text, 0)
+    ]
+
+]|
+
+# TODO: define some parslets, such as literals, character classes, etc..
+
+# add continuation style to parslets
+object ParsletContinuation := Object |[
+
+    method continue(result)
+    [
+        # skip
+    ]
+
+]|
+
+Parslet.replace(Parslet |[
+
+    method parse(text, index, continuation)
+    [
+        continuation.continue(self.parse(text, index))
+    ]
+
+]|)
+
+# modify parser so that it uses the continuation style for parslets
+Parser := Parser |[
+
+    method parse(text) [
+    
+        object parseResult := null
+        
+        object continuation := ParsletContinuation |[
+            method continue(result) [
+                parseResult := result
+            ]
+        ]|
+        
+        self.grammar.parse(text, 0, continuation)
+        
+        result := parseResult               
+    ]
+
+]|
+
+# TODO: define the rest of the parslets, such as concatenation, repetition, ...
+
