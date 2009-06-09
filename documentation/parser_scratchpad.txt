@@ -1,31 +1,42 @@
-# define what we expect a parser to produce
-object ParseResult := Object |[
+# TODO: move this helper class to Objects.Collections
+object Pair := Object |[
 
-    object result' := null
-    object index'  := null
+    object first := null
+    object second := null
+        
+    method create(first', second') [
+        result := self.copy
+        result.setFirst(first')
+        result.setSecond(second')
+    ]
     
+    method first [
+        result := first
+    ]
+    
+    method second [
+        result := second
+    ]
+
+    method setFirst(first') [
+        first := first'
+    ]
+    
+    method setSecond(second') [
+        second := second
+    ]
+
+]|
+
+# define what we expect a parser to produce
+object ParseResult := Pair |[
+
     method result [
-        result := result'
+        result := self.first
     ]
     
     method index [
-        result := index'
-    ]
-    
-    method create(result, index) [
-        result := self.copy
-        result.setResult(result)
-        result.setIndex(index)
-    ]
-    
-    method setResult(result) [
-        Assert.that(self = caller)
-        result' := result
-    ]
-    
-    method setIndex(index) [
-        Assert.that(self = caller)
-        index' := index
+        result := self.second
     ]
 
 ]|
