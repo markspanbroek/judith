@@ -1,0 +1,12 @@
+object NumberTests := Object |[
+
+    method canBeConvertedToText 
+    [
+        Assert.that("42" = 42.asText)
+    ]
+
+]|
+
+# PENDING
+#NumberTests
+#    .canBeConvertedToText

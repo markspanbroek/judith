@@ -18,7 +18,7 @@ object RepetitionTests := Object |[
 
 ]|
 
-# pending
+# PENDING
 #RepetitionTests
 #    .parsingZeroInstancesSucceeds
 #    .parsingSingleInstanceSucceeds

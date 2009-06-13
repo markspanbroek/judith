@@ -1,0 +1,68 @@
+object Combination := Object |[
+
+    object types   := null
+    object objects := null
+
+    method setTypes(types')
+    [
+        Assert.that(self = caller)
+        types = types'
+    ]
+    
+    method setObjects(objects')
+    [
+        Assert.that(self = caller)
+        Assert.that(types.length = objects.length)
+        
+        object i := 0
+        do (i < types.length)
+            Assert.that(objects.get(i) : types.get(i))
+            i := i + 1
+        od
+        
+        objects = objects'
+    ]
+    
+    method get(index)
+    [
+        Assert.that(self = caller)
+        result := objects.get(index)
+    ]
+
+    method onUnknownMethod(name, arguments)
+    [
+        if (name == "of")
+        
+            result := self.copy
+            result.setTypes(arguments)
+            
+        || (name == "create")
+        
+            result := self.copy
+            result.setObjects(arguments)
+            
+        || true
+        
+            parent.onUnknownMethod(name, arguments)
+            
+        fi
+    ]
+
+]|
+
+object ParseResult := Combination.of(Object,Number) |[
+
+    method result
+    [
+        result := self.get(0)
+    ]
+    
+    method index
+    [
+        result := self.get(1)
+    ]
+
+]|
+
+object ParseResult := Combination.of(Object, Number).as("result", "index")
+

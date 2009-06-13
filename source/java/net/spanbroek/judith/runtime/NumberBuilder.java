@@ -22,6 +22,7 @@ class NumberBuilder {
         builder.declareUnaryMinusMethod();
         builder.declareFloorMethod();
         builder.declareCeilingMethod();
+        builder.declareAsTextMethod();
     }
 
     private NumberBuilder(World world) {
@@ -212,6 +213,19 @@ class NumberBuilder {
             }
         }
         world.get("Number").declare("ceiling", new NumberCeilingMethod());
+    }
+
+    private void declareAsTextMethod() {
+        class AsTextMethod extends Method {
+            protected void execute(Scope scope) {
+                scope.set(
+                  "result",
+                  world.wrap(
+                    Double.toString((Double)scope.get("self").getNativeObject())
+                  )
+                );
+            }
+        }
     }
 
 }

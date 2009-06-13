@@ -4,25 +4,30 @@ object Pair := Object |[
     object first := null
     object second := null
         
-    method create(first', second') [
+    method create(first', second') 
+    [
         result := self.copy
         result.setFirst(first')
         result.setSecond(second')
     ]
     
-    method first [
+    method first 
+    [
         result := first
     ]
     
-    method second [
+    method second 
+    [
         result := second
     ]
 
-    method setFirst(first') [
+    method setFirst(first') 
+    [
         first := first'
     ]
     
-    method setSecond(second') [
+    method setSecond(second') 
+    [
         second := second
     ]
 
@@ -31,11 +36,13 @@ object Pair := Object |[
 # define what we expect a parser to produce
 object ParseResult := Pair |[
 
-    method result [
+    method result 
+    [
         result := self.first
     ]
     
-    method index [
+    method index 
+    [
         result := self.second
     ]
 
@@ -66,15 +73,18 @@ Parser := Parser |[
 
     object grammar := Parslet
     
-    method grammar [
+    method grammar 
+    [
         result := grammar
     ]
     
-    method setGrammar(grammar') [
+    method setGrammar(grammar') 
+    [
         grammar := grammar'
     ]
     
-    method parse(text) [
+    method parse(text) 
+    [
         result := self.grammar.parse(text, 0)
     ]
 
@@ -109,7 +119,8 @@ Parser := Parser |[
         object parseResult := null
         
         object continuation := ParsletContinuation |[
-            method continue(result) [
+            method continue(result) 
+            [
                 parseResult := result
             ]
         ]|

@@ -14,7 +14,7 @@ public class Parser {
         net.spanbroek.judith.parser.parser.Parser parser;
         parser = new net.spanbroek.judith.parser.parser.Parser(
           new Lexer(
-            new PushbackReader(reader)
+            new PushbackReader(reader, 4096)
           )
         );
 
