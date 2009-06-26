@@ -5,23 +5,21 @@ import net.spanbroek.judith.runtime.Object;
 class BooleanBuilder {
 
     private World world;
+    private Object wannabeBoolean;
     
     public static void build(World world) {
         BooleanBuilder builder = new BooleanBuilder(world);
-        builder.declareBoolean();
         builder.declareEqualsMethod();
         builder.declareNotMethod();
         builder.declareAndMethod();
         builder.declareOrMethod();
+        builder.declareBoolean();
     }
 
     private BooleanBuilder(World world) {
         this.world = world;
-    }
-    
-    private void declareBoolean() {
-        world.declare("Boolean", new Object(world.get("Object"), world));
-        world.get("Boolean").setNativeObject(false);
+        wannabeBoolean = new Object(world.get("Object"), world);
+        wannabeBoolean.setNativeObject(false);
     }
     
     private void declareEqualsMethod() {
@@ -35,7 +33,7 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self == bool));
             }
         }
-        world.get("Boolean").declare("equals", new BooleanEqualsMethod());
+        wannabeBoolean.declare("equals", new BooleanEqualsMethod());
     }
     
     private void declareNotMethod() {
@@ -47,7 +45,7 @@ class BooleanBuilder {
                 );
             }
         }
-        world.get("Boolean").declare("not", new BooleanNotMethod());
+        wannabeBoolean.declare("not", new BooleanNotMethod());
     }
     
     private void declareAndMethod() {
@@ -61,7 +59,7 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self && bool));
             }
         }
-        world.get("Boolean").declare("and", new BooleanAndMethod());
+        wannabeBoolean.declare("and", new BooleanAndMethod());
     }
     
     private void declareOrMethod() {
@@ -75,7 +73,16 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self || bool));
             }
         }
-        world.get("Boolean").declare("or", new BooleanOrMethod());
+        wannabeBoolean.declare("or", new BooleanOrMethod());
     }
 
+    private void declareBoolean() {
+        class BooleanMethod extends Method {
+            protected void execute(Scope scope) {
+                scope.set("result", wannabeBoolean);
+            }
+        }
+        world.get("Objects").declare("Boolean", new BooleanMethod());
+        world.declare("Boolean", wannabeBoolean);
+    }    
 }

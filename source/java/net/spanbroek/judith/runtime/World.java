@@ -20,6 +20,7 @@ public class World extends Scope {
         ObjectBuilder.build(this);
 
         declare("self", get("Object").copy());
+        declare("Objects", get("Object").copy());
 
         BooleanBuilder.build(this);
         NumberBuilder.build(this);
