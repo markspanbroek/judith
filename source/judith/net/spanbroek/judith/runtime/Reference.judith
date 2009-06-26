@@ -1,5 +1,4 @@
-Object |[ method keepGlobalScopeTidy [
-    
+[
     object Reference := Object
     |[
         object value := null
@@ -33,5 +32,4 @@ Object |[ method keepGlobalScopeTidy [
             result := Reference.copy
         ]
     ]|
-        
-] ]|.keepGlobalScopeTidy
+]

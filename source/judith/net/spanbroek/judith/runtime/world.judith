@@ -1,113 +1,125 @@
-Exception := Exception |[
-
-  method asText [
-    result := self.message
-  ]
-
+Exception := Exception 
+|[
+    method asText 
+    [
+        result := self.message
+    ]
 ]|
 
-ExceptionHandler := ExceptionHandler |[
-
-  method try [
-    # skip
-  ]
+ExceptionHandler := ExceptionHandler
+|[
+    method try 
+    [
+        # skip
+    ]
   
-  method catch(exception) [
-    # skip
-  ]
+    method catch(exception) 
+    [
+        # skip
+    ]
   
-  method finally [
-    # skip
-  ]
-
+    method finally 
+    [
+        # skip
+    ]
 ]|
 
-object AssertionFailedException := Exception |[
-
-  method asText[
-    if self.message = "" 
-      result := "Assertion failed."
-    || true 
-      result := "Assertion failed: " + self.message
-    fi
-  ]
-
+object AssertionFailedException := Exception 
+|[
+    method asText
+    [
+        if self.message = "" 
+            result := "Assertion failed."
+        || true 
+            result := "Assertion failed: " + self.message
+        fi
+    ]
 ]|
 
-object Assert := Object |[
-
-    method that(assertion) [
+object Assert := Object 
+|[
+    method that(assertion) 
+    [
         if not assertion 
             AssertionFailedException.throw
         fi
     ]
-
 ]|
 
 object null := Object.copy
 
-object Function := Object |[ ]|
+object Function := Object 
+|[ 
+    # empty
+]|
 
 Number := Number
 |[
-  method plus(x) [
-    Assert.that(x : Number)
-    result := parent.plus(x)
-  ]
-  
-  # TODO: check parameters of rest of Number's methods
+    method plus(x) [
+        Assert.that(x : Number)
+        result := parent.plus(x)
+    ]
+    # TODO: check parameters of rest of Number's methods
 ]|
 
-List := List |[
-
+List := List 
+|[
     object elementType := Object
     
-    method setElementType(elementType') [
+    method setElementType(elementType') 
+    [
         Assert.that(self.length = 0)
         elementType := elementType'
     ]
 
-    method get(index) [
+    method get(index) 
+    [
         Assert.that(index : Number)
         result := parent.get(index)
     ]
   
-    method set(index, element) [
+    method set(index, element) 
+    [
       Assert.that(index : Number)
       Assert.that(element : elementType)
       parent.set(index, element)
     ]
   
-    method pop [
+    method pop 
+    [
       Assert.that(self.length > 0)
       result := self.get(self.length - 1)
       self.remove(self.length - 1)
     ]
   
-    method add(element) [
+    method add(element) 
+    [
         self.push(element)
     ]
     
-    method push(element) [
+    method push(element) 
+    [
         Assert.that(element : elementType)
         parent.push(element)
     ]
   
-    method remove(index) [
+    method remove(index) 
+    [
         Assert.that(0 <= index and index < self.length)
         parent.remove(index)
     ] 
-  
 ]|
 
 Text.replace(Text |[
 
-    method excerpt(begin, end) [
+    method excerpt(begin, end)
+    [
         Assert.that(0 <= begin and begin < end and end <= self.length)
         result := parent.excerpt(begin, end)
     ]
     
-    method equals(other) [
+    method equals(other) 
+    [
         if other : Text 
             result := parent.equals(other)
         || true 
