@@ -1,11 +1,3 @@
-Exception := Exception 
-|[
-    method asText 
-    [
-        result := self.message
-    ]
-]|
-
 ExceptionHandler := ExceptionHandler
 |[
     method try 
@@ -128,5 +120,3 @@ Text.replace(Text |[
     ]
 
 ]|)
-
-object Objects := Object.copy

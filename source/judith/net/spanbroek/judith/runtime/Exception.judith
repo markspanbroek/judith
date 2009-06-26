@@ -1,0 +1,20 @@
+object Objects := Object.copy
+
+[
+    Exception := Exception 
+    |[
+        method asText 
+        [
+            result := self.message
+        ]
+    ]|
+    
+    Objects := Objects
+    |[
+        method Exception
+        [
+            result := Exception.copy
+        ]
+    ]|
+]
+

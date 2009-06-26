@@ -28,6 +28,7 @@ public class World extends Scope {
         ExceptionHandlerBuilder.build(this);
         ListBuilder.build(this);
 
+        interpret("Exception.judith");
         interpret("world.judith");
         interpret("IO.judith");
         interpret("Reference.judith");
