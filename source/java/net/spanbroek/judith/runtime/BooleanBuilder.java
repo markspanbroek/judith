@@ -84,8 +84,5 @@ class BooleanBuilder {
         }
         world.get("Objects").declare("Boolean", new BooleanMethod());
         world.setBoolean(booleanToBe);
-        
-        // TODO: remove this:
-        world.declare("Boolean", booleanToBe);
     }    
 }

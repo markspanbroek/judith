@@ -1,3 +1,5 @@
+object Text := Objects.Text
+
 object ListTests := Object |[
 
     object list := List.copy.setElementType(Text)

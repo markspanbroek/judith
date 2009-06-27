@@ -1,6 +1,6 @@
-Object |[ method keepGlobalScopeTidy [
-
+[
     object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Text := Objects.Text
 
     ParserGenerator.replace( ParserGenerator |[
 
@@ -174,4 +174,4 @@ Object |[ method keepGlobalScopeTidy [
     
     ParserGenerator.initialize
 
-]]|.keepGlobalScopeTidy
+]

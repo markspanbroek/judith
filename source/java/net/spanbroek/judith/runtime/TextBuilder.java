@@ -112,9 +112,6 @@ class TextBuilder {
         }
         world.get("Objects").declare("Text", new TextMethod());
         world.setText(textToBe);
-
-        // TODO: remove this:
-        world.declare("Text", textToBe);
     }
 
 }

@@ -5,9 +5,9 @@ import net.spanbroek.judith.Exception;
 
 class ExceptionBuilder {
 
-    private Scope scope;
+    private World world;
     
-    public static void build(Scope scope) {
+    public static void build(World scope) {
         ExceptionBuilder builder = new ExceptionBuilder(scope);
         builder.declareException();
         builder.declareMessageMethod();
@@ -15,15 +15,13 @@ class ExceptionBuilder {
         builder.declareThrowMethod();
     }
 
-    private ExceptionBuilder(Scope scope) {
-        this.scope = scope;
+    private ExceptionBuilder(World scope) {
+        this.world = scope;
     }
 
     private void declareException() {
-        scope.declare("Exception", new Object(scope.get("Object"), scope));
-        Object message = scope.get("Text").copy();
-        message.setNativeObject("");
-        scope.get("Exception").declare("message", message);
+        world.declare("Exception", new Object(world.get("Object"), world));
+        world.get("Exception").declare("message", world.wrap(""));
     }
     
     private void declareMessageMethod() {
@@ -32,7 +30,7 @@ class ExceptionBuilder {
                 scope.set("result",scope.get("message"));
             }
         }
-        scope.get("Exception").declare("message",new ExceptionMessageMethod());
+        world.get("Exception").declare("message",new ExceptionMessageMethod());
     }
 
     private void declareSetMessageMethod() {
@@ -44,7 +42,7 @@ class ExceptionBuilder {
                 scope.set("message", scope.get("message'"));
             }
         }
-        scope.get("Exception").declare(
+        world.get("Exception").declare(
           "setMessage",
           new ExceptionSetMessageMethod()
         );
@@ -56,7 +54,7 @@ class ExceptionBuilder {
                 throw new Exception(scope.get("self"));
             }
         }
-        scope.get("Exception").declare("throw",new ExceptionThrowMethod());
+        world.get("Exception").declare("throw",new ExceptionThrowMethod());
     }
 
 }

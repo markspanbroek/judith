@@ -106,8 +106,8 @@ object Point := Object
   [
     Assert.that(caller : self)
 
-    Assert.that(x : Number)
-    Assert.that(y : Number)
+    Assert.that(x : Objects.Number)
+    Assert.that(y : Objects.Number)
 
     x := x'
     y := y'
@@ -128,8 +128,8 @@ Point := Point
 |[
   method translate(dx,dy)
   [
-    Assert.that(dx : Number)
-    Assert.that(dy : Number)
+    Assert.that(dx : Objects.Number)
+    Assert.that(dy : Objects.Number)
     
     result := self.create(self.x + dx, self.y + dy)
   ]

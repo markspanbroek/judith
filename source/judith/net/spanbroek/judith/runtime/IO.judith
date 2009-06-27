@@ -1,4 +1,6 @@
 [  
+    object Text := Objects.Text
+
     object StandardInput := Object 
     |[
         method readLine 

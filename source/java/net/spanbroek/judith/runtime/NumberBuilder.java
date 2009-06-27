@@ -234,9 +234,6 @@ class NumberBuilder {
         }
         world.get("Objects").declare("Number", new NumberMethod());
         world.setNumber(numberToBe);
-
-        // TODO: remove this:
-        world.declare("Number", numberToBe);
     }
 
 }
