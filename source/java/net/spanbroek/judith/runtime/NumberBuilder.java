@@ -5,10 +5,11 @@ import net.spanbroek.judith.runtime.Object;
 class NumberBuilder {
 
     private World world;
+
+    private Object numberToBe;
     
     public static void build(World world) {
         NumberBuilder builder = new NumberBuilder(world);
-        builder.declareNumber();
         builder.declareEqualsMethod();
         builder.declareAtmostMethod();
         builder.declareAtleastMethod();
@@ -23,16 +24,13 @@ class NumberBuilder {
         builder.declareFloorMethod();
         builder.declareCeilingMethod();
         builder.declareAsTextMethod();
+        builder.declareNumber();
     }
 
     private NumberBuilder(World world) {
-
         this.world = world;
-    }
-    
-    private void declareNumber() {
-        world.declare("Number", new Object(world.get("Object"), world));
-        world.get("Number").setNativeObject(0d);
+        numberToBe = new Object(world.get("Object"), world);
+        numberToBe.setNativeObject(0d);
     }
     
     private void declareEqualsMethod() {
@@ -46,7 +44,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self == number));
             }
         }
-        world.get("Number").declare("equals", new NumberEqualsMethod());
+        numberToBe.declare("equals", new NumberEqualsMethod());
     }
     
     private void declareAtmostMethod() {
@@ -60,7 +58,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self <= number));
             }
         }
-        world.get("Number").declare("atmost", new NumberAtMostMethod());
+        numberToBe.declare("atmost", new NumberAtMostMethod());
     }
     
     private void declareAtleastMethod() {
@@ -74,7 +72,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self >= number));
             }
         }
-        world.get("Number").declare("atleast", new NumberAtLeastMethod());
+        numberToBe.declare("atleast", new NumberAtLeastMethod());
     }
     
     private void declareLessthanMethod() {
@@ -88,7 +86,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self < number));
             }
         }
-        world.get("Number").declare("lessthan", new NumberLessThanMethod());
+        numberToBe.declare("lessthan", new NumberLessThanMethod());
     }
     
     private void declareMorethanMethod() {
@@ -102,7 +100,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self > number));
             }
         }
-        world.get("Number").declare("morethan", new NumberMoreThanMethod());
+        numberToBe.declare("morethan", new NumberMoreThanMethod());
     }
     
     private void declarePlusMethod() {
@@ -116,7 +114,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self + number));
             }
         }
-        world.get("Number").declare("plus", new NumberPlusMethod());
+        numberToBe.declare("plus", new NumberPlusMethod());
     }
 
     private void declareMinusMethod() {
@@ -130,7 +128,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self - number));
             }
         }
-        world.get("Number").declare("minus", new NumberMinusMethod());
+        numberToBe.declare("minus", new NumberMinusMethod());
     }
 
     private void declareStarMethod() {
@@ -144,7 +142,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self * number));
             }
         }
-        world.get("Number").declare("star", new NumberStarMethod());
+        numberToBe.declare("star", new NumberStarMethod());
     }
 
     private void declareSlashMethod() {
@@ -158,7 +156,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self / number));
             }
         }
-        world.get("Number").declare("slash", new NumberSlashMethod());
+        numberToBe.declare("slash", new NumberSlashMethod());
     }
 
     private void declareCarrotMethod() {
@@ -172,7 +170,7 @@ class NumberBuilder {
                 scope.set("result", world.wrap(Math.pow(self,number)));
             }
         }
-        world.get("Number").declare("carrot", new NumberCarrotMethod());
+        numberToBe.declare("carrot", new NumberCarrotMethod());
     }
 
     private void declareUnaryMinusMethod() {
@@ -184,7 +182,7 @@ class NumberBuilder {
                 );
             }
         }
-        world.get("Number").declare("minus", new NumberUnaryMinusMethod());
+        numberToBe.declare("minus", new NumberUnaryMinusMethod());
     }
     
     private void declareFloorMethod() {
@@ -198,7 +196,7 @@ class NumberBuilder {
                 );
             }
         }
-        world.get("Number").declare("floor", new NumberFloorMethod());
+        numberToBe.declare("floor", new NumberFloorMethod());
     }
     
     private void declareCeilingMethod() {
@@ -212,7 +210,7 @@ class NumberBuilder {
                 );
             }
         }
-        world.get("Number").declare("ceiling", new NumberCeilingMethod());
+        numberToBe.declare("ceiling", new NumberCeilingMethod());
     }
 
     private void declareAsTextMethod() {
@@ -226,6 +224,19 @@ class NumberBuilder {
                 );
             }
         }
+    }
+
+    private void declareNumber() {
+        class NumberMethod extends Method {
+            protected void execute(Scope scope) {
+                scope.set("result", numberToBe.copy());
+            }
+        }
+        world.get("Objects").declare("Number", new NumberMethod());
+        world.setNumber(numberToBe);
+
+        // TODO: remove this:
+        world.declare("Number", numberToBe);
     }
 
 }

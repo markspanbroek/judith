@@ -5,25 +5,24 @@ import net.spanbroek.judith.runtime.Object;
 class TextBuilder {
 
     private World world;
+
+    private Object textToBe;
     
     public static void build(World world) {
         TextBuilder builder = new TextBuilder(world);
-        builder.declareText();
         builder.declareEqualsMethod();
         builder.declarePlusMethod();
         builder.declareExcerptMethod();
         builder.declareQuoteMethod();
         builder.declareLengthMethod();
         builder.declareAtmostMethod();
+        builder.declareText();
     }
 
     private TextBuilder(World world) {
         this.world = world;
-    }
-    
-    private void declareText() {
-        world.declare("Text", new Object(world.get("Object"), world));
-        world.get("Text").setNativeObject("");
+        textToBe = new Object(world.get("Object"), world);
+        textToBe.setNativeObject("");
     }
     
     private void declareEqualsMethod() {
@@ -37,7 +36,7 @@ class TextBuilder {
                 scope.set("result", world.wrap(self.equals(text)));
             }
         }
-        world.get("Text").declare("equals", new TextEqualsMethod());
+        textToBe.declare("equals", new TextEqualsMethod());
     }
     
     private void declarePlusMethod() {
@@ -51,7 +50,7 @@ class TextBuilder {
                 scope.set("result", world.wrap(self + text));
             }
         }
-        world.get("Text").declare("plus", new TextPlusMethod());
+        textToBe.declare("plus", new TextPlusMethod());
     }
     
     private void declareExcerptMethod() {
@@ -69,7 +68,7 @@ class TextBuilder {
                 );
             }
         }
-        world.get("Text").declare("excerpt", new TextExcerptMethod());
+        textToBe.declare("excerpt", new TextExcerptMethod());
     }
     
     private void declareQuoteMethod() {
@@ -78,7 +77,7 @@ class TextBuilder {
                 scope.set("result", world.wrap("\""));
             }
         }
-        world.get("Text").declare("quote", new TextQuoteMethod());
+        textToBe.declare("quote", new TextQuoteMethod());
     }
     
     private void declareLengthMethod() {
@@ -88,7 +87,7 @@ class TextBuilder {
                 scope.set("result", world.wrap(self.length()));
             }
         }
-        world.get("Text").declare("length", new TextLengthMethod());    
+        textToBe.declare("length", new TextLengthMethod());
     }
     
     private void declareAtmostMethod() {
@@ -102,7 +101,20 @@ class TextBuilder {
                 scope.set("result", world.wrap(self.compareTo(other) <= 0));
             }
         }
-        world.get("Text").declare("atmost", new TextAtmostMethod());
+        textToBe.declare("atmost", new TextAtmostMethod());
+    }
+
+    private void declareText() {
+        class TextMethod extends Method {
+            protected void execute(Scope scope) {
+                scope.set("result", textToBe.copy());
+            }
+        }
+        world.get("Objects").declare("Text", new TextMethod());
+        world.setText(textToBe);
+
+        // TODO: remove this:
+        world.declare("Text", textToBe);
     }
 
 }

@@ -11,6 +11,10 @@ import java.io.*;
  * the initial objects. It is implemented as a Java singleton object.
  */
 public class World extends Scope {
+
+    private Object booleanPrototype = null;
+    private Object numberPrototype = null;
+    private Object textPrototype = null;
     
     /**
      * Initializes the global context of Judith execution.
@@ -46,7 +50,7 @@ public class World extends Scope {
      * Wraps the specified boolean value as a judith Boolean object.
      */
     public Object wrap(boolean bool) {
-        Object result = get("Boolean").copy();
+        Object result = booleanPrototype.copy();
         result.setNativeObject(bool);
         return result;
     }
@@ -55,7 +59,7 @@ public class World extends Scope {
      * Wraps the specified double value as a judith Number object.
      */
     public Object wrap(double number) {
-        Object result = get("Number").copy();
+        Object result = numberPrototype.copy();
         result.setNativeObject(number);
         return result;
     }
@@ -64,7 +68,7 @@ public class World extends Scope {
      * Wraps the specified string as a judith Text object.
      */
     public Object wrap(String text) {
-        Object result = get("Text").copy();
+        Object result = textPrototype.copy();
         result.setNativeObject(text);
         return result;
     }
@@ -74,20 +78,47 @@ public class World extends Scope {
      */
     public java.lang.Object unwrap(Object object) {
 
-        if (object.isCompatibleWith(get("Boolean"))) {
+        if (object.isCompatibleWith(booleanPrototype)) {
             return (Boolean)object.getNativeObject();
         }
 
-        if (object.isCompatibleWith(get("Number"))) {
+        if (object.isCompatibleWith(numberPrototype)) {
             return (Double)object.getNativeObject();
         }
 
-        if (object.isCompatibleWith(get("Text"))) {
+        if (object.isCompatibleWith(textPrototype)) {
             return (String)object.getNativeObject();
         }
 
         return null;
 
+    }
+
+    void setBoolean(Object booleanPrototype) {
+        if (this.booleanPrototype == null) {
+            this.booleanPrototype = booleanPrototype;
+        }
+        else {
+            throw new IllegalStateException("boolean prototype already set");
+        }
+    }
+
+    void setNumber(Object numberPrototype) {
+        if (this.numberPrototype == null) {
+            this.numberPrototype = numberPrototype;
+        }
+        else {
+            throw new IllegalStateException("number prototype already set");
+        }
+    }
+
+    void setText(Object textPrototype) {
+        if (this.textPrototype == null) {
+            this.textPrototype = textPrototype;
+        }
+        else {
+            throw new IllegalStateException("text prototype already set");
+        }
     }
     
     private void interpret(String file) {
@@ -103,5 +134,4 @@ public class World extends Scope {
         }
 
    }
-
 }

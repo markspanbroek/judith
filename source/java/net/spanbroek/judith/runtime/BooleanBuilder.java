@@ -5,7 +5,7 @@ import net.spanbroek.judith.runtime.Object;
 class BooleanBuilder {
 
     private World world;
-    private Object wannabeBoolean;
+    private Object booleanToBe;
     
     public static void build(World world) {
         BooleanBuilder builder = new BooleanBuilder(world);
@@ -18,8 +18,8 @@ class BooleanBuilder {
 
     private BooleanBuilder(World world) {
         this.world = world;
-        wannabeBoolean = new Object(world.get("Object"), world);
-        wannabeBoolean.setNativeObject(false);
+        booleanToBe = new Object(world.get("Object"), world);
+        booleanToBe.setNativeObject(false);
     }
     
     private void declareEqualsMethod() {
@@ -33,7 +33,7 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self == bool));
             }
         }
-        wannabeBoolean.declare("equals", new BooleanEqualsMethod());
+        booleanToBe.declare("equals", new BooleanEqualsMethod());
     }
     
     private void declareNotMethod() {
@@ -45,7 +45,7 @@ class BooleanBuilder {
                 );
             }
         }
-        wannabeBoolean.declare("not", new BooleanNotMethod());
+        booleanToBe.declare("not", new BooleanNotMethod());
     }
     
     private void declareAndMethod() {
@@ -59,7 +59,7 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self && bool));
             }
         }
-        wannabeBoolean.declare("and", new BooleanAndMethod());
+        booleanToBe.declare("and", new BooleanAndMethod());
     }
     
     private void declareOrMethod() {
@@ -73,16 +73,19 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self || bool));
             }
         }
-        wannabeBoolean.declare("or", new BooleanOrMethod());
+        booleanToBe.declare("or", new BooleanOrMethod());
     }
 
     private void declareBoolean() {
         class BooleanMethod extends Method {
             protected void execute(Scope scope) {
-                scope.set("result", wannabeBoolean);
+                scope.set("result", booleanToBe.copy());
             }
         }
         world.get("Objects").declare("Boolean", new BooleanMethod());
-        world.declare("Boolean", wannabeBoolean);
+        world.setBoolean(booleanToBe);
+        
+        // TODO: remove this:
+        world.declare("Boolean", booleanToBe);
     }    
 }

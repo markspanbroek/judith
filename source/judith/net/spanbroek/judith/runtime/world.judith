@@ -45,14 +45,20 @@ object Function := Object
     # empty
 ]|
 
-Number := Number
-|[
-    method plus(x) [
-        Assert.that(x : Number)
-        result := parent.plus(x)
-    ]
-    # TODO: check parameters of rest of Number's methods
-]|
+[
+    object Number := Objects.Number
+    
+    Number.replace(
+        Number
+        |[
+            method plus(x) [
+                Assert.that(x : Number)
+                result := parent.plus(x)
+            ]
+            # TODO: check parameters of rest of Number's methods
+        ]|
+    )
+]
 
 List := List 
 |[
