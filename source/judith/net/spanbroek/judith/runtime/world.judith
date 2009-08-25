@@ -36,6 +36,15 @@ object Assert := Object
             AssertionFailedException.throw
         fi
     ]
+    
+    method equal(expected, actual)
+    [
+        if not (expected = actual)
+            object message := "Expected '" + expected.asText + "'"
+            message := message + " but got '" + actual.asText + "'"
+            AssertionFailedException.copy.setMessage(message).throw
+        fi
+    ]
 ]|
 
 object null := Object.copy
@@ -131,6 +140,11 @@ object Function := Object
                 || true 
                     result := false
                 fi
+            ]
+            
+            method asText
+            [
+                result := self
             ]
         ]|
     )

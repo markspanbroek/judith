@@ -1,7 +1,5 @@
 package net.spanbroek.judith.runtime;
 
-import net.spanbroek.judith.runtime.Object;
-
 class NumberBuilder {
 
     private World world;
@@ -216,14 +214,16 @@ class NumberBuilder {
     private void declareAsTextMethod() {
         class AsTextMethod extends Method {
             protected void execute(Scope scope) {
+                double value = (Double)scope.get("self").getNativeObject();
                 scope.set(
                   "result",
                   world.wrap(
-                    Double.toString((Double)scope.get("self").getNativeObject())
+                    Math.round(value) != value ? Double.toString(value) : Long.toString((long)value)
                   )
                 );
             }
         }
+        numberToBe.declare("asText", new AsTextMethod());
     }
 
     private void declareNumber() {

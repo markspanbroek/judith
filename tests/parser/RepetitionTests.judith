@@ -1,25 +1,29 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 
-object RepetitionTests := Object |[
-
+object RepetitionTests := Object 
+|[
     object parser := ParserGenerator.repetition(ParserGenerator.literal("a"))
 
-    method parsingZeroInstancesSucceeds [
-        Assert.that(0 = parser.parse("").length)
+    method parsingZeroInstancesSucceeds 
+    [
+        Assert.equal(0, parser.parse("").length)
     ]
     
-    method parsingSingleInstanceSucceeds [
-        Assert.that("a" = parser.parse("a").get(0))
+    method parsingSingleInstanceSucceeds 
+    [
+        object result1 := parser.parse("a")
+        Assert.equal(1, result1.length)
+        Assert.equal("a", result1.get(0))
     ]
     
-    method parsingMultipleInstancesSucceeds [
-        Assert.that(5 = parser.parse("aaaaa").length)
+    method parsingMultipleInstancesSucceeds 
+    [
+        Assert.equal(5, parser.parse("aaaaa").length)
     ]
 
 ]|
 
-# PENDING
-#RepetitionTests
-#    .parsingZeroInstancesSucceeds
+RepetitionTests
+    .parsingZeroInstancesSucceeds
 #    .parsingSingleInstanceSucceeds
 #    .parsingMultipleInstancesSucceeds

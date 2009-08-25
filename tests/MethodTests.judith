@@ -1,0 +1,19 @@
+object MethodTests := Object
+|[
+    method methodBodyHasInnerScope
+    [
+        Assert.that(
+            Function |[ 
+                method run [ 
+                    result := true 
+                    object result := false 
+                ]
+            ]|.run
+        )
+    ]
+]|
+
+# PENDING
+#MethodTests
+#    .methodBodyHasInnerScope
+

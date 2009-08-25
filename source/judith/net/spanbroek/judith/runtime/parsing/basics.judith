@@ -1,5 +1,4 @@
-Object |[ method keepGlobalScopeTidy [
-
+[
     object Parser := Objects.Parsing.Parser
 
     ##
@@ -227,6 +226,5 @@ Object |[ method keepGlobalScopeTidy [
         [
             result := ParserGenerator
         ]
-    ]| )
-    
-] ]|.keepGlobalScopeTidy
+    ]| )    
+]

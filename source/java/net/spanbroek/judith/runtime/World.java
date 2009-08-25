@@ -1,9 +1,6 @@
 package net.spanbroek.judith.runtime;
 
 import net.spanbroek.judith.interpreter.Interpreter;
-import net.spanbroek.judith.runtime.Object;
-import net.spanbroek.judith.runtime.Scope;
-import net.spanbroek.judith.Exception;
 import java.io.*;
 
 /**
@@ -32,7 +29,9 @@ public class World extends Scope {
         ExceptionBuilder.build(this);
         ExceptionHandlerBuilder.build(this);
         ListBuilder.build(this);
+        DictionaryBuilder.build(this);
 
+        interpret("Dictionary.judith");
         interpret("Exception.judith");
         interpret("world.judith");
         interpret("IO.judith");

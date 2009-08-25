@@ -2,11 +2,16 @@ object NumberTests := Object |[
 
     method canBeConvertedToText 
     [
-        Assert.that("42" = 42.asText)
+        Assert.equal("42", 42.asText)
+    ]
+    
+    method decimalsAreConvertedToText
+    [
+        Assert.equal("4.2", 4.2.asText)
     ]
 
 ]|
 
-# PENDING
-#NumberTests
-#    .canBeConvertedToText
+NumberTests
+    .canBeConvertedToText
+    .decimalsAreConvertedToText

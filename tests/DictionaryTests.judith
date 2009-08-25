@@ -1,0 +1,100 @@
+object Dictionary := Objects.Dictionary
+
+object DictionaryTests := Object
+|[
+    object dictionary := Dictionary.copy
+
+    method hasMethodReturnsFalseWhenObjectNotPresent
+    [
+        Assert.that(not dictionary.has("foo"))
+    ]
+
+    method getMethodThrowsWhenObjectNotPresent
+    [
+        object exception := null
+        
+        ExceptionHandler
+        |[
+            method try
+            [
+                dictionary.get("foo")
+            ]
+            method catch(exception')[
+                exception := exception'
+            ]
+        ]|.run
+        
+        Assert.that(exception : AssertionFailedException)
+    ]
+    
+    method hasMethodThrowsWhenNotGivenAString
+    [
+        object exception := null
+        
+        ExceptionHandler
+        |[
+            method try
+            [
+                dictionary.has(1)
+            ]
+            method catch(exception')[
+                exception := exception'
+            ]
+        ]|.run
+        
+        Assert.that(exception : AssertionFailedException)
+    ]
+
+    method getMethodThrowsWhenNotGivenAString
+    [
+        object exception := null
+        
+        ExceptionHandler
+        |[
+            method try
+            [
+                dictionary.get(1)
+            ]
+            method catch(exception')[
+                exception := exception'
+            ]
+        ]|.run
+        
+        Assert.that(exception : AssertionFailedException)
+    ]
+    
+    method setMethodThrowsWhenNotGivenAString
+    [
+        object exception := null
+        
+        ExceptionHandler
+        |[
+            method try
+            [
+                dictionary.set(1,"1")
+            ]
+            method catch(exception')[
+                exception := exception'
+            ]
+        ]|.run
+        
+        Assert.that(exception : AssertionFailedException)
+    ]
+
+    method storesAnObject
+    [
+        object foo := Object.copy
+        dictionary.set("foo", foo)
+        Assert.that(dictionary.has("foo"))
+        Assert.equal(foo, dictionary.get("foo"))
+    ]    
+    
+]|
+
+DictionaryTests
+    .hasMethodReturnsFalseWhenObjectNotPresent    
+    .getMethodThrowsWhenObjectNotPresent
+    .hasMethodThrowsWhenNotGivenAString
+    .getMethodThrowsWhenNotGivenAString
+    .setMethodThrowsWhenNotGivenAString
+    .storesAnObject

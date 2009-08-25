@@ -7,25 +7,59 @@ object AssertTests := Object |[
   
   method throwsOnFalse 
   [
-    object exceptionWasThrown := false
+    object exception := null
     
     ExceptionHandler |[
-    
       method try 
       [
         Assert.that(false)
       ]
-      
-      method catch(exception) 
+      method catch(exception')
       [
-        exceptionWasThrown := true
+        exception := exception'
       ]
-      
     ]|.run
     
-    if not exceptionWasThrown
+    if not (exception : AssertionFailedException)
       AssertionFailedException.throw
     fi
+  ]
+  
+  method throwsWhenNotEqual
+  [
+    object exception := null
+    
+    ExceptionHandler |[    
+        method try
+        [
+            Assert.equal(1, 2)
+        ]
+        method catch(exception')
+        [
+            exception := exception'
+        ]
+    ]|.run
+    
+    Assert.that(exception : AssertionFailedException)
+  ]
+  
+  method doesNotThrowWhenEqual
+  [
+    Assert.equal(1,1)
+  ]
+  
+  method descibesWhatsWrongWhenNotEqual
+  [
+    ExceptionHandler |[    
+        method try
+        [
+            Assert.equal(1, 2)
+        ]
+        method catch(exception)
+        [
+            Assert.equal("Expected '1' but got '2'", exception.message)
+        ]
+    ]|.run
   ]
   
 ]|
@@ -33,3 +67,6 @@ object AssertTests := Object |[
 AssertTests
   .doesNotThrowOnTrue
   .throwsOnFalse
+  .throwsWhenNotEqual
+  .doesNotThrowWhenEqual
+  .descibesWhatsWrongWhenNotEqual

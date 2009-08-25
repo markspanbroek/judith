@@ -1,0 +1,27 @@
+[
+    object Text := Objects.Text
+
+    object Dictionary := Objects.Dictionary
+    |[
+        method has(key)
+        [
+            Assert.that(key : Text)
+            result := parent.has(key)
+        ]
+    
+        method get(key)
+        [
+            Assert.that(key : Text)
+            Assert.that(self.has(key))
+            result := parent.get(key)
+        ]
+
+        method set(key, value)
+        [
+            Assert.that(key : Text)
+            parent.set(key, value)
+        ]    
+    ]|
+
+    Objects.Dictionary.replace(Dictionary)    
+]

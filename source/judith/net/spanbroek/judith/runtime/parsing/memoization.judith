@@ -1,7 +1,20 @@
-Object |[ method keepGlobalScopeTidy [
-
+[
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
+
+    Parser.replace( Parser |[
+        method createContext(input)
+        [
+            object cache := Objects.Dictionary.copy
+            result := parent.createContext(input)
+            |[
+                method cache
+                [
+                    result := cache
+                ]
+            ]|
+        ]
+    ]| )
 
     ##
     # Add memoization to support left-recursion, and improve the time complexity
@@ -42,7 +55,7 @@ Object |[ method keepGlobalScopeTidy [
         ]
         
         method continuations [ 
-          result := results 
+          result := continuations 
         ]
       
       ]|
@@ -59,13 +72,16 @@ Object |[ method keepGlobalScopeTidy [
             
             if (context.cache.has(key)) 
             
-              object entry := context.cache.at(key)
+              object entry := context.cache.get(key)
+              Assert.that(entry : CacheEntry)
               
               entry.continuations.push(continuation)
-              object iterator := entry.results.iterator
-              do iterator.hasNext 
-                object result := iterator.next
-                continuation.run(result.index, result.value)
+              
+              object iterator := entry.results.copy
+              do iterator.length > 0
+                object current := iterator.pop
+                Assert.that(current : Result)
+                continuation.run(current.index, current.value)
               od
               
             || true 
@@ -117,4 +133,4 @@ Object |[ method keepGlobalScopeTidy [
 
     ]| )
 
-] ]|.keepGlobalScopeTidy
+]
