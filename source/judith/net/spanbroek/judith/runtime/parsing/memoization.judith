@@ -2,10 +2,48 @@
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
 
-    Parser.replace( Parser |[
+    object ParseResult := Object 
+    |[
+        object index := null
+        object value := null
+
+        method index [
+            result := index
+        ]
+
+        method setIndex(index') [
+            index := index'
+        ]
+
+        method value [
+            result := value
+        ]
+
+        method setValue(value') [
+            value := value'
+        ]
+    ]|
+
+    object CacheEntry := Object 
+    |[
+        object results := List.copy
+        object continuations := List.copy
+
+        method results [ 
+            result := results 
+        ]
+
+        method continuations [ 
+            result := continuations 
+        ]
+    ]|
+
+    Parser.replace( Parser 
+    |[
         method createContext(input)
         [
             object cache := Objects.Dictionary.copy
+            
             result := parent.createContext(input)
             |[
                 method cache
@@ -16,121 +54,75 @@
         ]
     ]| )
 
-    ##
-    # Add memoization to support left-recursion, and improve the time complexity
-    # from exponential to polynomial.
-    #
-    ParserGenerator.replace( ParserGenerator |[
-
-      object Result := Object |[
-      
-        object index := null
-        object value := null
-        
-        method index [
-          result := index
-        ]
-        
-        method indexBecomes(index') [
-          index := index'
-        ]
-
-        method value [
-          result := value
-        ]
-        
-        method valueBecomes(value') [
-          value := value'
-        ]
-      
-      ]|
-
-      object CacheEntry := Object |[
-      
-        object results := List.copy
-        object continuations := List.copy
-        
-        method results [ 
-          result := results 
-        ]
-        
-        method continuations [ 
-          result := continuations 
-        ]
-      
-      ]|
-
-      method memoize(function) [
-      
-        object text := function.asText
-        
-        result := Parser |[ 
-        
-          method run(context, index, result, continuation) [
-
-            object key := function.asText + "," + index.asText
+    object Memoizer := Object
+    |[
+        method memoize(parser)
+        [
+            Assert.that(parser : Parser)
             
-            if (context.cache.has(key)) 
-            
-              object entry := context.cache.get(key)
-              Assert.that(entry : CacheEntry)
-              
-              entry.continuations.push(continuation)
-              
-              object iterator := entry.results.copy
-              do iterator.length > 0
-                object current := iterator.pop
-                Assert.that(current : Result)
-                continuation.run(current.index, current.value)
-              od
-              
-            || true 
-
-              object entry := CacheEntry.copy
-              context.cache.set(key, entry)
-              
-              entry.continuations.push(continuation)
-              
-              object newcontinuation := Function |[ method run(index, value) [
-              
-                  object result := Result.copy
-                  result.indexBecomes(index)
-                  result.valueBecomes(value)
-                  entry.results.push(result)
+            result := Parser 
+            |[            
+                method run(context, index, result, continuation) 
+                [
+                    object key := parser.asText + "," + index.asText
+                
+                    if (context.cache.has(key))                 
+                        object entry := context.cache.get(key)
+                        Assert.that(entry : CacheEntry)
                   
-                  object iterator := entry.continuations.iterator
-                  do iterator.hasNext 
-                    iterator.next.run(index, value)
-                  od
+                        entry.continuations.push(continuation)
                   
-              ] ]|
-              
-              function.run(context, index, result, newcontinuation)
-              
-            fi
-            
-          ]
+                        object iterator := entry.results.copy
+                        do iterator.length > 0
+                            object current := iterator.pop
+                            Assert.that(current : ParseResult)
+                            continuation.run(current.index, current.value)
+                        od
+                    || true 
+                        object entry := CacheEntry.copy
+                        context.cache.set(key, entry)
+                  
+                        entry.continuations.push(continuation)
+                  
+                        object newcontinuation := Function 
+                        |[ 
+                            method run(index, value) [
+                   
+                                object result := ParseResult.copy
+                                result.setIndex(index)
+                                result.setValue(value)
+                                entry.results.push(result)
+                          
+                                object iterator := entry.continuations.iterator
+                                do iterator.hasNext 
+                                    iterator.next.run(index, value)
+                                od
+                      
+                            ] 
+                        ]|
+                  
+                        parser.run(context, index, result, newcontinuation)
+                    fi
+                ]
           
-          method asText [
-            result := text
-          ]
-        
-        ]|
-      
-      ]
-      
-      method rule(name) [
-      
-        result := self.memoize(parent.rule(name))
-      
-      ]
-      
-      method repetitionplus(operand) [
-      
-        result := self.memoize(parent.repetitionplus(operand))
-      
-      ]
+                method asText 
+                [
+                    result := parser.asText
+                ]        
+            ]|      
+        ]
+    ]|
 
+    ParserGenerator.replace( ParserGenerator 
+    |[
+        method rule(name) 
+        [      
+            result := Memoizer.memoize(parent.rule(name))      
+        ]
+      
+        method repetitionplus(operand) 
+        [
+            result := Memoizer.memoize(parent.repetitionplus(operand))
+        ]
     ]| )
-
 ]
