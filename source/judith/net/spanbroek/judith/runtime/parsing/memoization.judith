@@ -56,6 +56,11 @@
 
     object Memoizer := Object
     |[
+        method createKey(parser, index)
+        [
+            result := parser.asText + "," + index.asText
+        ]
+        
         method memoize(parser)
         [
             Assert.that(parser : Parser)
@@ -64,10 +69,11 @@
             |[            
                 method run(context, index, result, continuation) 
                 [
-                    object key := parser.asText + "," + index.asText
+                    object cache := context.cache
+                    object key := Memoizer.createKey(parser, index)
                 
-                    if (context.cache.has(key))                 
-                        object entry := context.cache.get(key)
+                    if (cache.has(key))                 
+                        object entry := cache.get(key)
                         Assert.that(entry : CacheEntry)
                   
                         entry.continuations.push(continuation)
@@ -80,7 +86,7 @@
                         od
                     || true 
                         object entry := CacheEntry.copy
-                        context.cache.set(key, entry)
+                        cache.set(key, entry)
                   
                         entry.continuations.push(continuation)
                   
