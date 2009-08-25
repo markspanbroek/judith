@@ -72,16 +72,14 @@
                     object cache := context.cache
                     object key := Memoizer.createKey(parser, index)
                 
-                    if (cache.has(key))                 
+                    if (cache.has(key))
                         object entry := cache.get(key)
-                        Assert.that(entry : CacheEntry)
                   
                         entry.continuations.push(continuation)
                   
                         object iterator := entry.results.copy
                         do iterator.length > 0
                             object current := iterator.pop
-                            Assert.that(current : ParseResult)
                             continuation.run(current.index, current.value)
                         od
                     || true 
