@@ -1,7 +1,5 @@
 package net.spanbroek.judith.runtime;
 
-import net.spanbroek.judith.runtime.Object;
-
 /**
  * Represents a judith method.
  *
@@ -36,7 +34,7 @@ public abstract class Method {
         for (int i=0; i<this.parameters.length; i++) {
             scope.declare(this.parameters[i], parameters[i]);
         }
-        execute(scope);
+        execute(new Scope(scope));
         return scope.get("result");
 
     }

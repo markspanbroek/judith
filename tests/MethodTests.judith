@@ -13,7 +13,6 @@ object MethodTests := Object
     ]
 ]|
 
-# PENDING
-#MethodTests
-#    .methodBodyHasInnerScope
+MethodTests
+    .methodBodyHasInnerScope
 
