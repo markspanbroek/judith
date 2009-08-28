@@ -29,12 +29,45 @@
         object results := List.copy
         object continuations := List.copy
 
-        method results [ 
-            result := results 
+        method addContinuation(continuation)
+        [
+            continuations.push(continuation)
+            
+            self.forwardResultsTo(continuation)
+        ]
+        
+        method addResult(index, value)
+        [
+            results.push(
+                ParseResult
+                    .copy
+                    .setIndex(index)
+                    .setValue(value)                
+            )
+            
+            self.callContinuationsWith(result)
         ]
 
-        method continuations [ 
-            result := continuations 
+        method forwardResultsTo(continuation)
+        [
+            Assert.equal(self, caller)
+            
+            object iterator := results.copy
+            do iterator.length > 0
+                object current := iterator.pop
+                continuation.run(current.index, current.value)
+            od
+        ]
+        
+        method callContinuationsWith(result)
+        [
+            Assert.equal(self, caller)
+        
+            object iterator := continuations.copy
+            do iterator.length > 0
+                object current := iterator.pop
+                current.run(result.index, result.value)
+            od
         ]
     ]|
 
@@ -66,46 +99,33 @@
             Assert.that(parser : Parser)
             
             result := Parser 
-            |[            
+            |[
                 method run(context, index, result, continuation) 
                 [
                     object cache := context.cache
                     object key := Memoizer.createKey(parser, index)
                 
                     if (cache.has(key))
-                        object entry := cache.get(key)
-                  
-                        entry.continuations.push(continuation)
-                  
-                        object iterator := entry.results.copy
-                        do iterator.length > 0
-                            object current := iterator.pop
-                            continuation.run(current.index, current.value)
-                        od
+                    
+                        cache.get(key).addContinuation(continuation)
+                        
                     || true 
+                    
                         object entry := CacheEntry.copy
                         cache.set(key, entry)
                   
-                        entry.continuations.push(continuation)
-                  
+                        entry.addContinuation(continuation)
+
                         object newcontinuation := Function 
                         |[ 
-                            method run(index, value) [
-                   
-                                object result := ParseResult.copy
-                                result.setIndex(index)
-                                result.setValue(value)
-                                entry.results.push(result)
-                          
-                                object iterator := entry.continuations.iterator
-                                do iterator.hasNext 
-                                    iterator.next.run(index, value)
-                                od
-                      
+                            method run(index, value)
+                            [
+                                entry.addResult(index, value)
                             ] 
                         ]|
                   
                         parser.run(context, index, result, newcontinuation)
+                        
                     fi
                 ]
           
@@ -113,7 +133,7 @@
                 [
                     result := parser.asText
                 ]        
-            ]|      
+            ]|
         ]
     ]|
 

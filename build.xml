@@ -87,6 +87,7 @@
       <arg file='tests/ListTests.judith'/>
       <arg file='tests/MethodTests.judith'/>
       <arg file='tests/NumberTests.judith'/>
+      <arg file='tests/ParentTests.judith'/>
       <arg file='tests/ReferenceTests.judith'/>
       <arg file='tests/TextTests.judith'/>
       <arg file='tests/parser/AlternativesTests.judith'/>
@@ -98,6 +99,7 @@
       <arg file='tests/parser/NeverTests.judith'/>
       <arg file='tests/parser/RangeTests.judith'/>
       <arg file='tests/parser/RepetitionTests.judith'/>
+      <arg file='tests/parser/RepetitionPlusTests.judith'/>
       <arg file='tests/MiscellaneousTests.judith'/>
     </java>
   </target>

@@ -1,0 +1,95 @@
+object ParentTests := Object
+|[
+    method multipleInheritanceWorks
+    [
+        object Foo := Object 
+        |[
+            method asText
+            [
+                result := "Foo"
+            ]
+        ]|
+        
+        object Bar := Foo
+        |[
+            method asText
+            [
+                result := "Bar:" + parent.asText
+            ]
+        ]|
+        
+        object Baz := Bar
+        |[
+            method asText
+            [
+                result := "Baz:" + parent.asText
+            ]        
+        ]|
+        
+        Assert.equal("Baz:Bar:Foo", Baz.asText)
+    ]
+    
+    method parentBug
+    [
+        object foo := Object |[
+
+          method test1 [
+            # weirdness number 1: you would expect: Assert.that(parent = Object)
+            # might be avoided by using 'super' instead of 'parent'
+            Assert.that(parent = self)
+          ]
+
+          method test2 [
+            self.test2a
+          ]
+
+          method test3a [
+            self.test3b
+          ]
+
+        ]|
+        foo.test1
+
+        object bar := foo |[
+
+          method test2a [
+            # skip
+          ]
+
+          method test3 [
+            parent.test3a
+          ]
+
+          method test3a [
+            Exception.throw
+          ]
+
+          method test3b [
+            #skip
+          ]
+
+          method parent [
+            result := parent
+          ]
+
+        ]|
+        bar.test2
+        bar.test3
+
+        object baz := bar |[
+        
+          method test4 [
+            #self.parent.test3a
+            # Weirdness number 2: the following produces an error, while the statement
+            # above doesn't:
+            self.parent|[object foo := foo]|.test3a
+          ]
+        
+        ]|
+        baz.test4
+    ]
+]|
+
+ParentTests
+    .multipleInheritanceWorks
+#    .parentBug
