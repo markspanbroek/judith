@@ -62,68 +62,36 @@ object ParentTests := Object
         Assert.equal("Baz:Bar:Foo", Foo.asText)
     ]
     
-    method parentBug
+    method parentMethodsHaveAccessToDescendantMethods
     [
-        object foo := Object |[
-
-          method test1 [
-            # weirdness number 1: you would expect: Assert.that(parent = Object)
-            # might be avoided by using 'super' instead of 'parent'
-            Assert.that(parent = self)
-          ]
-
-          method test2 [
-            self.test2a
-          ]
-
-          method test3a [
-            self.test3b
-          ]
-
+        object Parent := Object 
+        |[
+            method parentMethod [
+                self.childMethod
+            ]
         ]|
-        foo.test1
 
-        object bar := foo |[
-
-          method test2a [
-            # skip
-          ]
-
-          method test3 [
-            parent.test3a
-          ]
-
-          method test3a [
-            Exception.throw
-          ]
-
-          method test3b [
-            #skip
-          ]
-
-          method parent [
-            result := parent
-          ]
-
-        ]|
-        bar.test2
-        bar.test3
-
-        object baz := bar |[
+        object Child := Parent 
+        |[
+            object childMethodCalled := false
         
-          method test4 [
-            #self.parent.test3a
-            # Weirdness number 2: the following produces an error, while the statement
-            # above doesn't:
-            self.parent|[object foo := foo]|.test3a
-          ]
-        
+            method childMethod
+            [
+                childMethodCalled := true
+            ]
+            
+            method checkParentHasAccessToChild
+            [
+                parent.parentMethod
+                Assert.that(childMethodCalled)
+            ]
         ]|
-        baz.test4
+        
+        Child.checkParentHasAccessToChild
     ]
 ]|
 
 ParentTests
     .multipleInheritanceWorks
     .multipleInheritanceWorksWithReplace
-#    .parentBug
+    .parentMethodsHaveAccessToDescendantMethods

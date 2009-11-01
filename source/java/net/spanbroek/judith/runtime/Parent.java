@@ -56,5 +56,12 @@ class Parent extends Object {
             );
         }
     }
+    
+    public Object copy() {
+        // return new Parent(wrapped.copy());
+        throw new Exception(
+          "parent objects can not be copied, or derived from"
+        );
+    }
 
 }
