@@ -1,10 +1,25 @@
 [
     object Parser := Objects.Parsing.Parser
 
-    ##
-    # A recursive descent parser in continuation passing style.
-    #
-    object ParserGenerator := Object 
+    object ParserGenerator := Object
+    |[
+        method begin
+        [
+            object EmptyParser := self.empty
+            
+            result := Parser
+            |[
+                method run(context, index, result, continuation)
+                [
+                    if index = 0
+                        EmptyParser.run(context, index, result, continuation)
+                    fi
+                ]
+            ]|
+        ]
+    ]|    
+
+    ParserGenerator.replace(ParserGenerator 
     |[
 
       method alternation(alternatives) [
@@ -20,29 +35,7 @@
         ] ]|
       
       ]
-      
-      object begin := Parser |[ method run(context, index, result, continuation) [
-      
-        if index = 0 
-          ParserGenerator.empty.run(context, index, result, continuation)
-        fi
-        
-      ] ]|
-      
-      method begin [ 
-      
-        result := begin 
-        
-      ]
-      
-      method beginBecomes(begin') [
-
-        Assert.that(caller : self)
-        
-        begin := begin'
-      
-      ]
-      
+            
       method concatenation(elements) [
         
         if elements.length > 0 
@@ -222,7 +215,7 @@
       
       ]
       
-    ]|
+    ]|)
     
     Objects.Parsing.replace( Objects.Parsing |[
         method ParserGenerator

@@ -4,18 +4,23 @@
 
     ParserGenerator.replace( ParserGenerator |[
 
+        method begin
+        [
+            result := parent.begin
+            |[
+                method asText
+                [
+                    result := "^"
+                ]
+            ]|
+        ]
+
       object initialized := false
 
       method initialize [
 
         Assert.that(not initialized)
 
-        self.beginBecomes(self.begin |[
-          method asText [
-            result := "^"
-          ]
-        ]|)
-        
         self.endBecomes(self.end |[
           method asText [
             result := "$"
