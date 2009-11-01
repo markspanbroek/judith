@@ -21,10 +21,10 @@
             
       method concatenation(elements) [
         
+        object generator := self
+
         if elements.length > 0 
         
-          object generator := self
-
           result := Parser |[ method run(context, index, result, continuation) [
               
             object tail := elements.copy
@@ -44,32 +44,12 @@
           
         || true 
         
-          result := empty
+          result := generator.empty
           
         fi
       
       ]
-      
-      object empty := Parser |[ method run(context, index, result, continuation) [
-        
-        continuation.run(index, result)
-          
-      ] ]|
-      
-      method empty [
-      
-        result := empty
-      
-      ]
-      
-      method emptyBecomes(empty') [
-
-        Assert.that(caller : self)
-      
-        empty := empty'
-      
-      ]
-      
+            
       object end := Parser |[ method run(context, index, result, continuation) [
          
         if index = context.input.length 
