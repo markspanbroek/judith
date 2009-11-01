@@ -255,7 +255,6 @@ public class Object {
      */
     public synchronized void replace(Object object) {
         getCore().getClazz().setReplacement(object);
-        setCore(object.getCurrentCore());
     }
 
 }

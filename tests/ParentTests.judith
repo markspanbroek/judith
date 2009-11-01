@@ -29,6 +29,39 @@ object ParentTests := Object
         Assert.equal("Baz:Bar:Foo", Baz.asText)
     ]
     
+    method multipleInheritanceWorksWithReplace
+    [
+        object Foo := Object 
+        |[
+            method asText
+            [
+                result := "Foo"
+            ]
+        ]|
+        
+        Foo.replace(
+            Foo
+            |[
+                method asText
+                [
+                    result := "Bar:" + parent.asText
+                ]
+            ]|
+        )
+        
+        Foo.replace(
+            Foo
+            |[
+                method asText
+                [
+                    result := "Baz:" + parent.asText
+                ]        
+            ]|
+       )
+        
+        Assert.equal("Baz:Bar:Foo", Foo.asText)
+    ]
+    
     method parentBug
     [
         object foo := Object |[
@@ -92,4 +125,5 @@ object ParentTests := Object
 
 ParentTests
     .multipleInheritanceWorks
+    .multipleInheritanceWorksWithReplace
 #    .parentBug
