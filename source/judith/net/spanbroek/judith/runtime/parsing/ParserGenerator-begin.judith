@@ -1,0 +1,23 @@
+[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Parser := Objects.Parsing.Parser
+
+    ParserGenerator.replace(ParserGenerator
+    |[
+        method begin
+        [
+            object EmptyParser := self.empty
+            
+            result := Parser
+            |[
+                method run(context, index, result, continuation)
+                [
+                    if index = 0
+                        EmptyParser.run(context, index, result, continuation)
+                    fi
+                ]
+            ]|
+        ]
+    ]|)
+]
+
