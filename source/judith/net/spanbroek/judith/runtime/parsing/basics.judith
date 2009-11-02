@@ -4,20 +4,6 @@
     
     ParserGenerator.replace(ParserGenerator 
     |[
-
-      method alternation(alternatives) [
-      
-        result := Parser |[ method run(context, index, result, continuation) [
-          
-          object i := 0
-          do i < alternatives.length 
-            alternatives.get(i).run(context, index, result, continuation)
-            i := i + 1
-          od
-          
-        ] ]|
-      
-      ]
             
       method concatenation(elements) [
         
