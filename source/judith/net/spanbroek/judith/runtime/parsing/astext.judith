@@ -15,6 +15,17 @@
             ]|
         ]
         
+        method end
+        [
+            result := parent.end
+            |[
+                method asText
+                [
+                    result := "$"
+                ]
+            ]|
+        ]
+
         method empty
         [
             result := parent.empty
@@ -32,12 +43,6 @@
 
         Assert.that(not initialized)
 
-        self.endBecomes(self.end |[
-          method asText [
-            result := "$"
-          ]
-        ]|)
-        
         self.neverBecomes(self.never |[
           method asText [
             result := "0"

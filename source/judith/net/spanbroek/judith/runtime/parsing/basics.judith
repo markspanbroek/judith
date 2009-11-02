@@ -50,28 +50,6 @@
       
       ]
             
-      object end := Parser |[ method run(context, index, result, continuation) [
-         
-        if index = context.input.length 
-          ParserGenerator.empty.run(context, index, result, continuation)
-        fi
-          
-      ] ]|
-      
-      method end [
-      
-        result := end
-      
-      ]
-      
-      method endBecomes(end') [
-
-        Assert.that(caller : self)
-      
-        end := end'
-      
-      ]
-      
       method literal(literal) [
       
         result := Parser |[ method run(context, index, result, continuation) [
