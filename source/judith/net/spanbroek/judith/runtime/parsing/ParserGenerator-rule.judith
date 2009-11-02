@@ -1,0 +1,18 @@
+[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Parser := Objects.Parsing.Parser
+    
+    ParserGenerator.replace(ParserGenerator 
+    |[
+        method rule(name) 
+        [          
+            result := Parser 
+            |[ 
+                method run(context, index, result, continuation) 
+                [
+                    context.parser.get(name).run(context, index, result, continuation)            
+                ]
+            ]|          
+        ]
+    ]|)
+]

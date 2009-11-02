@@ -47,7 +47,10 @@ public class World extends Scope {
         interpret("parsing/ParserGenerator-range.judith");
         interpret("parsing/ParserGenerator-alternation.judith");
         interpret("parsing/ParserGenerator-concatenation.judith");
-        interpret("parsing/basics.judith");
+        interpret("parsing/ParserGenerator-repetition.judith");
+        interpret("parsing/ParserGenerator-repetitionplus.judith");
+        interpret("parsing/ParserGenerator-rule.judith");
+        interpret("parsing/ParserGenerator-transform.judith");
         interpret("parsing/astext.judith");
         interpret("parsing/memoization.judith");
  

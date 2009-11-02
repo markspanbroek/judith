@@ -1,0 +1,16 @@
+[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Parser := Objects.Parsing.Parser
+    
+    ParserGenerator.replace(ParserGenerator 
+    |[
+        method repetition(operand) 
+        [  
+            result := self.alternation(
+                List.copy
+                    .add(self.empty)
+                    .add(self.repetitionplus(operand))
+            )          
+        ]
+    ]|)
+]
