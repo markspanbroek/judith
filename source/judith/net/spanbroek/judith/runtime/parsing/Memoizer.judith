@@ -1,0 +1,64 @@
+[
+    object Parser := Objects.Parsing.Parser
+    object CacheEntry := Objects.Parsing.CacheEntry
+
+    object Memoizer := Object
+    |[
+        method createKey(parser, index)
+        [
+            result := parser.asText + "," + index.asText
+        ]
+        
+        method memoize(parser)
+        [
+            Assert.that(parser : Parser)
+            
+            result := Parser 
+            |[
+                method run(context, index, result, continuation) 
+                [
+                    object cache := context.cache
+                    object key := Memoizer.createKey(parser, index)
+                
+                    if (cache.has(key))
+                    
+                        cache.get(key).addContinuation(continuation)
+                        
+                    || true 
+                    
+                        object entry := CacheEntry.copy
+                        cache.set(key, entry)
+                  
+                        entry.addContinuation(continuation)
+
+                        object newcontinuation := Function 
+                        |[ 
+                            method run(index, value)
+                            [
+                                entry.addResult(index, value)
+                            ] 
+                        ]|
+                  
+                        parser.run(context, index, result, newcontinuation)
+                        
+                    fi
+                ]
+          
+                method asText 
+                [
+                    result := parser.asText
+                ]        
+            ]|
+        ]
+    ]|
+    
+    Objects.Parsing.replace( 
+        Objects.Parsing 
+        |[
+            method Memoizer
+            [
+                result := Memoizer
+            ]
+        ]|
+    )    
+]

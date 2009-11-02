@@ -1,0 +1,58 @@
+[
+    object CacheEntry := Object 
+    |[
+        object results := List.copy
+        object continuations := List.copy
+
+        method addContinuation(continuation)
+        [
+            continuations.push(continuation)
+            
+            self.forwardResultsTo(continuation)
+        ]
+        
+        method addResult(index, value)
+        [
+            results.push(
+                ParseResult
+                    .copy
+                    .setIndex(index)
+                    .setValue(value)                
+            )
+            
+            self.callContinuationsWith(result)
+        ]
+
+        method forwardResultsTo(continuation)
+        [
+            Assert.equal(self, caller)
+            
+            object iterator := results.copy
+            do iterator.length > 0
+                object current := iterator.pop
+                continuation.run(current.index, current.value)
+            od
+        ]
+        
+        method callContinuationsWith(result)
+        [
+            Assert.equal(self, caller)
+        
+            object iterator := continuations.copy
+            do iterator.length > 0
+                object current := iterator.pop
+                current.run(result.index, result.value)
+            od
+        ]
+    ]|
+    
+    Objects.Parsing.replace( 
+        Objects.Parsing 
+        |[
+            method CacheEntry
+            [
+                result := CacheEntry
+            ]
+        ]|
+    )
+]

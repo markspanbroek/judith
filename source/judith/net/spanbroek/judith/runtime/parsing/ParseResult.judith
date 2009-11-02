@@ -1,0 +1,33 @@
+[
+    object ParseResult := Object 
+    |[
+        object index := null
+        object value := null
+
+        method index [
+            result := index
+        ]
+
+        method setIndex(index') [
+            index := index'
+        ]
+
+        method value [
+            result := value
+        ]
+
+        method setValue(value') [
+            value := value'
+        ]
+    ]|
+    
+    Objects.Parsing.replace( 
+        Objects.Parsing 
+        |[
+            method ParseResult
+            [
+                result := ParseResult
+            ]
+        ]|
+    )
+]

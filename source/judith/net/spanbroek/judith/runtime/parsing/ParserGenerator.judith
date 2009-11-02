@@ -1,11 +1,14 @@
 [
     object ParserGenerator := Object |[ ]|
 
-    Objects.Parsing.replace( Objects.Parsing |[
-        method ParserGenerator
-        [
-            result := ParserGenerator
-        ]
-    ]| )    
+    Objects.Parsing.replace( 
+        Objects.Parsing 
+        |[
+            method ParserGenerator
+            [
+                result := ParserGenerator
+            ]
+        ]|
+    )    
 ]
 
