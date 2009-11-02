@@ -14,6 +14,17 @@
                 ]
             ]|
         ]
+        
+        method empty
+        [
+            result := parent.empty
+            |[
+                method asText
+                [
+                    result := "()"
+                ]
+            ]|
+        ]
 
       object initialized := false
 
@@ -24,12 +35,6 @@
         self.endBecomes(self.end |[
           method asText [
             result := "$"
-          ]
-        ]|)
-        
-        self.emptyBecomes(self.empty |[
-          method asText [
-            result := "()"
           ]
         ]|)
         

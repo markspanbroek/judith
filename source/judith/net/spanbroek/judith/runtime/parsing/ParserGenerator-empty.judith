@@ -4,27 +4,15 @@
     
     ParserGenerator.replace(ParserGenerator 
     |[
-        object empty := Parser |[ method run(context, index, result, continuation) [
-
-            continuation.run(index, result)
-          
-        ] ]|
-
-        method empty [
-
-            result := empty
-
+        method empty 
+        [
+            result := Parser
+            |[
+                method run(context, index, result, continuation)
+                [
+                    continuation.run(index, result)
+                ]
+            ]|
         ]
-
-        method emptyBecomes(empty') [
-
-            Assert.that(caller : self)
-
-            empty := empty'
-
-        ]
-    
     ]|)
-
 ]
-
