@@ -6,25 +6,6 @@
     |[
                         
       
-      object never := Parser |[ method run(context, index, result, continuation) [
-      
-        # skip
-      
-      ] ]|
-      
-      method never [
-      
-        result := never
-      
-      ]
-      
-      method neverBecomes(never') [
-      
-        Assert.that(caller : self)
-      
-        never := never'
-      
-      ]
       
       method range(lower, upper) [
       

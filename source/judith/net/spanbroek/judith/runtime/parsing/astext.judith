@@ -36,23 +36,18 @@
                 ]
             ]|
         ]
-
-      object initialized := false
-
-      method initialize [
-
-        Assert.that(not initialized)
-
-        self.neverBecomes(self.never |[
-          method asText [
-            result := "0"
-          ]
-        ]|)
-      
-        initialized := true
         
-      ]
-      
+        method never
+        [
+            result := parent.never
+            |[
+                method asText
+                [
+                    result := "0"
+                ]
+            ]|
+        ]
+
       method alternation(alternatives) [
       
         object text := "("
@@ -187,6 +182,4 @@
       
     ]| )
     
-    ParserGenerator.initialize
-
 ]
