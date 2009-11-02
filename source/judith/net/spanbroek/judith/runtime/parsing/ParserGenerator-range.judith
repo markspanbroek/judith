@@ -1,0 +1,21 @@
+[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Parser := Objects.Parsing.Parser
+    
+    ParserGenerator.replace(ParserGenerator 
+    |[
+        method range(lower, upper) 
+        [
+            result := Parser 
+            |[ 
+                method run(context, index, result, continuation) 
+                [
+                    object character := context.input.excerpt(index, index+1)
+                    if (lower <= character and character <= upper) 
+                        continuation.run(index+1, result.copy.push(character))
+                    fi
+                ]
+            ]|
+        ]
+    ]|)
+]
