@@ -1,0 +1,24 @@
+[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Parser := Objects.Parsing.Parser
+    
+    ParserGenerator.replace(ParserGenerator 
+    |[
+        method literal(literal) 
+        [
+            result := Parser
+            |[
+                method run(context, index, result, continuation) 
+                [
+                    if index + literal.length <= context.input.length
+                        if context.input.excerpt(index, index + literal.length) = literal                        
+                            continuation.run(index + literal.length, result.copy.push(literal))
+                        fi
+                    fi
+                ]
+            ]|
+        ]
+    ]|)
+]
+
+
