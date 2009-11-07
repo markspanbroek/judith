@@ -97,6 +97,7 @@
       <arg file='tests/parser/EndTests.judith'/>
       <arg file='tests/parser/LiteralTests.judith'/>
       <arg file='tests/parser/NeverTests.judith'/>
+      <arg file='tests/parser/ParseResultTests.judith'/>
       <arg file='tests/parser/RangeTests.judith'/>
       <arg file='tests/parser/RepetitionTests.judith'/>
       <arg file='tests/parser/RepetitionPlusTests.judith'/>

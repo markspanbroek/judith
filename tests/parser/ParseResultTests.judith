@@ -1,0 +1,30 @@
+object ParseResult := Objects.Parsing.ParseResult
+
+object ParseResultTests := Object
+|[
+    method indexIsNullByDefault
+    [
+        Assert.that(null = ParseResult.index)
+    ]
+    
+    method valueIsNullByDefault
+    [
+        Assert.that(null = ParseResult.value)
+    ]
+    
+    method storesIndex
+    [
+        Assert.that(42 = ParseResult.copy.setIndex(42).index)
+    ]
+    
+    method storesValue
+    [
+        Assert.that("foo" = ParseResult.copy.setValue("foo").value)
+    ]
+]|
+
+ParseResultTests
+    .indexIsNullByDefault
+    .valueIsNullByDefault
+    .storesIndex
+    .storesValue
