@@ -1,4 +1,6 @@
 [
+    object ParseResult := Objects.Parsing.ParseResult
+
     object CacheEntry := Object 
     |[
         object results := List.copy
@@ -13,12 +15,12 @@
         
         method addResult(index, value)
         [
-            results.push(
-                ParseResult
-                    .copy
-                    .setIndex(index)
-                    .setValue(value)                
-            )
+            object result := ParseResult
+                                .copy
+                                .setIndex(index)
+                                .setValue(value)
+
+            results.push(result)
             
             self.callContinuationsWith(result)
         ]
@@ -43,6 +45,19 @@
                 object current := iterator.pop
                 current.run(result.index, result.value)
             od
+        ]
+        
+        method copy
+        [
+            result := parent.copy.reset
+        ]
+        
+        method reset
+        [
+            Assert.that(caller : self)
+                        
+            results := List.copy
+            continuations := List.copy
         ]
     ]|
     

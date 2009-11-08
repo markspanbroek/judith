@@ -1,0 +1,24 @@
+[
+    object Counter := Object 
+    |[
+        object value := 0
+        
+        method value
+        [
+            result := value
+        ]
+        
+        method increase
+        [
+            value := value + 1
+        ]
+    ]|
+    
+    Objects := Objects
+    |[
+        method Counter
+        [
+            result := Counter
+        ]
+    ]|
+]

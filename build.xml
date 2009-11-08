@@ -78,30 +78,13 @@
   </target>
     
   <target name='test' depends='jar,testStandardOutput,testStandardInput'>
+    <pathconvert pathsep=' ' property='tests'>
+      <fileset dir='tests'>
+        <include name='**/*Tests.judith'/>
+      </fileset>
+    </pathconvert>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
-      <arg file='tests/AssertTests.judith'/>
-      <arg file='tests/BlockTests.judith'/>
-      <arg file='tests/BooleanTests.judith'/>
-      <arg file='tests/DictionaryTests.judith'/>
-      <arg file='tests/LambdaTests.judith'/>
-      <arg file='tests/ListTests.judith'/>
-      <arg file='tests/MethodTests.judith'/>
-      <arg file='tests/NumberTests.judith'/>
-      <arg file='tests/ParentTests.judith'/>
-      <arg file='tests/ReferenceTests.judith'/>
-      <arg file='tests/TextTests.judith'/>
-      <arg file='tests/parser/AlternativesTests.judith'/>
-      <arg file='tests/parser/BeginTests.judith'/>
-      <arg file='tests/parser/ConcatenationTests.judith'/>
-      <arg file='tests/parser/EmptyTests.judith'/>
-      <arg file='tests/parser/EndTests.judith'/>
-      <arg file='tests/parser/LiteralTests.judith'/>
-      <arg file='tests/parser/NeverTests.judith'/>
-      <arg file='tests/parser/ParseResultTests.judith'/>
-      <arg file='tests/parser/RangeTests.judith'/>
-      <arg file='tests/parser/RepetitionTests.judith'/>
-      <arg file='tests/parser/RepetitionPlusTests.judith'/>
-      <arg file='tests/MiscellaneousTests.judith'/>
+      <arg line='${tests}'/>
     </java>
   </target>
 

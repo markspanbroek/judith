@@ -37,6 +37,7 @@ public class World extends Scope {
         interpret("IO.judith");
         interpret("Reference.judith");
         interpret("List.judith");
+        interpret("Counter.judith");
         interpret("parsing/Parser.judith");
         interpret("parsing/ParseResult.judith");
         interpret("parsing/CacheEntry.judith");
