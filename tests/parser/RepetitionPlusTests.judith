@@ -17,6 +17,6 @@ object RepetitionPlusTests := Object
     ]
 ]|
 
-#RepetitionPlusTests
-#    .parsingSingleInstanceSucceeds
-#    .parsingMultipleInstancesSucceeds
+RepetitionPlusTests
+    .parsingSingleInstanceSucceeds
+    .parsingMultipleInstancesSucceeds

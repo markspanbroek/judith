@@ -32,7 +32,7 @@ class DictionaryBuilder {
             @Override
             protected void execute(Scope scope) {
                 HashMap<String, Object> map;
-                map = (HashMap<String, Object>)dictionaryToBe.getNativeObject();
+                map = (HashMap<String, Object>)scope.get("self").getNativeObject();
                 String key = (String) scope.get("key").getNativeObject();
                 scope.set("result", world.wrap(map.containsKey(key)));
             }
@@ -49,7 +49,7 @@ class DictionaryBuilder {
             @Override
             protected void execute(Scope scope) {
                 HashMap<String, Object> map;
-                map = (HashMap<String, Object>)dictionaryToBe.getNativeObject();
+                map = (HashMap<String, Object>)scope.get("self").getNativeObject();
                 String key = (String) scope.get("key").getNativeObject();
                 scope.set("result", map.get(key));
             }
@@ -66,7 +66,7 @@ class DictionaryBuilder {
             @Override
             protected void execute(Scope scope) {
                 HashMap<String, Object> map;
-                map = (HashMap<String, Object>)dictionaryToBe.getNativeObject();
+                map = (HashMap<String, Object>)scope.get("self").getNativeObject();
                 String key = (String) scope.get("key").getNativeObject();
                 map.put(key, scope.get("value"));
             }

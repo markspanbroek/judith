@@ -87,7 +87,13 @@ object DictionaryTests := Object
         dictionary.set("foo", foo)
         Assert.that(dictionary.has("foo"))
         Assert.equal(foo, dictionary.get("foo"))
-    ]    
+    ]
+    
+    method copiesAreIndependent
+    [
+        Dictionary.copy.set("bar", null)
+        Assert.that(not Dictionary.copy.has("bar"))
+    ]
     
 ]|
 
@@ -98,3 +104,4 @@ DictionaryTests
     .getMethodThrowsWhenNotGivenAString
     .setMethodThrowsWhenNotGivenAString
     .storesAnObject
+    .copiesAreIndependent
