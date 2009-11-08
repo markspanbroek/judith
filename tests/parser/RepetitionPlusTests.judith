@@ -1,6 +1,6 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 
-object RepetitionPlusTests := Object 
+object RepetitionPlusTests := Object
 |[
     object parser := ParserGenerator.repetitionplus(ParserGenerator.literal("a"))
 

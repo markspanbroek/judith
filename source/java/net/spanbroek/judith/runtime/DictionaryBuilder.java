@@ -13,6 +13,7 @@ class DictionaryBuilder {
         builder.declareHasMethod();
         builder.declareGetMethod();
         builder.declareSetMethod();
+        builder.declareCopyMethod();
         builder.declareDictionary();
     }
 
@@ -71,6 +72,21 @@ class DictionaryBuilder {
             }
         }
         dictionaryToBe.declare("set", new SetMethod());
+    }
+
+    private void declareCopyMethod() {
+        class CopyMethod extends Method {
+            protected void execute(Scope scope) {
+                Object self = scope.get("self");
+                Object parent = scope.get("parent");
+                Object result = parent.call("copy", new Object[]{}, self);
+                HashMap<String,Object> original = (HashMap<String,Object>)self.getNativeObject();
+                HashMap<String,Object> copy = new HashMap<String,Object>(original);
+                result.setNativeObject(copy);
+                scope.set("result", result);
+            }
+        }
+        dictionaryToBe.declare("copy", new CopyMethod());
     }
 
     private void declareDictionary() {
