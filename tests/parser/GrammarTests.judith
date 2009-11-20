@@ -1,0 +1,23 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+object Grammar := Objects.Parsing.Grammar
+
+object GrammarTests := Object 
+|[
+
+    object grammar := Grammar.copy
+
+    method testCanAddRule
+    [
+        grammar.addRule("foo", ParserGenerator.literal("foo"))
+    ]
+    
+    method testCanSetDefaultRule
+    [
+        grammar.setDefaultRule("foo")
+    ]
+
+]|
+
+GrammarTests
+  .testCanAddRule
+  .testCanSetDefaultRule

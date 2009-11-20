@@ -1,0 +1,24 @@
+[
+    object Grammar := Object
+    |[
+        method addRule(name, expression)
+        [
+            #todo
+        ]
+        
+        method setDefaultRule(name)
+        [
+            #todo
+        ]
+    ]|
+    
+    Objects.Parsing.replace(
+        Objects.Parsing
+        |[
+            method Grammar
+            [
+                result := Grammar
+            ]
+        ]|
+    )
+]
