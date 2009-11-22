@@ -95,6 +95,14 @@ object DictionaryTests := Object
         Assert.that(not Dictionary.copy.has("bar"))
     ]
     
+    method implicitCopiesAreIndependent
+    [
+        object one := Dictionary.copy
+        object two := one |[ ]|
+        one.set("baz", null)
+#todo        Assert.that(not two.has("baz"))
+    ]
+    
 ]|
 
 DictionaryTests
@@ -105,3 +113,4 @@ DictionaryTests
     .setMethodThrowsWhenNotGivenAString
     .storesAnObject
     .copiesAreIndependent
+    .implicitCopiesAreIndependent

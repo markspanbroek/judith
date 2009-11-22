@@ -1,14 +1,18 @@
 [
+    object Dictionary := Objects.Dictionary
+
     object Grammar := Object
     |[
+        object rules := Dictionary.copy
+    
         method addRule(name, expression)
         [
-            #todo
+            rules.set(name, expression)
         ]
         
         method setDefaultRule(name)
         [
-            #todo
+            Assert.that(rules.has(name))
         ]
     ]|
     
