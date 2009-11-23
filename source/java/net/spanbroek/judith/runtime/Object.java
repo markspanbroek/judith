@@ -22,7 +22,7 @@ public class Object {
      */
     public Object(Object parent, Scope scope) {
         this(scope);
-        getCore().setParent(parent.copy());
+        getCore().setParent(parent.call("copy"));
     }
 
     /**

@@ -100,7 +100,7 @@ object DictionaryTests := Object
         object one := Dictionary.copy
         object two := one |[ ]|
         one.set("baz", null)
-#todo        Assert.that(not two.has("baz"))
+        Assert.that(not two.has("baz"))
     ]
     
 ]|
