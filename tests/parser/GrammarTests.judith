@@ -17,6 +17,13 @@ object GrammarTests := Object
         grammar.addRule("foo", ParserGenerator.literal("foo"))
     ]
     
+    method testCanSetDefaultRule
+    [
+        self.setup
+        grammar.addRule("foo", ParserGenerator.empty)
+        grammar.setDefaultRule("foo")
+    ]
+    
     method testDefaultRuleMustFirstBeAdded
     [
         self.setup
@@ -42,4 +49,5 @@ object GrammarTests := Object
 
 GrammarTests
   .testCanAddRule
+  .testCanSetDefaultRule
   .testDefaultRuleMustFirstBeAdded
