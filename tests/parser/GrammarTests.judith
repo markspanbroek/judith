@@ -3,21 +3,23 @@ object Grammar := Objects.Parsing.Grammar
 
 object GrammarTests := Object 
 |[
+
+    object grammar := null
+    
+    method setup
+    [
+        grammar := Grammar.copy
+    ]
+
     method testCanAddRule
     [
-        object grammar := Grammar.copy
+        self.setup
         grammar.addRule("foo", ParserGenerator.literal("foo"))
-    ]
-    
-    method testCanSetDefaultRule
-    [
-        object grammar := Grammar.copy
-        grammar.setDefaultRule("foo")
     ]
     
     method testDefaultRuleMustBeAddedFirst
     [
-        object grammar := Grammar.copy
+        self.setup
         object exceptionWasThrown := false
         
         ExceptionHandler 
@@ -33,12 +35,11 @@ object GrammarTests := Object
             ]
         ]|.run
         
-#todo        Assert.that(exceptionWasThrown)
+        Assert.that(exceptionWasThrown)
     ]
 
 ]|
 
 GrammarTests
   .testCanAddRule
-  .testCanSetDefaultRule
   .testDefaultRuleMustBeAddedFirst
