@@ -17,7 +17,7 @@ object GrammarTests := Object
         grammar.addRule("foo", ParserGenerator.literal("foo"))
     ]
     
-    method testDefaultRuleMustBeAddedFirst
+    method testDefaultRuleMustFirstBeAdded
     [
         self.setup
         object exceptionWasThrown := false
@@ -42,4 +42,4 @@ object GrammarTests := Object
 
 GrammarTests
   .testCanAddRule
-  .testDefaultRuleMustBeAddedFirst
+  .testDefaultRuleMustFirstBeAdded
