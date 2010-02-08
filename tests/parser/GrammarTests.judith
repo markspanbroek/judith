@@ -44,6 +44,29 @@ object GrammarTests := Object
         
         Assert.that(exceptionWasThrown)
     ]
+    
+    method testCannotParseWithoutDefaultRule
+    [
+        self.setup
+        grammar.addRule("foo", ParserGenerator.empty)
+        
+        object exceptionWasThrown := false
+        
+        ExceptionHandler
+        |[
+            method try
+            [
+                grammar.parse("bar")
+            ]
+            
+            method catch(exception)
+            [
+                exceptionWasThrown := true
+            ]            
+        ]|.run
+        
+        Assert.that(exceptionWasThrown)
+    ]
 
 ]|
 
