@@ -74,3 +74,4 @@ GrammarTests
   .testCanAddRule
   .testCanSetDefaultRule
   .testDefaultRuleMustFirstBeAdded
+  .testCannotParseWithoutDefaultRule

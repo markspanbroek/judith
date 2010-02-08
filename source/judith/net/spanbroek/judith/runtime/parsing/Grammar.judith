@@ -19,7 +19,12 @@
         [
             result := parent.copy
             rules := rules.copy
-        ]        
+        ]
+        
+        method parse(input)
+        [
+            Exception.throw
+        ]
     ]|
     
     Objects.Parsing.replace(
