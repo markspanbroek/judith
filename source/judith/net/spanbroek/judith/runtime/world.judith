@@ -54,6 +54,11 @@ object Function := Object
     # empty
 ]|
 
+object Procedure := Object 
+|[ 
+    # empty
+]|
+
 [
     object Number := Objects.Number
     

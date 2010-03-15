@@ -20,7 +20,7 @@ expression2  = (expression2 w ("+"|"-") w)? expression3
 expression3  = (expression3 w ("*"|"/") w)? expression4
 expression4  = (expression4 w "^" w)? expression5
 expression5  = ("not"|"-") w expression5 | expression6
-expression6  = methodcall | alteration | lambda | expression7
+expression6  = methodcall | alteration | lambda | block | expression7
 expression7  = braces | identifier | text | number | boolean
 
 methodcall   = expression6 "." identifier (expressions)?

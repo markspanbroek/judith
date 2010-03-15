@@ -152,6 +152,23 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     @Override
+    public void visit(net.spanbroek.judith.tree.LambdaBlock node) {
+
+        Object procedure = new Object(world.get("Procedure"), scope);
+
+        Method runMethod = new InterpretedMethod(
+          new String[]{},
+          node.getStatements(),
+          world
+        );
+
+        procedure.declare("run", runMethod);
+        
+        stack.push(procedure);
+
+    }
+
+    @Override
     public void visit(net.spanbroek.judith.tree.Method node) {
         // skip
     }

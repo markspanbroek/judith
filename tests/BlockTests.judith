@@ -14,9 +14,15 @@ object BlockTests := Object |[
     [
         []
     ]
+    
+    method blockIsProcedure
+    [
+        Assert.that([] : Procedure)
+    ]
 
 ]|
 
 BlockTests
     .blockHasOwnScope
     .emptyBlockIsAllowed
+    .blockIsProcedure

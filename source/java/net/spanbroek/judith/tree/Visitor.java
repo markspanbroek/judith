@@ -9,7 +9,8 @@ public abstract class Visitor {
     public void visit(Conditional node) {}
     public void visit(Do node) {}
     public void visit(If node) {}
-    public void visit(Lambda aThis) {}
+    public void visit(Lambda node) {}
+    public void visit(LambdaBlock node) {}
     public void visit(Method node) {}
     public void visit(MethodCall node) {}
     public void visit(Number node) {}

@@ -1,10 +1,10 @@
 package net.spanbroek.judith.tree;
 
-public class Block implements Statement {
+public class LambdaBlock implements Expression {
 
     private Statement[] statements;
 
-    public Block(Statement[] statements) {
+    public LambdaBlock(Statement[] statements) {
         this.statements = statements;
     }
 

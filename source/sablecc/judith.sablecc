@@ -130,6 +130,7 @@ Productions
   expression6 = {methodcall} methodcall
               | {alteration} alteration
               | {lambda} lambda
+              | {block} block
               | {simple} expression7
               ;
 

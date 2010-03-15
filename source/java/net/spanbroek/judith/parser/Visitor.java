@@ -95,6 +95,12 @@ class Visitor extends DepthFirstAdapter {
     }
 
     @Override
+    public void outABlockExpression6(ABlockExpression6 node) {
+        Block block = (Block)stack.pop();
+        stack.push(new LambdaBlock(block.getStatements()));
+    }
+    
+    @Override
     public void outAIdentifierExpression7(AIdentifierExpression7 node) {
         String identifier = (String)stack.pop();
         stack.push(new Reference(identifier));
