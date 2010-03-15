@@ -19,10 +19,17 @@ object BlockTests := Object |[
     [
         Assert.that([] : Procedure)
     ]
-
+    
+    method blockHasRunMethod
+    [
+        object wasRun := false
+        [ wasRun := true ].run
+        Assert.that(wasRun)
+    ]
 ]|
 
 BlockTests
     .blockHasOwnScope
     .emptyBlockIsAllowed
     .blockIsProcedure
+    .blockHasRunMethod
