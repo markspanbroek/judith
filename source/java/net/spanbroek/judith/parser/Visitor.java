@@ -95,13 +95,13 @@ class Visitor extends DepthFirstAdapter {
     }
 
     @Override
-    public void outABlockExpression6(ABlockExpression6 node) {
+    public void outABlockExpression7(ABlockExpression7 node) {
         Block block = (Block)stack.pop();
         stack.push(new LambdaBlock(block.getStatements()));
     }
     
     @Override
-    public void outAIdentifierExpression7(AIdentifierExpression7 node) {
+    public void outAIdentifierExpression8(AIdentifierExpression8 node) {
         String identifier = (String)stack.pop();
         stack.push(new Reference(identifier));
     }
@@ -174,6 +174,18 @@ class Visitor extends DepthFirstAdapter {
           new Lambda(
             (String[])identifiers.toArray(new String[]{}),
             expression
+          )
+        );
+    }
+
+    @Override
+    public void outALambdablock(ALambdablock node) {
+        List statements = (List)stack.pop();
+        List identifiers = (List)stack.pop();
+        stack.push(
+          new LambdaBlock(
+            (String[])identifiers.toArray(new String[]{}),
+            (Statement[])statements.toArray(new Statement[]{})
           )
         );
     }

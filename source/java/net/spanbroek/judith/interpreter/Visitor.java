@@ -157,7 +157,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         Object procedure = new Object(world.get("Procedure"), scope);
 
         Method runMethod = new InterpretedMethod(
-          new String[]{},
+          node.getIdentifiers(),
           node.getStatements(),
           world
         );

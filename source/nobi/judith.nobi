@@ -20,13 +20,15 @@ expression2  = (expression2 w ("+"|"-") w)? expression3
 expression3  = (expression3 w ("*"|"/") w)? expression4
 expression4  = (expression4 w "^" w)? expression5
 expression5  = ("not"|"-") w expression5 | expression6
-expression6  = methodcall | alteration | lambda | block | expression7
-expression7  = braces | identifier | text | number | boolean
+expression6  = methodcall | alteration | expression7
+expression7  = block | lambda | lambdablock | expression8
+expression8  = braces | identifier | text | number | boolean
 
 methodcall   = expression6 "." identifier (expressions)?
 expressions  = "(" w expression (w "," w expression)* w ")"
 alteration   = expression 6 w "|[" (w (object|method))* w "]|"
 lambda       = "(" w identifier (w "," w identifier)* w "->" w expression w ")"
+lambdablock  = "[" w identifier (w "," w identifier)* w "->" w statements w "]"
 braces       = "(" w expression w ")"
 method       = "method" w identifier (identifiers)? w "[" w statements w "]"
 identifiers  = "(" w identifier (w "," w identifier)* w ")"

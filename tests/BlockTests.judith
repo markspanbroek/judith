@@ -26,6 +26,13 @@ object BlockTests := Object |[
         [ wasRun := true ].run
         Assert.that(wasRun)
     ]
+    
+    method runMethodPassesParameters
+    [
+        object wasRun := false
+        [ x -> wasRun := x ].run(true)
+        Assert.that(wasRun)
+    ]
 ]|
 
 BlockTests
@@ -33,3 +40,4 @@ BlockTests
     .emptyBlockIsAllowed
     .blockIsProcedure
     .blockHasRunMethod
+    .runMethodPassesParameters

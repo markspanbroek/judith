@@ -129,12 +129,16 @@ Productions
 
   expression6 = {methodcall} methodcall
               | {alteration} alteration
-              | {lambda} lambda
-              | {block} block
               | {simple} expression7
               ;
+              
+  expression7 = {block} block
+              | {lambda} lambda
+              | {lambdablock} lambdablock
+              | {simple} expression8
+              ;
 
-  expression7 = {braces} braces
+  expression8 = {braces} braces
               | {identifier} identifier
               | {text} text
               | {number} number
@@ -162,6 +166,8 @@ Productions
                  ;
 
   lambda = openbrace identifierlist arrow expression closebrace;
+  
+  lambdablock = openbracket identifierlist arrow statements closebracket;
 
   braces = openbrace expression closebrace;
 
