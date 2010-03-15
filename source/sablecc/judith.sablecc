@@ -1,6 +1,6 @@
 /*
  * conversion of the judith language specification into sablecc
- * 2009-05-24
+ * 2010-03-15
  * Mark Spanbroek
  */
 Package
@@ -158,7 +158,7 @@ Productions
                  | {method} method
                  ;
 
-  lambda = openbracket identifierlist arrow expression closebracket;
+  lambda = openbrace identifierlist arrow expression closebrace;
 
   braces = openbrace expression closebrace;
 
