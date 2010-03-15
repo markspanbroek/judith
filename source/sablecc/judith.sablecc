@@ -90,7 +90,9 @@ Productions
 
   conditional = expression statements;
 
-  block = openbracket statement statements closebracket;
+  block = {normal} openbracket statement statements closebracket
+        | {empty} openbracket closebracket
+        ;
 
   expression = {and} expression andsym expression1
              | {or} expression orsym expression1

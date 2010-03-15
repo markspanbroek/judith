@@ -79,12 +79,18 @@ class Visitor extends DepthFirstAdapter {
     }
 
     @Override
-    public void outABlock(ABlock node) {
+    public void outANormalBlock(ANormalBlock node) {
         List statements = (List)stack.pop();
         statements.add(0, stack.pop());
         Block block = new Block(
           (Statement[])statements.toArray(new Statement[]{})
         );
+        stack.push(block);
+    }
+
+    @Override
+    public void outAEmptyBlock(AEmptyBlock node) {
+        Block block = new Block(new Statement[]{});
         stack.push(block);
     }
 

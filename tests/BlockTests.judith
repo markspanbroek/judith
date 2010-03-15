@@ -1,6 +1,7 @@
 object BlockTests := Object |[
 
-    method blockHasOwnScope [
+    method blockHasOwnScope 
+    [
         object foo := true
         [
             object foo := false
@@ -8,8 +9,14 @@ object BlockTests := Object |[
         ]
         Assert.that(foo)
     ]
+    
+    method emptyBlockIsAllowed
+    [
+        []
+    ]
 
 ]|
 
 BlockTests
     .blockHasOwnScope
+    .emptyBlockIsAllowed
