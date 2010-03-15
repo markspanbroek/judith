@@ -8,8 +8,7 @@ object LambdaTests := Object
     method evaluateUsesExpression 
     [
         Assert.that((x->x/2).evaluate(42) = 21)
-    ]
-    
+    ]    
 ]|
 
 LambdaTests
