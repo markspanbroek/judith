@@ -47,6 +47,16 @@
             Assert.that(0 <= index and index < self.length)
             parent.remove(index)
         ] 
+        
+        method do(procedure)
+        [
+            Assert.that(procedure : Procedure)
+            object i := 0
+            do i < self.length
+                procedure.run(self.get(i))
+                i := i + 1
+            od
+        ]
     ]|
 ]
 

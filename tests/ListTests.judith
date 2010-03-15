@@ -26,8 +26,16 @@ object ListTests := Object
         Assert.that(exceptionWasThrown)
     ]
     
+    method doIsCalledForEachElement
+    [
+        object list := List.copy.add(40).add(2)
+        object sum := 0
+        list.do([x -> sum := sum + x])
+        Assert.equal(42, sum)
+    ]
 ]|
 
 ListTests
     .objectsOfCorrectTypeCanBeAdded
     .objectsOfIncorrectTypeCannotBeAdded
+    .doIsCalledForEachElement
