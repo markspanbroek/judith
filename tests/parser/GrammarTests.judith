@@ -27,7 +27,6 @@ object GrammarTests := Object
     method testDefaultRuleMustFirstBeAdded
     [
         self.setup
-        object exceptionWasThrown := false
         
         Assert.that([ grammar.setDefaultRule("foo") ]).throws(Exception)
     ]
