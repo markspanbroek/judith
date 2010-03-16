@@ -11,74 +11,22 @@ object DictionaryTests := Object
 
     method getMethodThrowsWhenObjectNotPresent
     [
-        object exception := null
-        
-        ExceptionHandler
-        |[
-            method try
-            [
-                dictionary.get("foo")
-            ]
-            method catch(exception')[
-                exception := exception'
-            ]
-        ]|.run
-        
-        Assert.that(exception : AssertionFailedException)
+        Assert.throws(AssertionFailedException, [ dictionary.get("foo") ])
     ]
     
     method hasMethodThrowsWhenNotGivenAString
     [
-        object exception := null
-        
-        ExceptionHandler
-        |[
-            method try
-            [
-                dictionary.has(1)
-            ]
-            method catch(exception')[
-                exception := exception'
-            ]
-        ]|.run
-        
-        Assert.that(exception : AssertionFailedException)
+        Assert.throws(AssertionFailedException, [ dictionary.has(1) ])
     ]
 
     method getMethodThrowsWhenNotGivenAString
     [
-        object exception := null
-        
-        ExceptionHandler
-        |[
-            method try
-            [
-                dictionary.get(1)
-            ]
-            method catch(exception')[
-                exception := exception'
-            ]
-        ]|.run
-        
-        Assert.that(exception : AssertionFailedException)
+        Assert.throws(AssertionFailedException, [ dictionary.get(1) ])
     ]
     
     method setMethodThrowsWhenNotGivenAString
     [
-        object exception := null
-        
-        ExceptionHandler
-        |[
-            method try
-            [
-                dictionary.set(1,"1")
-            ]
-            method catch(exception')[
-                exception := exception'
-            ]
-        ]|.run
-        
-        Assert.that(exception : AssertionFailedException)
+        Assert.throws(AssertionFailedException, [ dictionary.set(1, "1") ])
     ]
 
     method storesAnObject

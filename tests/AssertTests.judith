@@ -62,6 +62,55 @@ object AssertTests := Object |[
     ]|.run
   ]
   
+  method callsProcedureThatIsPassedToThrows
+  [
+      object wasRun := false
+      Assert.throws(Exception, [ wasRun := true Exception.throw ])
+      Assert.that(wasRun)
+  ]
+  
+  method catchesExceptionWhenExpected
+  [
+      Assert.throws(Exception, [ Exception.throw ])
+  ]
+  
+  method throwsExceptionWhenExpectedExceptionDidNotOccur
+  [
+      object wasThrown := false
+      ExceptionHandler
+      |[
+          method try
+          [
+              Assert.throws(Exception, [])
+          ]
+          
+          method catch(exception)
+          [
+              wasThrown := true
+          ]
+      ]|.run
+      
+      Assert.that(wasThrown)
+  ]
+
+  method throwsExceptionWhenExceptionOfWrongTypeOccurs
+  [
+      object wasThrown := false
+      ExceptionHandler
+      |[
+          method try
+          [
+              Assert.throws(AssertionFailedException, [ Exception.throw])
+          ]
+          
+          method catch(exception)
+          [
+              wasThrown := true
+          ]
+      ]|.run
+      
+      Assert.that(wasThrown)
+  ]
 ]|
 
 AssertTests
@@ -70,3 +119,7 @@ AssertTests
   .throwsWhenNotEqual
   .doesNotThrowWhenEqual
   .descibesWhatsWrongWhenNotEqual
+  .callsProcedureThatIsPassedToThrows
+  .catchesExceptionWhenExpected
+  .throwsExceptionWhenExpectedExceptionDidNotOccur
+  .throwsExceptionWhenExceptionOfWrongTypeOccurs

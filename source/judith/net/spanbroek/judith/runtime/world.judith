@@ -45,6 +45,30 @@ object Assert := Object
             AssertionFailedException.copy.setMessage(message).throw
         fi
     ]
+    
+    method throws(expectedException, procedure)
+    [
+        self.that(procedure : Procedure)
+        
+        object exception := null
+        ExceptionHandler
+        |[
+            method try
+            [
+                procedure.run
+            ]
+            
+            method catch(exception')
+            [
+                exception := exception'
+            ]
+        ]|.run
+        
+        if not (exception : expectedException)
+            object message := "Expected exception to occur"
+            AssertionFailedException.copy.setMessage(message).throw
+        fi
+    ]
 ]|
 
 object null := Object.copy
