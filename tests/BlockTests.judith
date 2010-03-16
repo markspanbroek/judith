@@ -5,9 +5,9 @@ object BlockTests := Object |[
         object foo := true
         [
             object foo := false
-            Assert.that(not foo)
+            Assert.that(not foo).isTrue
         ]
-        Assert.that(foo)
+        Assert.that(foo).isTrue
     ]
     
     method emptyBlockIsAllowed
@@ -17,21 +17,21 @@ object BlockTests := Object |[
     
     method blockIsProcedure
     [
-        Assert.that([] : Procedure)
+        Assert.that([] : Procedure).isTrue
     ]
     
     method blockHasRunMethod
     [
         object wasRun := false
         [ wasRun := true ].run
-        Assert.that(wasRun)
+        Assert.that(wasRun).isTrue
     ]
     
     method runMethodPassesParameters
     [
         object wasRun := false
         [ x -> wasRun := x ].run(true)
-        Assert.that(wasRun)
+        Assert.that(wasRun).isTrue
     ]
 ]|
 

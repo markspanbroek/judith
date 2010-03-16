@@ -27,7 +27,7 @@
 
         method forwardResultsTo(continuation)
         [
-            Assert.equal(self, caller)
+            Assert.that(caller).equals(self)
             
             object iterator := results.copy
             do iterator.length > 0
@@ -38,7 +38,7 @@
         
         method callContinuationsWith(result)
         [
-            Assert.equal(self, caller)
+            Assert.that(caller).equals(self)
         
             object iterator := continuations.copy
             do iterator.length > 0
@@ -54,7 +54,7 @@
         
         method reset
         [
-            Assert.that(caller : self)
+            Assert.that(caller : self).isTrue
                         
             results := List.copy
             continuations := List.copy

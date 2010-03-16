@@ -11,7 +11,7 @@
         
         method memoize(parser)
         [
-            Assert.that(parser : Parser)
+            Assert.that(parser : Parser).isTrue
             
             result := Parser 
             |[

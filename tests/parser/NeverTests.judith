@@ -9,7 +9,7 @@ object NeverTests := Object |[
                     .push(ParserGenerator.literal("foo"))
                     .push(ParserGenerator.never)
             )
-        Assert.that(null = parser.parse("foo"))
+        Assert.that(parser.parse("foo")).equals(null)
     ]
 
 ]|

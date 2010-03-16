@@ -19,7 +19,7 @@ object CacheEntryTests := Object
         cacheEntry.addResult(1,"foo")
         cacheEntry.addResult(2,"bar")
         cacheEntry.addResult(3,"baz")
-        Assert.equal(3, counter.value)
+        Assert.that(counter.value).equals(3)
     ]
 ]|
 

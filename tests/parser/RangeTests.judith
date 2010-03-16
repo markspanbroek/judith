@@ -5,19 +5,19 @@ object RangeTests := Object |[
     object parser := ParserGenerator.range("b", "y")
 
     method parseSucceeds [
-        Assert.that("k" = parser.parse("k").get(0))
+        Assert.that(parser.parse("k").get(0)).equals("k")
     ]
     
     method parseFails [
-        Assert.that(null = parser.parse("a"))
+        Assert.that(parser.parse("a")).equals(null)
     ]
 
     method rangeBeginIsInclusive [
-        Assert.that("b" = parser.parse("b").get(0))
+        Assert.that(parser.parse("b").get(0)).equals("b")
     ]
     
     method rangeEndIsInclusive [
-        Assert.that("y" = parser.parse("y").get(0))
+        Assert.that(parser.parse("y").get(0)).equals("y")
     ]
 
 ]|

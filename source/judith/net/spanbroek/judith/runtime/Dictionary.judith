@@ -5,20 +5,20 @@
     |[
         method has(key)
         [
-            Assert.that(key : Text)
+            Assert.that(key : Text).isTrue
             result := parent.has(key)
         ]
     
         method get(key)
         [
-            Assert.that(key : Text)
-            Assert.that(self.has(key))
+            Assert.that(key : Text).isTrue
+            Assert.that(self.has(key)).isTrue
             result := parent.get(key)
         ]
 
         method set(key, value)
         [
-            Assert.that(key : Text)
+            Assert.that(key : Text).isTrue
             parent.set(key, value)
         ]    
     ]|

@@ -7,26 +7,26 @@
         
         method setElementType(elementType') 
         [
-            Assert.that(self.length = 0)
+            Assert.that(self.length).equals(0)
             elementType := elementType'
         ]
 
         method get(index) 
         [
-            Assert.that(index : Number)
+            Assert.that(index : Number).isTrue
             result := parent.get(index)
         ]
       
         method set(index, element) 
         [
-          Assert.that(index : Number)
-          Assert.that(element : elementType)
+          Assert.that(index : Number).isTrue
+          Assert.that(element : elementType).isTrue
           parent.set(index, element)
         ]
       
         method pop 
         [
-          Assert.that(self.length > 0)
+          Assert.that(self.length > 0).isTrue
           result := self.get(self.length - 1)
           self.remove(self.length - 1)
         ]
@@ -38,19 +38,19 @@
         
         method push(element) 
         [
-            Assert.that(element : elementType)
+            Assert.that(element : elementType).isTrue
             parent.push(element)
         ]
       
         method remove(index) 
         [
-            Assert.that(0 <= index and index < self.length)
+            Assert.that(0 <= index and index < self.length).isTrue
             parent.remove(index)
         ] 
         
         method do(procedure)
         [
-            Assert.that(procedure : Procedure)
+            Assert.that(procedure : Procedure).isTrue
             object i := 0
             do i < self.length
                 procedure.run(self.get(i))

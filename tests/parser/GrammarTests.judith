@@ -42,7 +42,7 @@ object GrammarTests := Object
             ]
         ]|.run
         
-        Assert.that(exceptionWasThrown)
+        Assert.that(exceptionWasThrown).isTrue
     ]
     
     method testCannotParseWithoutDefaultRule
@@ -65,7 +65,7 @@ object GrammarTests := Object
             ]            
         ]|.run
         
-        Assert.that(exceptionWasThrown)
+        Assert.that(exceptionWasThrown).isTrue
     ]
 
 ]|

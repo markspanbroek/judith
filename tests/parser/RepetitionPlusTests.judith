@@ -7,13 +7,13 @@ object RepetitionPlusTests := Object
     method parsingSingleInstanceSucceeds 
     [
         object result := parser.parse("a")
-        Assert.equal(1, result.length)
-        Assert.equal("a", result.get(0))
+        Assert.that(result.length).equals(1)
+        Assert.that(result.get(0)).equals("a")
     ]
     
     method parsingMultipleInstancesSucceeds 
     [
-        Assert.equal(5, parser.parse("aaaaa").length)
+        Assert.that(parser.parse("aaaaa").length).equals(5)
     ]
 ]|
 

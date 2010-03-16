@@ -2,76 +2,76 @@ object AssertTests := Object |[
 
   method doesNotThrowOnTrue 
   [
-    Assert.that(true)
+      Assert.that(true).isTrue
   ] 
   
   method throwsOnFalse 
   [
-    object exception := null
-    
-    ExceptionHandler |[
-      method try 
-      [
-        Assert.that(false)
-      ]
-      method catch(exception')
-      [
-        exception := exception'
-      ]
-    ]|.run
-    
-    if not (exception : AssertionFailedException)
-      AssertionFailedException.throw
-    fi
+      object exception := null
+      
+      ExceptionHandler |[
+        method try 
+        [
+          Assert.that(false).isTrue
+        ]
+        method catch(exception')
+        [
+          exception := exception'
+        ]
+      ]|.run
+      
+      if not (exception : AssertionFailedException)
+        AssertionFailedException.throw
+      fi
   ]
   
   method throwsWhenNotEqual
   [
-    object exception := null
-    
-    ExceptionHandler |[    
-        method try
-        [
-            Assert.equal(1, 2)
-        ]
-        method catch(exception')
-        [
-            exception := exception'
-        ]
-    ]|.run
-    
-    Assert.that(exception : AssertionFailedException)
+      object exception := null
+      
+      ExceptionHandler |[    
+          method try
+          [
+              Assert.that(2).equals(1)
+          ]
+          method catch(exception')
+          [
+              exception := exception'
+          ]
+      ]|.run
+      
+      Assert.that(exception : AssertionFailedException)
   ]
   
   method doesNotThrowWhenEqual
   [
-    Assert.equal(1,1)
+      Assert.that(1).equals(1)
   ]
   
   method descibesWhatsWrongWhenNotEqual
   [
-    ExceptionHandler |[    
-        method try
-        [
-            Assert.equal(1, 2)
-        ]
-        method catch(exception)
-        [
-            Assert.equal("Expected '1' but got '2'", exception.message)
-        ]
-    ]|.run
+      ExceptionHandler |[    
+          method try
+          [
+              Assert.that(2).equals(1)
+          ]
+          method catch(exception)
+          [
+              Assert.that(exception.message).equals("Expected '1' but got '2'")
+          ]
+      ]|.run
   ]
   
   method callsProcedureThatIsPassedToThrows
   [
       object wasRun := false
-      Assert.throws(Exception, [ wasRun := true Exception.throw ])
-      Assert.that(wasRun)
+      Assert.that([ wasRun := true Exception.throw ]).throws(Exception)
+      Assert.that(wasRun).isTrue
   ]
   
   method catchesExceptionWhenExpected
   [
-      Assert.throws(Exception, [ Exception.throw ])
+      Assert.that([ Exception.throw ]).throws(Exception)
   ]
   
   method throwsExceptionWhenExpectedExceptionDidNotOccur
@@ -81,7 +81,7 @@ object AssertTests := Object |[
       |[
           method try
           [
-              Assert.throws(Exception, [])
+              Assert.that([]).throws(Exception)
           ]
           
           method catch(exception)
@@ -90,7 +90,7 @@ object AssertTests := Object |[
           ]
       ]|.run
       
-      Assert.that(wasThrown)
+      Assert.that(wasThrown).isTrue
   ]
 
   method throwsExceptionWhenExceptionOfWrongTypeOccurs
@@ -100,7 +100,7 @@ object AssertTests := Object |[
       |[
           method try
           [
-              Assert.throws(AssertionFailedException, [ Exception.throw])
+              Assert.that([ Exception.throw ]).throws(AssertionFailedException)
           ]
           
           method catch(exception)
@@ -109,7 +109,7 @@ object AssertTests := Object |[
           ]
       ]|.run
       
-      Assert.that(wasThrown)
+      Assert.that(wasThrown).isTrue
   ]
 ]|
 

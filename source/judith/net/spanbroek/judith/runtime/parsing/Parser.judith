@@ -6,7 +6,7 @@
     |[
         method parse(input) 
         [
-            Assert.that(input : Text)
+            Assert.that(input : Text).isTrue
 
             object parseResult := Reference.create(null)
             object continuation := self.createContinuation(parseResult)
@@ -19,7 +19,7 @@
         
         method createContext(input)
         [
-            Assert.that(self = caller)
+            Assert.that(caller).equals(self)
 
             result := Object 
             |[
@@ -32,8 +32,8 @@
         
         method createContinuation(parseResult)
         [
-            Assert.that(self = caller)
-            Assert.that(parseResult : Reference)
+            Assert.that(caller).equals(self)
+            Assert.that(parseResult : Reference).isTrue
             
             result := Function 
             |[

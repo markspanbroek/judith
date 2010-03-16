@@ -1,11 +1,11 @@
 object booleanTests := Object |[
 
     method testConditionalEvaluationOfAnd [
-        object irrelevant := false and Assert.that(false)
+        object irrelevant := false and Assert.that(false).isTrue
     ]
     
     method testConditionalEvaluationOfOr [
-        object irrelevant := true or Assert.that(false)
+        object irrelevant := true or Assert.that(false).isTrue
     ]
 
 ]|

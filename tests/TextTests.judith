@@ -1,15 +1,15 @@
 object TextTests := Object |[
 
     method atmostReturnsTrueWhenLarger [
-        Assert.that("a" <= "b")
+        Assert.that("a" <= "b").isTrue
     ]
     
     method atmostReturnsTrueWhenEqual [
-        Assert.that("a" <= "a")
+        Assert.that("a" <= "a").isTrue
     ]
     
     method atmostReturnsFalse [
-        Assert.that("b" <= "b")
+        Assert.that("b" <= "b").isTrue
     ]
 
 ]|

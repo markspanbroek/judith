@@ -6,41 +6,41 @@ object DictionaryTests := Object
 
     method hasMethodReturnsFalseWhenObjectNotPresent
     [
-        Assert.that(not dictionary.has("foo"))
+        Assert.that(not dictionary.has("foo")).isTrue
     ]
 
     method getMethodThrowsWhenObjectNotPresent
     [
-        Assert.throws(AssertionFailedException, [ dictionary.get("foo") ])
+        Assert.that([ dictionary.get("foo") ]).throws(AssertionFailedException)
     ]
     
     method hasMethodThrowsWhenNotGivenAString
     [
-        Assert.throws(AssertionFailedException, [ dictionary.has(1) ])
+        Assert.that([ dictionary.has(1) ]).throws(AssertionFailedException)
     ]
 
     method getMethodThrowsWhenNotGivenAString
     [
-        Assert.throws(AssertionFailedException, [ dictionary.get(1) ])
+        Assert.that([ dictionary.get(1) ]).throws(AssertionFailedException)
     ]
     
     method setMethodThrowsWhenNotGivenAString
     [
-        Assert.throws(AssertionFailedException, [ dictionary.set(1, "1") ])
+        Assert.that([ dictionary.set(1, "1") ]).throws(AssertionFailedException)
     ]
 
     method storesAnObject
     [
         object foo := Object.copy
         dictionary.set("foo", foo)
-        Assert.that(dictionary.has("foo"))
-        Assert.equal(foo, dictionary.get("foo"))
+        Assert.that(dictionary.has("foo")).isTrue
+        Assert.that(dictionary.get("foo")).equals(foo)
     ]
     
     method copiesAreIndependent
     [
         Dictionary.copy.set("bar", null)
-        Assert.that(not Dictionary.copy.has("bar"))
+        Assert.that(not Dictionary.copy.has("bar")).isTrue
     ]
     
     method implicitCopiesAreIndependent
@@ -48,7 +48,7 @@ object DictionaryTests := Object
         object one := Dictionary.copy
         object two := one |[ ]|
         one.set("baz", null)
-        Assert.that(not two.has("baz"))
+        Assert.that(not two.has("baz")).isTrue
     ]
     
 ]|

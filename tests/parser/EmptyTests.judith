@@ -9,7 +9,7 @@ object EmptyTests := Object |[
                     .push(ParserGenerator.literal("foo"))
                     .push(ParserGenerator.empty)
             )
-        Assert.that("foo" = parser.parse("foo").get(0))
+        Assert.that(parser.parse("foo").get(0)).equals("foo")
     ]
     
     method doesNotProduceResult [
@@ -19,7 +19,7 @@ object EmptyTests := Object |[
                     .push(ParserGenerator.empty)
                     .push(ParserGenerator.literal("foo"))
             )
-        Assert.that("foo" = parser.parse("foo").get(0))
+        Assert.that(parser.parse("foo").get(0)).equals("foo")
     ]
 
 ]|

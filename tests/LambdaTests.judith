@@ -2,12 +2,12 @@ object LambdaTests := Object
 |[
     method lambdaExpressionCreatesFunction
     [
-        Assert.that((x->x) : Function)
+        Assert.that((x->x) : Function).isTrue
     ]
     
     method evaluateUsesExpression 
     [
-        Assert.that((x->x/2).evaluate(42) = 21)
+        Assert.that((x->x/2).evaluate(42)).equals(21)
     ]    
 ]|
 

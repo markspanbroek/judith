@@ -12,14 +12,14 @@ object ConcatenationTests := Object |[
 
     method parseSucceeds [
         object parseResult := parser.parse("foo bar")
-        Assert.that(parseResult : List)
-        Assert.that("foo" = parseResult.get(0))
-        Assert.that(" "   = parseResult.get(1))
-        Assert.that("bar" = parseResult.get(2))
+        Assert.that(parseResult : List).isTrue
+        Assert.that(parseResult.get(0)).equals("foo")
+        Assert.that(parseResult.get(1)).equals(" ")
+        Assert.that(parseResult.get(2)).equals("bar")
     ]
     
     method parseFails [
-        Assert.that(null = parser.parse("foo "))
+        Assert.that(parser.parse("foo ")).equals(null)
     ]
 
 ]|

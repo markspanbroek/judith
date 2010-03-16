@@ -9,7 +9,7 @@ object BeginTests := Object |[
                     .push(ParserGenerator.begin)
                     .push(ParserGenerator.literal("foo"))
             )
-        Assert.that("foo" = parser.parse("foo").get(0))
+        Assert.that(parser.parse("foo").get(0)).equals("foo")
     ]
     
     method parseFails [
@@ -19,7 +19,7 @@ object BeginTests := Object |[
                     .push(ParserGenerator.literal("foo"))
                     .push(ParserGenerator.begin)
             )
-        Assert.that(null = parser.parse("foo"))
+        Assert.that(parser.parse("foo")).equals(null)
     ]
 
 ]|

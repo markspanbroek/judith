@@ -1,3 +1,15 @@
+object null := Object.copy
+
+object Function := Object 
+|[ 
+    # empty
+]|
+
+object Procedure := Object 
+|[ 
+    # empty
+]|
+
 ExceptionHandler := ExceptionHandler
 |[
     method try 
@@ -28,60 +40,69 @@ object AssertionFailedException := Exception
     ]
 ]|
 
-object Assert := Object 
-|[
-    method that(assertion) 
-    [
-        if not assertion 
-            AssertionFailedException.throw
-        fi
-    ]
-    
-    method equal(expected, actual)
-    [
-        if not (expected = actual)
-            object message := "Expected '" + expected.asText + "'"
-            message := message + " but got '" + actual.asText + "'"
-            AssertionFailedException.copy.setMessage(message).throw
-        fi
-    ]
-    
-    method throws(expectedException, procedure)
-    [
-        self.that(procedure : Procedure)
+object Assert := null
+[
+    object Assertion := Object
+    |[
+        object subject := null
         
-        object exception := null
-        ExceptionHandler
-        |[
-            method try
-            [
-                procedure.run
-            ]
+        method setSubject(subject')
+        [
+            subject := subject'
+        ]
+        
+        method create(subject)
+        [
+            result := self.copy.setSubject(subject)
+        ]
+
+        method isTrue
+        [
+            if not subject
+                AssertionFailedException.throw
+            fi
+        ]        
+        
+        method equals(expected)
+        [
+            if not (expected = subject)
+                object message := "Expected '" + expected.asText + "'"
+                message := message + " but got '" + subject.asText + "'"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+
+        method throws(expectedException)
+        [
+            object exception := null
+            ExceptionHandler
+            |[
+                method try
+                [
+                    subject.run
+                ]
+                
+                method catch(exception')
+                [
+                    exception := exception'
+                ]
+            ]|.run
             
-            method catch(exception')
-            [
-                exception := exception'
-            ]
-        ]|.run
-        
-        if not (exception : expectedException)
-            object message := "Expected exception to occur"
-            AssertionFailedException.copy.setMessage(message).throw
-        fi
-    ]
-]|
+            if not (exception : expectedException)
+                object message := "Expected exception to occur"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+    ]|
 
-object null := Object.copy
-
-object Function := Object 
-|[ 
-    # empty
-]|
-
-object Procedure := Object 
-|[ 
-    # empty
-]|
+    Assert := Object 
+    |[
+        method that(assertion) 
+        [
+            result := Assertion.create(assertion)
+        ]
+    ]|
+]
 
 [
     object Number := Objects.Number
@@ -90,7 +111,7 @@ object Procedure := Object
         Number
         |[
             method plus(x) [
-                Assert.that(x : Number)
+                Assert.that(x : Number).isTrue
                 result := parent.plus(x)
             ]
             # TODO: check parameters of rest of Number's methods
@@ -106,7 +127,7 @@ object Procedure := Object
         |[
             method excerpt(begin, end)
             [
-                Assert.that(0 <= begin and begin < end and end <= self.length)
+                Assert.that(0 <= begin and begin < end and end <= self.length).isTrue
                 result := parent.excerpt(begin, end)
             ]
             

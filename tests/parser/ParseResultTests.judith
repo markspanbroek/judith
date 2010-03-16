@@ -4,22 +4,22 @@ object ParseResultTests := Object
 |[
     method indexIsNullByDefault
     [
-        Assert.that(null = ParseResult.index)
+        Assert.that(ParseResult.index).equals(null)
     ]
     
     method valueIsNullByDefault
     [
-        Assert.that(null = ParseResult.value)
+        Assert.that(ParseResult.value).equals(null)
     ]
     
     method storesIndex
     [
-        Assert.that(42 = ParseResult.copy.setIndex(42).index)
+        Assert.that(ParseResult.copy.setIndex(42).index).equals(42)
     ]
     
     method storesValue
     [
-        Assert.that("foo" = ParseResult.copy.setValue("foo").value)
+        Assert.that(ParseResult.copy.setValue("foo").value).equals("foo")
     ]
 ]|
 

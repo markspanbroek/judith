@@ -12,7 +12,7 @@
         
         method setDefaultRule(name)
         [
-            Assert.that(rules.has(name))
+            Assert.that(rules.has(name)).isTrue
         ]
         
         method copy

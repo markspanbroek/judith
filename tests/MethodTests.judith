@@ -9,7 +9,7 @@ object MethodTests := Object
                     object result := false 
                 ]
             ]|.run
-        )
+        ).isTrue
     ]
 ]|
 

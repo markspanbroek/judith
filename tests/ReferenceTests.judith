@@ -4,17 +4,17 @@ object ReferenceTests := Object
 |[
     method initialValueIsNull
     [
-        Assert.that(Reference.get = null)
+        Assert.that(Reference.get).equals(null)
     ]
 
     method creationStoresValue
     [
-        Assert.that(Reference.create(10).get = 10)
+        Assert.that(Reference.create(10).get).equals(10)
     ]
     
     method setChangesValue
     [
-        Assert.that(Reference.create(10).set(5).get = 5)
+        Assert.that(Reference.create(10).set(5).get).equals(5)
     ]
 ]|
 

@@ -3,9 +3,9 @@
 object foo := Object |[
 
   method test1 [
-    # weirdness number 1: you would expect: Assert.that(parent = Object)
+    # weirdness number 1: you would expect: Assert.that(parent = Object).isTrue
     # might be avoided by using 'super' instead of 'parent'
-    Assert.that(parent = self)
+    Assert.that(parent = self).isTrue
   ]
 
   method test2 [
@@ -85,11 +85,11 @@ object replacementTest3 := replacementTest1 |[
 
 ]|
 
-Assert.that(replacementTest1.identify = 1)
-Assert.that(replacementTest2.identify = 2)
+Assert.that(replacementTest1.identify = 1).isTrue
+Assert.that(replacementTest2.identify = 2).isTrue
 replacementTest1.replace(replacementTest3)
-Assert.that(replacementTest1.identify = 3)
-Assert.that(replacementTest2.identify = 4)
+Assert.that(replacementTest1.identify = 3).isTrue
+Assert.that(replacementTest2.identify = 4).isTrue
 
 
 object Point := Object
@@ -104,10 +104,10 @@ object Point := Object
   
   method initialize(x',y') 
   [
-    Assert.that(caller : self)
+    Assert.that(caller : self).isTrue
 
-    Assert.that(x : Objects.Number)
-    Assert.that(y : Objects.Number)
+    Assert.that(x : Objects.Number).isTrue
+    Assert.that(y : Objects.Number).isTrue
 
     x := x'
     y := y'
@@ -128,8 +128,8 @@ Point := Point
 |[
   method translate(dx,dy)
   [
-    Assert.that(dx : Objects.Number)
-    Assert.that(dy : Objects.Number)
+    Assert.that(dx : Objects.Number).isTrue
+    Assert.that(dy : Objects.Number).isTrue
     
     result := self.create(self.x + dx, self.y + dy)
   ]
@@ -141,7 +141,7 @@ ExceptionHandler |[
 
   method try [
     Point.initialize(1,2)
-    Assert.that(false)
+    Assert.that(false).isTrue
   ]
   
   method catch(exception) [

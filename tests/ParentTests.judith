@@ -26,7 +26,7 @@ object ParentTests := Object
             ]        
         ]|
         
-        Assert.equal("Baz:Bar:Foo", Baz.asText)
+        Assert.that(Baz.asText).equals("Baz:Bar:Foo")
     ]
     
     method multipleInheritanceWorksWithReplace
@@ -59,7 +59,7 @@ object ParentTests := Object
             ]|
        )
         
-        Assert.equal("Baz:Bar:Foo", Foo.asText)
+        Assert.that(Foo.asText).equals("Baz:Bar:Foo")
     ]
     
     method parentMethodsHaveAccessToDescendantMethods
@@ -83,7 +83,7 @@ object ParentTests := Object
             method checkParentHasAccessToChild
             [
                 parent.parentMethod
-                Assert.that(childMethodCalled)
+                Assert.that(childMethodCalled).isTrue
             ]
         ]|
         
