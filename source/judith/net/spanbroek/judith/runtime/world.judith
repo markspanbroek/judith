@@ -93,6 +93,22 @@ object Assert := null
                 AssertionFailedException.copy.setMessage(message).throw
             fi
         ]
+        
+        method isNotNull
+        [
+            if subject = null
+                object message := "Expected non-null object"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+        
+        method isNull
+        [
+            if not (subject = null)
+                object message := "Expected null"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
     ]|
 
     Assert := Object 

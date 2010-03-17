@@ -4,6 +4,7 @@
     object Grammar := Object
     |[
         object rules := Dictionary.copy
+        object defaultRule := null
     
         method addRule(name, expression)
         [
@@ -13,6 +14,7 @@
         method setDefaultRule(name)
         [
             Assert.that(rules.has(name)).isTrue
+            defaultRule := name
         ]
         
         method copy
@@ -23,7 +25,8 @@
         
         method parse(input)
         [
-            Exception.throw
+            Assert.that(defaultRule).isNotNull
+            result := rules.get(defaultRule).parse(input)
         ]
     ]|
     

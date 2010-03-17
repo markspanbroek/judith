@@ -111,6 +111,20 @@ object AssertTests := Object |[
       
       Assert.that(wasThrown).isTrue
   ]
+  
+  method throwsWhenNull
+  [
+      Assert
+        .that([ Assert.that(null).isNotNull ])
+        .throws(AssertionFailedException)
+  ]
+  
+  method throwsWhenNotNull
+  [
+      Assert
+        .that([ Assert.that(Object).isNull ])
+        .throws(AssertionFailedException)
+  ]
 ]|
 
 AssertTests
@@ -123,3 +137,5 @@ AssertTests
   .catchesExceptionWhenExpected
   .throwsExceptionWhenExpectedExceptionDidNotOccur
   .throwsExceptionWhenExceptionOfWrongTypeOccurs
+  .throwsWhenNull
+  .throwsWhenNotNull

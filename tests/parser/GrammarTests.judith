@@ -38,7 +38,15 @@ object GrammarTests := Object
         
         Assert.that([ grammar.parse("bar") ]).throws(Exception)
     ]
-
+    
+    method testParsesDefaultRule
+    [
+        self.setup
+        grammar.addRule("foo", ParserGenerator.literal("a"))
+        grammar.setDefaultRule("foo")
+        
+        Assert.that(grammar.parse("a").get(0)).equals("a")
+    ]
 ]|
 
 GrammarTests
@@ -46,3 +54,4 @@ GrammarTests
   .testCanSetDefaultRule
   .testDefaultRuleMustFirstBeAdded
   .testCannotParseWithoutDefaultRule
+  .testParsesDefaultRule
