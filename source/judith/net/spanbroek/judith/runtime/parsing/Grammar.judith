@@ -1,7 +1,8 @@
 [
     object Dictionary := Objects.Dictionary
+    object Parser := Objects.Parsing.Parser
 
-    object Grammar := Object
+    object Grammar := Parser
     |[
         object rules := Dictionary.copy
         object defaultRule := null
@@ -23,10 +24,20 @@
             rules := rules.copy
         ]
         
-        method parse(input)
+        method run(context, index, result, continuation)
         [
             Assert.that(defaultRule).isNotNull
-            result := rules.get(defaultRule).parse(input)
+
+            context := context
+            |[
+                method rules
+                [
+                    result := rules
+                ]
+            ]|
+
+            object rule := rules.get(defaultRule)
+            result := rule.run(context, index, result, continuation)
         ]
     ]|
     

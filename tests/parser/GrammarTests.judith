@@ -47,6 +47,16 @@ object GrammarTests := Object
         
         Assert.that(grammar.parse("a").get(0)).equals("a")
     ]
+    
+    method testRuleIndirection
+    [
+        self.setup
+        grammar.addRule("foo", ParserGenerator.rule("bar"))
+        grammar.addRule("bar", ParserGenerator.literal("a"))
+        grammar.setDefaultRule("foo")
+        
+        Assert.that(grammar.parse("a").get(0)).equals("a")
+    ]
 ]|
 
 GrammarTests
@@ -55,3 +65,4 @@ GrammarTests
   .testDefaultRuleMustFirstBeAdded
   .testCannotParseWithoutDefaultRule
   .testParsesDefaultRule
+  .testRuleIndirection

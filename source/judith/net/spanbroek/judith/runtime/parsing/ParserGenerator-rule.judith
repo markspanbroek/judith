@@ -10,7 +10,10 @@
             |[ 
                 method run(context, index, result, continuation) 
                 [
-                    context.parser.get(name).run(context, index, result, continuation)            
+                    context
+                      .rules
+                      .get(name)
+                      .run(context, index, result, continuation)            
                 ]
             ]|          
         ]
