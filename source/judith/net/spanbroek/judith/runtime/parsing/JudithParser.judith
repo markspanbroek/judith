@@ -4,8 +4,36 @@
 
     object parser := Grammar.copy
     object g := ParserGenerator.copy
+
+    parser.addRule("program",
+      g.concatenation(List.copy
+        .add(g.empty)
+        .add(g.end)
+      )
+    )
     
-    parser.addRule("program", g.empty)
+#PENDING
+#    parser.addRule("program", 
+#      g.concatenation(List.copy
+#        .add(g.rule("w"))
+#        .add(g.rule("statements"))
+#        .add(g.rule("w"))
+#        .add(g.end))
+#    )
+    
+#    parser.addRule("statements",
+#      #todo
+#    )
+    
+#    parser.addRule("w",
+#      g.repetition(
+#        g.alternation(List.copy
+#          .add(g.literal(" "))
+#          # todo
+#        )
+#      )
+#    )
+    
     parser.setDefaultRule("program")
     
     Objects.Parsing.replace(

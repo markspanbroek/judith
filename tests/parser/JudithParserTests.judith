@@ -4,9 +4,18 @@ object JudithParserTests := Object
 |[
     method testParseEmptyString
     [
-        parser.parse("")
+        object result := parser.parse("")
+        Assert.that(result).isNotNull
+    ]
+    
+    method testParseObjectDeclaration
+    [
+        object result := parser.parse("object foo := bar")
+        Assert.that(result).isNotNull
     ]
 ]|
 
 JudithParserTests
   .testParseEmptyString
+#PENDING
+#  .testParseObjectDeclaration
