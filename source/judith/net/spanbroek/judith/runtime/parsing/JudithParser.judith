@@ -1,0 +1,20 @@
+[
+    object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Grammar := Objects.Parsing.Grammar
+
+    object parser := Grammar.copy
+    object g := ParserGenerator.copy
+    
+    parser.addRule("program", g.empty)
+    parser.setDefaultRule("program")
+    
+    Objects.Parsing.replace(
+      Objects.Parsing
+      |[
+          method JudithParser
+          [
+              result := parser
+          ]
+      ]|
+    )
+]

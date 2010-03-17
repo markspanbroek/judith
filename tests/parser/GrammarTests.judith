@@ -3,7 +3,6 @@ object Grammar := Objects.Parsing.Grammar
 
 object GrammarTests := Object 
 |[
-
     object grammar := null
     
     method setup

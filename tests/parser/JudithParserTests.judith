@@ -1,0 +1,12 @@
+object parser := Objects.Parsing.JudithParser
+
+object JudithParserTests := Object
+|[
+    method testParseEmptyString
+    [
+        parser.parse("")
+    ]
+]|
+
+JudithParserTests
+  .testParseEmptyString
