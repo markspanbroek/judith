@@ -485,7 +485,7 @@
       g.alternation(List.copy
         .add(g.range("a","z"))
         .add(g.range("A","Z"))
-        .add(g.literal("_"))
+        .add(g.literal("?"))
         .add(g.literal("'"))
       )
     )
