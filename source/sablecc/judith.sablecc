@@ -1,6 +1,6 @@
 /*
  * conversion of the judith language specification into sablecc
- * 2010-03-15
+ * 2010-03-20
  * Mark Spanbroek
  */
 Package
@@ -11,7 +11,7 @@ Helpers
 
   any    = [0x0..0xffff];
   digit  = ['0'..'9'];
-  letter = ['a'..'z'] | ['A'..'Z'] | '_' | ''';
+  letter = ['a'..'z'] | ['A'..'Z'] | '?' | ''';
 
 Tokens
 
@@ -54,7 +54,7 @@ Tokens
   number          = digit+ ('.' digit+)?;
   text            = '"' [any-'"']* '"';
 
-  w = ( ' ' | 0x0a | 0x0d | 0x09 | '#' ([any-[0x0a+0x0d]])* )*;
+  w = ( ' ' | 0x0a | '#' ([any-0x0a])* )*;
 
 Ignored Tokens
 
