@@ -17,5 +17,4 @@ object JudithParserTests := Object
 
 JudithParserTests
   .testParseEmptyString
-#PENDING
-#  .testParseObjectDeclaration
+  .testParseObjectDeclaration
