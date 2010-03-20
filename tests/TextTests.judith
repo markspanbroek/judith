@@ -12,9 +12,20 @@ object TextTests := Object |[
         Assert.that("b" <= "b").isTrue
     ]
 
+    method quoteIsSingleCharacter
+    [
+        Assert.that(Text.quote.length).equals(1)
+    ]
+    
+    method lineEndIsAtLeastOneCharacter
+    [
+        Assert.that(Text.lineEnd.length >= 1).isTrue
+    ]
 ]|
 
 TextTests
     .atmostReturnsTrueWhenLarger
     .atmostReturnsTrueWhenEqual
     .atmostReturnsFalse
+    .quoteIsSingleCharacter
+    .lineEndIsAtLeastOneCharacter

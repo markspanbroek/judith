@@ -14,6 +14,7 @@ class TextBuilder {
         builder.declarePlusMethod();
         builder.declareExcerptMethod();
         builder.declareQuoteMethod();
+        builder.declareLineEndMethod();
         builder.declareLengthMethod();
         builder.declareAtmostMethod();
         builder.declareText();
@@ -80,6 +81,15 @@ class TextBuilder {
         textToBe.declare("quote", new TextQuoteMethod());
     }
     
+    private void declareLineEndMethod() {
+        class LineEndMethod extends Method {
+            protected void execute(Scope scope) {
+                scope.set("result", world.wrap("\n"));
+            }
+        }
+        textToBe.declare("lineEnd", new LineEndMethod());
+    }
+
     private void declareLengthMethod() {
         class TextLengthMethod extends Method {
             protected void execute(Scope scope) {
