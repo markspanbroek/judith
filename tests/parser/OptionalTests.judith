@@ -15,8 +15,14 @@ object OptionalTests := Object
         Assert.that(result.length).equals(1)
         Assert.that(result.get(0)).equals("a")
     ]
+    
+    method testAsText
+    [
+        Assert.that(parser.asText).equals(Text.quote + "a" + Text.quote + "?")
+    ]
 ]|
 
 OptionalTests
   .testParseNonOccurrenceSucceeds
   .testParseOccurrenceSucceeds
+  .testAsText

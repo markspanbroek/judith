@@ -126,6 +126,34 @@
       
       ]
       
+      method not(character) [
+
+        object text := "[~" + character + "]"
+            
+        result := parent.not(character) |[
+
+          method asText [
+            result := text
+          ]
+          
+        ]|
+      
+      ]
+
+      method optional(operand) [
+      
+        object text := operand.asText + "?"
+
+        result := parent.optional(operand) |[
+        
+          method asText [
+            result := text
+          ]
+        
+        ]| 
+      
+      ]
+
       method repetition(operand) [
       
         object text := operand.asText + "*"
