@@ -10,9 +10,11 @@
             |[ 
                 method run(context, index, result, continuation) 
                 [
-                    object character := context.input.excerpt(index, index+1)
-                    if (lower <= character and character <= upper) 
-                        continuation.run(index+1, result.copy.push(character))
+                    if context.input.length > index
+                        object character := context.input.excerpt(index, index+1)
+                        if (lower <= character and character <= upper) 
+                            continuation.run(index+1, result.copy.push(character))
+                        fi
                     fi
                 ]
             ]|

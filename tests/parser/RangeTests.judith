@@ -19,7 +19,11 @@ object RangeTests := Object |[
     method rangeEndIsInclusive [
         Assert.that(parser.parse("y").get(0)).equals("y")
     ]
-
+    
+    method doesNotThrowWhenAtEndOfInput
+    [
+        parser.parse("")
+    ]
 ]|
 
 RangeTests
@@ -27,3 +31,4 @@ RangeTests
     .parseFails
     .rangeBeginIsInclusive
     .rangeEndIsInclusive
+    .doesNotThrowWhenAtEndOfInput
