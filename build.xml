@@ -85,6 +85,7 @@
       </fileset>
     </pathconvert>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
+      <jvmarg value="-Xss1m"/>
       <arg line='${tests}'/>
     </java>
   </target>

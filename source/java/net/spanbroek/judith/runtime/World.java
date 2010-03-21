@@ -61,6 +61,7 @@ public class World extends Scope {
         interpret("parsing/ParserGenerator-memoization.judith");
         interpret("parsing/Grammar.judith");
         interpret("parsing/JudithParser.judith");
+        interpret("parsing/judith/tree/Alteration.judith");
  
         IOBuilder.build(this);
 

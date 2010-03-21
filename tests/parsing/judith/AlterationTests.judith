@@ -1,0 +1,21 @@
+object Parser := Objects.Parsing.Judith.Parser
+object Alteration := Objects.Parsing.Judith.Tree.Alteration
+
+object AlterationTests := Object
+|[
+    method testCanBeParsed
+    [
+        object alteration := Parser.parse("
+          object Foo := Object 
+          |[
+              object bar := true
+              method baz []
+          ]|
+        ")
+        
+        Assert.that(alteration).isNotNull
+    ]
+]|
+
+AlterationTests
+  .testCanBeParsed
