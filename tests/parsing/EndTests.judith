@@ -1,0 +1,29 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
+object EndTests := Object |[
+
+    method parseSucceeds [
+        object parser := 
+            ParserGenerator.concatenation(
+                List.copy
+                    .push(ParserGenerator.literal("foo"))
+                    .push(ParserGenerator.end)
+            )
+        Assert.that(parser.parse("foo").get(0)).equals("foo")
+    ]
+    
+    method parseFails [
+        object parser := 
+            ParserGenerator.concatenation(
+                List.copy
+                    .push(ParserGenerator.end)
+                    .push(ParserGenerator.literal("foo"))
+            )
+        Assert.that(parser.parse("foo")).equals(null)
+    ]
+
+]|
+
+EndTests
+    .parseSucceeds
+    .parseFails

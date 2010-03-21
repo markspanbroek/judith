@@ -1,0 +1,27 @@
+object CacheEntry := Objects.Parsing.CacheEntry
+object counter := Objects.Counter.copy
+
+object CacheEntryTests := Object
+|[
+    object cacheEntry := CacheEntry.copy
+    
+    object continuation := Function
+    |[
+        method run(index, value)
+        [
+            counter.increase
+        ]
+    ]|
+
+    method continuationReceivesResults
+    [
+        cacheEntry.addContinuation(continuation)
+        cacheEntry.addResult(1,"foo")
+        cacheEntry.addResult(2,"bar")
+        cacheEntry.addResult(3,"baz")
+        Assert.that(counter.value).equals(3)
+    ]
+]|
+
+CacheEntryTests
+    .continuationReceivesResults

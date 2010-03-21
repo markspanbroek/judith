@@ -1,0 +1,18 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
+object NeverTests := Object |[
+
+    method parseFails [
+        object parser := 
+            ParserGenerator.concatenation(
+                List.copy
+                    .push(ParserGenerator.literal("foo"))
+                    .push(ParserGenerator.never)
+            )
+        Assert.that(parser.parse("foo")).equals(null)
+    ]
+
+]|
+
+NeverTests
+    .parseFails

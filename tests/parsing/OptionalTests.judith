@@ -1,0 +1,28 @@
+object ParserGenerator := Objects.Parsing.ParserGenerator
+
+object OptionalTests := Object 
+|[
+    object parser := ParserGenerator.optional(ParserGenerator.literal("a"))
+
+    method testParseNonOccurrenceSucceeds
+    [
+        Assert.that(parser.parse("").length).equals(0)
+    ]
+    
+    method testParseOccurrenceSucceeds 
+    [
+        object result := parser.parse("a")
+        Assert.that(result.length).equals(1)
+        Assert.that(result.get(0)).equals("a")
+    ]
+    
+    method testAsText
+    [
+        Assert.that(parser.asText).equals(Text.quote + "a" + Text.quote + "?")
+    ]
+]|
+
+OptionalTests
+  .testParseNonOccurrenceSucceeds
+  .testParseOccurrenceSucceeds
+  .testAsText
