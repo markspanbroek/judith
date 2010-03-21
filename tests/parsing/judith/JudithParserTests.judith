@@ -1,0 +1,20 @@
+object parser := Objects.Parsing.Judith.Parser
+
+object JudithParserTests := Object
+|[
+    method testParseEmptyString
+    [
+        object result := parser.parse("")
+        Assert.that(result).isNotNull
+    ]
+    
+    method testParseObjectDeclaration
+    [
+        object result := parser.parse("object foo := bar")
+        Assert.that(result).isNotNull
+    ]
+]|
+
+JudithParserTests
+  .testParseEmptyString
+  .testParseObjectDeclaration
