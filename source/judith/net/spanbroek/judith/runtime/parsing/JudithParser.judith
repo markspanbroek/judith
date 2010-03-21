@@ -513,12 +513,20 @@
 
     parser.setDefaultRule("program")
     
+    object Judith := Object
+    |[
+        method Parser
+        [
+            result := parser
+        ]
+    ]|
+    
     Objects.Parsing.replace(
       Objects.Parsing
       |[
-          method JudithParser
+          method Judith
           [
-              result := parser
+              result := Judith
           ]
       ]|
     )
