@@ -15,9 +15,9 @@ object BlockTests := Object |[
         []
     ]
     
-    method blockIsProcedure
+    method blockIsCommand
     [
-        Assert.that([] : Procedure).isTrue
+        Assert.that([] : Command).isTrue
     ]
     
     method blockHasRunMethod
@@ -38,6 +38,6 @@ object BlockTests := Object |[
 BlockTests
     .blockHasOwnScope
     .emptyBlockIsAllowed
-    .blockIsProcedure
+    .blockIsCommand
     .blockHasRunMethod
     .runMethodPassesParameters

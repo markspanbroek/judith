@@ -48,12 +48,12 @@
             parent.remove(index)
         ] 
         
-        method do(procedure)
+        method do(command)
         [
-            Assert.that(procedure : Procedure).isTrue
+            Assert.that(command : Command).isTrue
             object i := 0
             do i < self.length
-                procedure.run(self.get(i))
+                command.run(self.get(i))
                 i := i + 1
             od
         ]

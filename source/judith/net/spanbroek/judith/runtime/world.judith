@@ -5,7 +5,7 @@ object Function := Object
     # empty
 ]|
 
-object Procedure := Object 
+object Command := Object 
 |[ 
     # empty
 ]|
