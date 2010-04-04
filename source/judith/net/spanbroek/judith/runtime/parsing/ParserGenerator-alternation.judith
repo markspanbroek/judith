@@ -8,14 +8,11 @@
         [
             result := Parser
             |[ 
-                method run(context, index, result, continuation)
-                [              
-                    object i := 0
-                    do i < alternatives.length 
-                        object alternative := alternatives.get(i)
-                        alternative.run(context, index, result, continuation)
-                        i := i + 1
-                    od  
+                method run(context, index, result', continuation)
+                [
+                    alternatives.do([alternative ->
+                      alternative.run(context, index, result', continuation)
+                    ])
                 ] 
             ]|
         ]
