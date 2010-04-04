@@ -162,7 +162,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
           world
         );
 
-        command.declare("run", runMethod);
+        command.declare("execute", runMethod);
         
         stack.push(command);
 

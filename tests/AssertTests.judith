@@ -62,11 +62,11 @@ object AssertTests := Object |[
       ]|.run
   ]
   
-  method callsCommandThatIsPassedToThrows
+  method executesCommandThatIsPassedToThrows
   [
-      object wasRun := false
-      Assert.that([ wasRun := true Exception.throw ]).throws(Exception)
-      Assert.that(wasRun).isTrue
+      object wasExecuted := false
+      Assert.that([ wasExecuted := true Exception.throw ]).throws(Exception)
+      Assert.that(wasExecuted).isTrue
   ]
   
   method catchesExceptionWhenExpected
@@ -133,7 +133,7 @@ AssertTests
   .throwsWhenNotEqual
   .doesNotThrowWhenEqual
   .descibesWhatsWrongWhenNotEqual
-  .callsCommandThatIsPassedToThrows
+  .executesCommandThatIsPassedToThrows
   .catchesExceptionWhenExpected
   .throwsExceptionWhenExpectedExceptionDidNotOccur
   .throwsExceptionWhenExceptionOfWrongTypeOccurs

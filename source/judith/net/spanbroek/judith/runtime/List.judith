@@ -53,7 +53,7 @@
             Assert.that(command : Command).isTrue
             object i := 0
             do i < self.length
-                command.run(self.get(i))
+                command.execute(self.get(i))
                 i := i + 1
             od
         ]

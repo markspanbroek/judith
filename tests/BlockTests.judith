@@ -20,18 +20,18 @@ object BlockTests := Object |[
         Assert.that([] : Command).isTrue
     ]
     
-    method blockHasRunMethod
+    method blockHasExecuteMethod
     [
-        object wasRun := false
-        [ wasRun := true ].run
-        Assert.that(wasRun).isTrue
+        object wasExecuted := false
+        [ wasExecuted := true ].execute
+        Assert.that(wasExecuted).isTrue
     ]
     
     method runMethodPassesParameters
     [
-        object wasRun := false
-        [ x -> wasRun := x ].run(true)
-        Assert.that(wasRun).isTrue
+        object wasExecuted := false
+        [ x -> wasExecuted := x ].execute(true)
+        Assert.that(wasExecuted).isTrue
     ]
 ]|
 
@@ -39,5 +39,5 @@ BlockTests
     .blockHasOwnScope
     .emptyBlockIsAllowed
     .blockIsCommand
-    .blockHasRunMethod
+    .blockHasExecuteMethod
     .runMethodPassesParameters

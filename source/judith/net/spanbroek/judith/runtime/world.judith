@@ -79,7 +79,7 @@ object Assert := null
             |[
                 method try
                 [
-                    subject.run
+                    subject.execute
                 ]
                 
                 method catch(exception')
