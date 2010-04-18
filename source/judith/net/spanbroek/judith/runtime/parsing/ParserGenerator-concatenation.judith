@@ -11,7 +11,7 @@
             if elements.length > 0 
                 result := Parser 
                 |[ 
-                    method run(context, index, result, continuation) 
+                    method run(context, index, result', continuation) 
                     [  
                         object tail := elements.copy
                         object head := tail.get(0)
@@ -22,11 +22,11 @@
                             method run(newindex, newresult) 
                             [
                                 object tailparser := generator.concatenation(tail)
-                                tailparser.run(context, newindex, newresult, continuation)
+                                context.doLater([tailparser.run(context, newindex, newresult, continuation)])
                             ] 
                         ]|
                 
-                        head.run(context, index, result, newcontinuation)
+                        context.doLater([head.run(context, index, result', newcontinuation)])
                     ] 
                 ]|
             || true 

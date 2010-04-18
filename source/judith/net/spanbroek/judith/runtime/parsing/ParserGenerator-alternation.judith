@@ -11,7 +11,7 @@
                 method run(context, index, result', continuation)
                 [
                     alternatives.do([alternative ->
-                      alternative.run(context, index, result', continuation)
+                      context.doLater([alternative.run(context, index, result', continuation)])
                     ])
                 ] 
             ]|

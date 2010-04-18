@@ -2,6 +2,14 @@
     object Reference := Objects.Reference
     object Text := Objects.Text
 
+    object Robot := List.copy.setElementType(Command)
+    |[
+        method execute
+        [
+            self.do([command -> command.execute])
+        ]
+    ]|
+
     object Parser := Object
     |[
         method parse(input) 
@@ -11,8 +19,19 @@
             object parseResult := Reference.create(null)
             object continuation := self.createContinuation(parseResult)
             object context := self.createContext(input)
+            object robot := Robot.copy
             
-            self.run(context, 0, List.copy, continuation)
+            context := context
+            |[
+                method doLater(command)
+                [
+                    robot.add(command)
+                ]
+            ]|
+            
+            object self' := self
+            robot.add([self'.run(context, 0, List.copy, continuation)])
+            robot.execute
             
             result := parseResult.get
         ]

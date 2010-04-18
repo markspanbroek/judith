@@ -8,12 +8,12 @@
         [
             result := Parser 
             |[ 
-                method run(context, index, result, continuation) 
+                method run(context, index, result', continuation) 
                 [
                     if context.input.length > index
                         object character := context.input.excerpt(index, index+1)
                         if (lower <= character and character <= upper) 
-                            continuation.run(index+1, result.copy.push(character))
+                            context.doLater([continuation.run(index+1, result'.copy.push(character))])
                         fi
                     fi
                 ]

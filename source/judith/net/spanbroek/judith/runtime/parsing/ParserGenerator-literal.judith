@@ -8,11 +8,11 @@
         [
             result := Parser
             |[
-                method run(context, index, result, continuation) 
+                method run(context, index, result', continuation) 
                 [
                     if index + literal.length <= context.input.length
-                        if context.input.excerpt(index, index + literal.length) = literal                        
-                            continuation.run(index + literal.length, result.copy.push(literal))
+                        if context.input.excerpt(index, index + literal.length) = literal
+                            context.doLater([continuation.run(index + literal.length, result'.copy.push(literal))])
                         fi
                     fi
                 ]

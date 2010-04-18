@@ -8,9 +8,9 @@
         [
             result := Parser
             |[
-                method run(context, index, result, continuation)
+                method run(context, index, result', continuation)
                 [
-                    continuation.run(index, result)
+                    context.doLater([continuation.run(index, result')])
                 ]
             ]|
         ]
