@@ -5,8 +5,15 @@
     |[
         object elementType := Object
         
+        method of(elementType)
+        [
+            result := self.copy.setElementType(elementType)
+        ]
+        
         method setElementType(elementType') 
         [
+            Assert.that(caller : self).isTrue
+            
             Assert.that(self.length).equals(0)
             elementType := elementType'
         ]

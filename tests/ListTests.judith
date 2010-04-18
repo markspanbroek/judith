@@ -2,7 +2,7 @@ object Text := Objects.Text
 
 object ListTests := Object 
 |[
-    object list := List.copy.setElementType(Text)
+    object list := List.of(Text)
 
     method objectsOfCorrectTypeCanBeAdded 
     [

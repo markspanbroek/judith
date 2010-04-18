@@ -2,7 +2,7 @@
     object Reference := Objects.Reference
     object Text := Objects.Text
 
-    object Robot := List.copy.setElementType(Command)
+    object Robot := List.of(Command)
     |[
         method execute
         [
