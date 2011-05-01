@@ -1,14 +1,14 @@
 object AssertTests := Object |[
 
-  method doesNotThrowOnTrue 
+  method doesNotThrowOnTrue
   [
       Assert.that(true).isTrue
-  ] 
-  
+  ]
+
   method throwsOnFalse 
   [
       object exception := null
-      
+
       ExceptionHandler |[
         method try 
         [
@@ -19,17 +19,17 @@ object AssertTests := Object |[
           exception := exception'
         ]
       ]|.run
-      
+
       if not (exception : AssertionFailedException)
         AssertionFailedException.throw
       fi
   ]
-  
+
   method throwsWhenNotEqual
   [
       object exception := null
-      
-      ExceptionHandler |[    
+
+      ExceptionHandler |[
           method try
           [
               Assert.that(2).equals(1)
@@ -39,18 +39,18 @@ object AssertTests := Object |[
               exception := exception'
           ]
       ]|.run
-      
+
       Assert.that(exception : AssertionFailedException)
   ]
-  
+
   method doesNotThrowWhenEqual
   [
       Assert.that(1).equals(1)
   ]
-  
+
   method descibesWhatsWrongWhenNotEqual
   [
-      ExceptionHandler |[    
+      ExceptionHandler |[
           method try
           [
               Assert.that(2).equals(1)
@@ -61,19 +61,19 @@ object AssertTests := Object |[
           ]
       ]|.run
   ]
-  
+
   method executesCommandThatIsPassedToThrows
   [
       object wasExecuted := false
       Assert.that([ wasExecuted := true Exception.throw ]).throws(Exception)
       Assert.that(wasExecuted).isTrue
   ]
-  
+
   method catchesExceptionWhenExpected
   [
       Assert.that([ Exception.throw ]).throws(Exception)
   ]
-  
+
   method throwsExceptionWhenExpectedExceptionDidNotOccur
   [
       object wasThrown := false
@@ -83,13 +83,13 @@ object AssertTests := Object |[
           [
               Assert.that([]).throws(Exception)
           ]
-          
+
           method catch(exception)
           [
               wasThrown := true
           ]
       ]|.run
-      
+
       Assert.that(wasThrown).isTrue
   ]
 
@@ -102,23 +102,23 @@ object AssertTests := Object |[
           [
               Assert.that([ Exception.throw ]).throws(AssertionFailedException)
           ]
-          
+
           method catch(exception)
           [
               wasThrown := true
           ]
       ]|.run
-      
+
       Assert.that(wasThrown).isTrue
   ]
-  
+
   method throwsWhenNull
   [
       Assert
         .that([ Assert.that(null).isNotNull ])
         .throws(AssertionFailedException)
   ]
-  
+
   method throwsWhenNotNull
   [
       Assert

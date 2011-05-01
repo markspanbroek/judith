@@ -49,7 +49,7 @@ object ReflectionTests := Object
 
         object result := Reflection.call(dummy, "thisMethodShouldBeCalled")
 
-        Assert.that(dummy.wasMethodCalled)
+        Assert.that(dummy.wasMethodCalled).isTrue
         Assert.that(dummy.result).equals(result)
     ]
 
@@ -60,7 +60,7 @@ object ReflectionTests := Object
 
         object result := Reflection.call(dummy, "thisMethodShouldBeCalled", arguments)
 
-        Assert.that(dummy.wasMethodCalled)
+        Assert.that(dummy.wasMethodCalled).isTrue
         Assert.that(dummy.firstArgument).equals("first")
         Assert.that(dummy.secondArgument).equals("second")
         Assert.that(dummy.result).equals(result)
