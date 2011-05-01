@@ -1,0 +1,72 @@
+object Reflection := Objects.Reflection
+
+object Dummy := Object
+|[
+    object methodWasCalled := false
+    object firstArgument := null
+    object secondArgument := null
+
+    method thisMethodShouldBeCalled
+    [
+        methodWasCalled := true
+        result := self.result
+    ]
+
+    method thisMethodShouldBeCalled(one, two)
+    [
+        methodWasCalled := true
+        firstArgument := one
+        secondArgument := two
+        result := self.result
+    ]
+
+    method wasMethodCalled
+    [
+        result := methodWasCalled
+    ]
+
+    method firstArgument
+    [
+        result := firstArgument
+    ]
+
+    method secondArgument
+    [
+        result := secondArgument
+    ]
+
+    method result
+    [
+        result := "result"
+    ]
+]|
+
+object ReflectionTests := Object
+|[
+    method callWithoutArguments
+    [
+        object dummy := Dummy.copy
+
+        object result := Reflection.call(dummy, "thisMethodShouldBeCalled")
+
+        Assert.that(dummy.wasMethodCalled)
+        Assert.that(dummy.result).equals(result)
+    ]
+
+    method callWithArguments
+    [
+        object dummy := Dummy.copy
+        object arguments := List.copy.add("first").add("second")
+
+        object result := Reflection.call(dummy, "thisMethodShouldBeCalled", arguments)
+
+        Assert.that(dummy.wasMethodCalled)
+        Assert.that(dummy.firstArgument).equals("first")
+        Assert.that(dummy.secondArgument).equals("second")
+        Assert.that(dummy.result).equals(result)
+    ]
+]|
+
+ReflectionTests
+  .callWithoutArguments
+  .callWithArguments

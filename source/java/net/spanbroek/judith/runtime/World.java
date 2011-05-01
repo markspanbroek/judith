@@ -30,6 +30,7 @@ public class World extends Scope {
         ExceptionHandlerBuilder.build(this);
         ListBuilder.build(this);
         DictionaryBuilder.build(this);
+        ReflectionBuilder.build(this);
 
         interpret("Dictionary.judith");
         interpret("Exception.judith");
