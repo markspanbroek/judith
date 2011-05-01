@@ -6,9 +6,9 @@ object ListTests := Object
 
     method objectsOfCorrectTypeCanBeAdded 
     [
-        list.add("foo")        
+        list.add("foo")
     ]
-    
+
     method objectsOfIncorrectTypeCannotBeAdded 
     [
         object exceptionWasThrown := false
@@ -17,7 +17,7 @@ object ListTests := Object
             method try 
             [
                 list.add(1)
-            ]            
+            ]
             method catch(exception) 
             [
                 exceptionWasThrown := true
@@ -25,7 +25,7 @@ object ListTests := Object
         ]|.run
         Assert.that(exceptionWasThrown).isTrue
     ]
-    
+
     method doIsCalledForEachElement
     [
         object list := List.copy.add(40).add(2)
@@ -33,9 +33,19 @@ object ListTests := Object
         list.do([x -> sum := sum + x])
         Assert.that(sum).equals(42)
     ]
+
+    method allIsCalledForEachElement
+    [
+        object counter := 0
+        object incrementer := [ counter := counter + 1 ]
+        object list := List.copy.add(incrementer).add(incrementer)
+        list.all.execute
+        Assert.that(counter).equals(list.length)
+    ]
 ]|
 
 ListTests
     .objectsOfCorrectTypeCanBeAdded
     .objectsOfIncorrectTypeCannotBeAdded
     .doIsCalledForEachElement
+    .allIsCalledForEachElement

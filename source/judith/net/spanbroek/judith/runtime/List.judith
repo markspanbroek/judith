@@ -1,19 +1,41 @@
 [
     object Number := Objects.Number
+    object Reflection := Objects.Reflection
+
+    object Forwarder := Object
+    |[
+        object list := null
+
+        method create(list)
+        [
+            object forwarder := self.copy.setList(list)
+            result := Reflection.createProxyFor(forwarder)
+        ]
+
+        method setList(list')
+        [
+            list := list'
+        ]
+
+        method call(methodName, arguments)
+        [
+            list.do( [x -> Reflection.call(x, methodName, arguments)] )
+        ]
+    ]|
 
     List := List 
     |[
         object elementType := Object
-        
+
         method of(elementType)
         [
             result := self.copy.setElementType(elementType)
         ]
-        
+
         method setElementType(elementType') 
         [
             Assert.that(caller : self).isTrue
-            
+
             Assert.that(self.length).equals(0)
             elementType := elementType'
         ]
@@ -23,38 +45,38 @@
             Assert.that(index : Number).isTrue
             result := parent.get(index)
         ]
-      
+
         method set(index, element) 
         [
           Assert.that(index : Number).isTrue
           Assert.that(element : elementType).isTrue
           parent.set(index, element)
         ]
-      
+
         method pop 
         [
           Assert.that(self.length > 0).isTrue
           result := self.get(self.length - 1)
           self.remove(self.length - 1)
         ]
-      
+
         method add(element) 
         [
             self.push(element)
         ]
-        
+
         method push(element) 
         [
             Assert.that(element : elementType).isTrue
             parent.push(element)
         ]
-      
+
         method remove(index) 
         [
             Assert.that(0 <= index and index < self.length).isTrue
             parent.remove(index)
         ] 
-        
+
         method do(command)
         [
             Assert.that(command : Command).isTrue
@@ -63,6 +85,11 @@
                 command.execute(self.get(i))
                 i := i + 1
             od
+        ]
+
+        method all
+        [
+            result := Forwarder.create(self)
         ]
     ]|
 ]
