@@ -24,6 +24,7 @@ class ListBuilder {
     private void declareList() {
         world.declare("List", new Object(world.get("Object"), world));
         world.get("List").setNativeObject(new ArrayList<Object>());
+        world.setList(world.get("List"));
     }
     
     private void declareCopyMethod() {

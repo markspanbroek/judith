@@ -11,6 +11,7 @@ public class ReflectionBuilder {
         ReflectionBuilder builder = new ReflectionBuilder(world);
         builder.declareCallMethodWithoutArguments();
         builder.declareCallMethodWithArguments();
+        builder.declareCreateProxyFor();
         builder.declareReflection();
     }
 
@@ -49,11 +50,24 @@ public class ReflectionBuilder {
             }
             protected void execute(Scope scope) {
                 Object object = scope.get("object");
-                String methodName = (String) scope.get("methodname").getNativeObject();
-                Object[] arguments = ((List<Object>)scope.get("arguments").getNativeObject()).toArray(new Object[]{});
+                String methodName = (String) world.unwrap(scope.get("methodname"));
+                Object[] arguments = (Object[]) world.unwrap(scope.get("arguments"));
                 scope.set("result", object.call(methodName, arguments));
             }
         }
         reflectionToBe.declare("call", new ReflectionCallMethod());
+    }
+
+    private void declareCreateProxyFor() {
+        class CreateProxyForMethod extends Method {
+            public CreateProxyForMethod() {
+                super("receiver");
+            }
+            protected void execute(Scope scope) {
+                Object receiver = scope.get("receiver");
+                scope.set("result", new Proxy(receiver, world));
+            }
+        }
+        reflectionToBe.declare("createProxyFor", new CreateProxyForMethod());
     }
 }

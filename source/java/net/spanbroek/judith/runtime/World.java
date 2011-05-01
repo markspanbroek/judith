@@ -2,6 +2,7 @@ package net.spanbroek.judith.runtime;
 
 import net.spanbroek.judith.interpreter.Interpreter;
 import java.io.*;
+import java.util.List;
 
 /**
  * Represents the global scope of Judith execution, that contains
@@ -12,6 +13,7 @@ public class World extends Scope {
     private Object booleanPrototype = null;
     private Object numberPrototype = null;
     private Object textPrototype = null;
+    private Object listPrototype = null;
     
     /**
      * Initializes the global context of Judith execution.
@@ -96,6 +98,17 @@ public class World extends Scope {
     }
 
     /**
+     * Wraps the specified array as a judith List object.
+     */
+    public Object wrap(Object[] array) {
+        Object result = listPrototype.copy();
+        for (Object element : array) {
+            result.call("push", element);
+        }
+        return result;
+    }
+
+    /**
      * Unwrap judith Boolean, Number or Text object.
      */
     public java.lang.Object unwrap(Object object) {
@@ -110,6 +123,10 @@ public class World extends Scope {
 
         if (object.isCompatibleWith(textPrototype)) {
             return (String)object.getNativeObject();
+        }
+
+        if (object.isCompatibleWith(listPrototype)) {
+            return ((List<Object>)object.getNativeObject()).toArray(new Object[]{});
         }
 
         return null;
@@ -140,6 +157,15 @@ public class World extends Scope {
         }
         else {
             throw new IllegalStateException("text prototype already set");
+        }
+    }
+
+    void setList(Object listPrototype) {
+        if (this.listPrototype == null) {
+            this.listPrototype = listPrototype;
+        }
+        else {
+            throw new IllegalStateException("list prototype already set");
         }
     }
     

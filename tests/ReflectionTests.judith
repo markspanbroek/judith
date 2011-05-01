@@ -65,8 +65,48 @@ object ReflectionTests := Object
         Assert.that(dummy.secondArgument).equals("second")
         Assert.that(dummy.result).equals(result)
     ]
+
+    method proxy
+    [
+        object receiver := Object |[
+
+            object methodName := null
+            object arguments := null
+
+            method call(methodName', arguments')
+            [
+                methodName := methodName'
+                arguments := arguments'
+                result := self.result
+            ]
+
+            method methodName
+            [
+                result := methodName
+            ]
+
+            method arguments
+            [
+                result := arguments
+            ]
+
+            method result
+            [
+                result := "result"
+            ]
+        ]|
+
+        object result := Reflection.createProxyFor(receiver).foo("bar", "baz")
+
+        Assert.that(receiver.methodName).equals("foo")
+        Assert.that(receiver.arguments.length).equals(2)
+        Assert.that(receiver.arguments.get(0)).equals("bar")
+        Assert.that(receiver.arguments.get(1)).equals("baz")
+        Assert.that(result).equals("result")
+    ]
 ]|
 
 ReflectionTests
   .callWithoutArguments
   .callWithArguments
+  .proxy
