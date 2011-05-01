@@ -4,13 +4,34 @@ object LambdaTests := Object
     [
         Assert.that((x->x) : Function).isTrue
     ]
-    
-    method evaluateUsesExpression 
+
+    method evaluateUsesExpression
     [
         Assert.that((x->x/2).evaluate(42)).equals(21)
-    ]    
+    ]
+
+    method doesntIntroduceSelfObject
+    [
+        object self := 40
+        Assert.that( (x->self+x).evaluate(2) ).equals(42)
+    ]
+
+    method doesntIntroduceCallerObject
+    [
+        object caller := 40
+        Assert.that( (x->caller+x).evaluate(2) ).equals(42)
+    ]
+
+    method doesntIntroduceResultObject
+    [
+        object result := 40
+        Assert.that( (x->result+x).evaluate(2) ).equals(42)
+    ]
 ]|
 
 LambdaTests
     .lambdaExpressionCreatesFunction
     .evaluateUsesExpression
+    .doesntIntroduceSelfObject
+    .doesntIntroduceCallerObject
+    .doesntIntroduceResultObject

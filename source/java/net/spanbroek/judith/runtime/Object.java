@@ -119,15 +119,10 @@ public class Object {
 
         // check whether the method was found
         if (method != null) {
-
-            // create a new child scope of the object scope, containing the
-            // 'self' and 'caller' objects
-            Scope scope = new Scope(core.getScope());
-            scope.declare("self", self);
-            scope.declare("caller", caller);
+            Scope scope = createScopeForMethodExecution(self, caller);
 
             // execute the method
-            return method.execute(parameters, scope);
+            return method.execute(parameters, self, caller, scope);
 
         }
         else {
@@ -163,6 +158,16 @@ public class Object {
 
         }
 
+    }
+
+    protected Scope createScopeForMethodExecution(Object self, Object caller) {
+        // create a new child scope of the object scope, containing the
+        // 'self', 'caller' and 'result' objects
+        Scope scope = new Scope(getCore().getScope());
+        scope.declare("self", self);
+        scope.declare("caller", caller);
+        scope.declare("result", self);
+        return scope;
     }
 
     /**

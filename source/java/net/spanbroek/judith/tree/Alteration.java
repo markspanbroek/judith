@@ -3,10 +3,10 @@ package net.spanbroek.judith.tree;
 public class Alteration implements Expression {
 
     private Expression operand;
-    private Object[] objects;
+    private ObjectDeclaration[] objects;
     private Method[] methods;
 
-    public Alteration(Expression operand, Object[] objects, Method[] methods) {
+    public Alteration(Expression operand, ObjectDeclaration[] objects, Method[] methods) {
         this.operand = operand;
         this.objects = objects;
         this.methods = methods;
@@ -16,7 +16,7 @@ public class Alteration implements Expression {
         return operand;
     }
 
-    public Object[] getObjects() {
+    public ObjectDeclaration[] getObjects() {
         return objects;
     }
 

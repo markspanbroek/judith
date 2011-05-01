@@ -9,29 +9,57 @@ object BlockTests := Object |[
         ]
         Assert.that(foo).isTrue
     ]
-    
+
     method emptyBlockIsAllowed
     [
         []
     ]
-    
+
     method blockIsCommand
     [
         Assert.that([] : Command).isTrue
     ]
-    
+
     method blockHasExecuteMethod
     [
         object wasExecuted := false
         [ wasExecuted := true ].execute
         Assert.that(wasExecuted).isTrue
     ]
-    
+
     method runMethodPassesParameters
     [
         object wasExecuted := false
         [ x -> wasExecuted := x ].execute(true)
         Assert.that(wasExecuted).isTrue
+    ]
+
+    method doesntIntroduceSelfObject
+    [
+        object self := null
+        [ self := 42 ].execute
+        Assert.that(self).equals(42)
+    ]
+
+    method doesntIntroduceCallerObject
+    [
+        object caller := null
+        [ caller := 42 ].execute
+        Assert.that(caller).equals(42)
+    ]
+
+    method doesntIntroduceResultObject
+    [
+        object result := null
+        [ result := 42 ].execute
+        Assert.that(result).equals(42)
+    ]
+
+    method alwaysReturnsSelf
+    [
+        object result := null
+        object block := [ result := 42 ]
+        Assert.that(block.execute).equals(block)
     ]
 ]|
 
@@ -41,3 +69,7 @@ BlockTests
     .blockIsCommand
     .blockHasExecuteMethod
     .runMethodPassesParameters
+    .doesntIntroduceSelfObject
+    .doesntIntroduceCallerObject
+    .doesntIntroduceResultObject
+    .alwaysReturnsSelf

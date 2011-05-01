@@ -1,5 +1,6 @@
 package net.spanbroek.judith.interpreter;
 
+import net.spanbroek.judith.runtime.SelflessObject;
 import net.spanbroek.judith.tree.Assignment;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.*;
@@ -19,6 +20,10 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         this.self = self;
     }
 
+    public Stack getStack() {
+        return stack;
+    }
+
     @Override
     public void visit(net.spanbroek.judith.tree.Alteration node) {
 
@@ -30,7 +35,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         Object result = new Object(operand, scope);
 
         // add objects
-        net.spanbroek.judith.tree.Object[] objects = node.getObjects();
+        net.spanbroek.judith.tree.ObjectDeclaration[] objects = node.getObjects();
         for (int i=0; i<objects.length; i++) {
             objects[i].getExpression().accept(this);
             result.declare(objects[i].getIdentifier(), (Object)stack.pop());
@@ -132,16 +137,11 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     @Override
     public void visit(net.spanbroek.judith.tree.Lambda node) {
 
-        Object function = new Object(world.get("Function"), scope);
+        Object function = new SelflessObject(world.get("Function"), scope);
 
-        Assignment resultAssignment = new Assignment(
-          "result",
-          node.getExpression()
-        );
-
-        Method evaluateMethod = new InterpretedMethod(
+        Method evaluateMethod = new InterpretedExpression (
           node.getIdentifiers(),
-          new Assignment[]{ resultAssignment },
+          node.getExpression(),
           world
         );
 
@@ -154,13 +154,19 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     @Override
     public void visit(net.spanbroek.judith.tree.LambdaBlock node) {
 
-        Object command = new Object(world.get("Command"), scope);
+        Object command = new SelflessObject(world.get("Command"), scope);
 
         Method runMethod = new InterpretedMethod(
           node.getIdentifiers(),
           node.getStatements(),
           world
-        );
+        ) {
+            @Override
+            public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
+                super.execute(parameters, self, caller, scope);
+                return self;
+            }
+        };
 
         command.declare("execute", runMethod);
         
@@ -209,7 +215,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     @Override
-    public void visit(net.spanbroek.judith.tree.Object node) {
+    public void visit(net.spanbroek.judith.tree.ObjectDeclaration node) {
         node.getExpression().accept(this);
         scope.declare(node.getIdentifier(), (Object)stack.pop());
     }
@@ -227,6 +233,10 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     @Override
     public void visit(net.spanbroek.judith.tree.Text node) {
         stack.push(world.wrap(node.getValue()));
+    }
+
+    public void visit(net.spanbroek.judith.tree.Node node) {
+        node.accept(this);
     }
 
     protected void visit(net.spanbroek.judith.tree.Statement[] nodes) {

@@ -2,7 +2,7 @@ package net.spanbroek.judith.parser;
 
 import net.spanbroek.judith.parser.analysis.*;
 import net.spanbroek.judith.parser.node.*;
-import net.spanbroek.judith.tree.Object;
+import net.spanbroek.judith.tree.ObjectDeclaration;
 import net.spanbroek.judith.tree.Boolean;
 import net.spanbroek.judith.tree.Number;
 import net.spanbroek.judith.tree.*;
@@ -36,7 +36,7 @@ class Visitor extends DepthFirstAdapter {
     public void outAObject(AObject node) {
         Expression expression = (Expression)stack.pop();
         String identifier = (String)stack.pop();
-        Object object = new Object(identifier, expression);
+        ObjectDeclaration object = new ObjectDeclaration(identifier, expression);
         stack.push(object);
     }
 
@@ -151,7 +151,7 @@ class Visitor extends DepthFirstAdapter {
         List methods = new ArrayList();
         for (Iterator i=alterationParts.iterator(); i.hasNext(); ) {
             java.lang.Object alterationPart = i.next();
-            if (alterationPart instanceof Object) {
+            if (alterationPart instanceof ObjectDeclaration) {
                 objects.add(alterationPart);
             }
             if (alterationPart instanceof Method) {
@@ -160,7 +160,7 @@ class Visitor extends DepthFirstAdapter {
         }
         Alteration alteration = new Alteration(
             operand,
-            (Object[])objects.toArray(new Object[]{}),
+            (ObjectDeclaration[])objects.toArray(new ObjectDeclaration[]{}),
             (Method[])methods.toArray(new Method[]{})
         );
         stack.push(alteration);

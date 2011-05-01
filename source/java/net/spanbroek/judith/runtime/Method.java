@@ -10,7 +10,7 @@ public abstract class Method {
     /**
      * The names of the parameters of this method.
      */
-    private String[] parameters;
+    protected String[] parameters;
 
     /**
      * Constructs a new method using the specified parameter names.
@@ -27,10 +27,8 @@ public abstract class Method {
      * names that were specified in the constructor. The scope should contain
      * a variable 'self'.
      */
-    public Object execute(Object[] parameters,
-      Scope scope) {
+    public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
 
-        scope.declare("result", scope.get("self"));
         for (int i=0; i<this.parameters.length; i++) {
             scope.declare(this.parameters[i], parameters[i]);
         }

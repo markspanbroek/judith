@@ -14,7 +14,7 @@ public abstract class Visitor {
     public void visit(Method node) {}
     public void visit(MethodCall node) {}
     public void visit(Number node) {}
-    public void visit(Object node) {}
+    public void visit(ObjectDeclaration node) {}
     public void visit(Program node) {}
     public void visit(Reference node) {}
     public void visit(Text node) {}

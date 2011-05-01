@@ -1,11 +1,11 @@
 package net.spanbroek.judith.tree;
 
-public class Object implements Statement {
+public class ObjectDeclaration implements Statement {
 
     private String identifier;
     private Expression expression;
 
-    public Object(String identifier, Expression expression) {
+    public ObjectDeclaration(String identifier, Expression expression) {
         this.identifier = identifier;
         this.expression = expression;
     }
