@@ -122,6 +122,10 @@ class ObjectCore implements Cloneable {
         aboriginal = object;
     }
 
+    public Method getMethod(String name, Object[] parameters) {
+        return getClazz().getMethod(name, parameters.length);
+    }
+
     /**
      * Creates a copy of the object core. The inner scope is copied, but the
      * outer scope and class are shared between all copies.
@@ -188,5 +192,4 @@ class ObjectCore implements Cloneable {
         }
         return result;
     }
-
 }

@@ -45,11 +45,7 @@ public class Object {
      * the core.
      */
     synchronized ObjectCore getCore() {
-        while (getCurrentCore().hasReplacement()) {
-            ObjectCore oldCore = getCurrentCore();
-            setCore(getCurrentCore().getReplacement());
-            oldCore.setReplaced();
-        }
+        resolveReplacements();
         return getCurrentCore();
     }
 
@@ -110,52 +106,16 @@ public class Object {
     protected Object call(String name, Object[] parameters,
       Object self, Object caller) {
 
-        ObjectCore core = getCore();
-
-        // Retrieve method from the class
-        Method method = core.getClazz().getMethod(name, parameters.length);
-
-        // check whether the method was found
+        resolveReplacements();
+        
+        Method method = core.getMethod(name, parameters);
         if (method != null) {
-            Scope scope = new Scope(getCore().getScope());
-
-            // execute the method
+            Scope scope = new Scope(core.getScope());
             return method.execute(parameters, self, caller, scope);
-
         }
         else {
-
-            // forward the call to the parent object, if it exists.
-            if (core.hasParent()) {
-
-                return core.getParent().call(name, parameters, self, caller);
-
-            }
-            else {
-
-                // create reader-friendly description of the method
-                String description = name;
-                if (parameters.length > 0) {
-                    description += "(";
-                    for (int i=0; i<parameters.length; i++) {
-                        if (i>0) {
-                            description += ", ";
-                        }
-                        description += "object";
-                        if (parameters.length > 1) {
-                            description += i;
-                        }
-                    }
-                    description += ")";
-                }
-
-                // throw exception describing the method that was not found.
-                throw new Exception("unknown method: " + description);
-
-            }
-
+            return forwardCallToParent(name, parameters, self, caller);
         }
-
     }
 
     /**
@@ -248,5 +208,40 @@ public class Object {
      */
     public synchronized void replace(Object object) {
         getCore().getClazz().setReplacement(object);
+    }
+
+    protected void resolveReplacements() {
+        while (getCurrentCore().hasReplacement()) {
+            ObjectCore oldCore = getCurrentCore();
+            setCore(getCurrentCore().getReplacement());
+            oldCore.setReplaced();
+        }
+    }
+
+    private Object forwardCallToParent(String name, Object[] parameters, Object self, Object caller) {
+            if (core.hasParent()) {
+                return core.getParent().call(name, parameters, self, caller);
+            }
+            else {
+                throw new Exception("unknown method: " + describeMethod(name, parameters));
+            }
+    }
+
+    private String describeMethod(String name, Object[] parameters) {
+        String description = name;
+        if (parameters.length > 0) {
+            description += "(";
+            for (int i = 0; i < parameters.length; i++) {
+                if (i > 0) {
+                    description += ", ";
+                }
+                description += "object";
+                if (parameters.length > 1) {
+                    description += i;
+                }
+            }
+            description += ")";
+        }
+        return description;
     }
 }
