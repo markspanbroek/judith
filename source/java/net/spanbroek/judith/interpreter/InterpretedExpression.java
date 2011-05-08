@@ -19,14 +19,12 @@ public class InterpretedExpression extends Method {
 
     @Override
     public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
-        for (int i=0; i<this.parameters.length; i++) {
-            scope.declare(this.parameters[i], parameters[i]);
-        }
-        return evaluate(expression, scope);
+        declareParameters(scope, parameters);
+        return evaluate(expression, scope, self);
     }
 
-    private Object evaluate(Expression expression, Scope scope) {
-        Visitor visitor = new Visitor(world, scope, scope.get("self"));
+    private Object evaluate(Expression expression, Scope scope, Object self) {
+        Visitor visitor = new Visitor(world, scope, self);
         visitor.visit(expression);
         return (Object) visitor.getStack().pop();
     }

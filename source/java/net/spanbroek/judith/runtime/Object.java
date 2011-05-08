@@ -117,7 +117,7 @@ public class Object {
 
         // check whether the method was found
         if (method != null) {
-            Scope scope = createMethodScope(self, caller);
+            Scope scope = new Scope(getCore().getScope());
 
             // execute the method
             return method.execute(parameters, self, caller, scope);
@@ -156,13 +156,6 @@ public class Object {
 
         }
 
-    }
-
-    protected Scope createMethodScope(Object self, Object caller) {
-        // create a new child scope of the object scope, containing the
-        // 'self', 'caller' and 'result' objects
-        Scope scope = new Scope(getCore().getScope());
-        return scope;
     }
 
     /**
@@ -256,5 +249,4 @@ public class Object {
     public synchronized void replace(Object object) {
         getCore().getClazz().setReplacement(object);
     }
-
 }

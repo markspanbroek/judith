@@ -30,7 +30,7 @@ public class Scope {
      */
     public Scope() {
 
-        this.parent = this;
+        this.parent = null;
         this.map = new HashMap<String,Object>();
 
     }
@@ -65,7 +65,7 @@ public class Scope {
             return true;
         }
         else {
-            if (parent != this) {
+            if (parent != null) {
                 return parent.contains(name);
             }
             else {
@@ -85,7 +85,7 @@ public class Scope {
 
         Object result = map.get(name);
         if (result == null) {
-            if (parent != this) {
+            if (parent != null) {
                 result = parent.get(name);
             }
             else {
@@ -110,7 +110,7 @@ public class Scope {
             map.put(name, object);
         }
         else {
-            if (parent != this) {
+            if (parent != null) {
                 parent.set(name, object);
             }
             else {

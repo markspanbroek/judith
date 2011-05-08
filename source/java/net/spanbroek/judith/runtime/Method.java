@@ -1,59 +1,38 @@
 package net.spanbroek.judith.runtime;
 
-/**
- * Represents a judith method.
- *
- * @author Mark Spanbroek
- */
 public abstract class Method {
 
-    /**
-     * The names of the parameters of this method.
-     */
-    protected String[] parameters;
+    protected String[] parameterNames;
 
-    /**
-     * Constructs a new method using the specified parameter names.
-     */
     public Method(String... parameters) {
-
-        this.parameters = parameters;
-
+        this.parameterNames = parameters;
     }
 
-    /**
-     * Executes this method using the specified parameter values and scope.
-     * The amount of parameter values should be equal to the number of parameter
-     * names that were specified in the constructor. The scope should contain
-     * a variable 'self'.
-     */
     public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
+        declareImplicitParameters(scope, self, caller);
+        declareParameters(scope, parameters);
+        
+        execute(new Scope(scope));
 
+        return scope.get("result");
+    }
+
+    protected abstract void execute(Scope scope);
+
+    public int getParameterCount() {
+        return parameterNames.length;
+    }
+
+    protected void declareImplicitParameters(Scope scope, Object self, Object caller) {
         scope.declare("self", self);
         scope.declare("caller", caller);
         scope.declare("result", self);
+    }
 
-        for (int i=0; i<this.parameters.length; i++) {
-            scope.declare(this.parameters[i], parameters[i]);
+    protected void declareParameters(Scope scope, Object[] parameters) {
+        assert parameters.length == parameterNames.length;
+        for (int i = 0; i < this.parameterNames.length; i++) {
+            scope.declare(this.parameterNames[i], parameters[i]);
         }
-        
-        execute(new Scope(scope));
-        return scope.get("result");
-
     }
-
-    /**
-     * The actual execution of the method.
-     */
-    protected abstract void execute(Scope scope);
-
-    /**
-     * Returns the number of parameters of this method.
-     */
-    public int getParameterCount() {
-
-        return parameters.length;
-
-    }
-
 }
