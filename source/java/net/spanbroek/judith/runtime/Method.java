@@ -29,9 +29,14 @@ public abstract class Method {
      */
     public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
 
+        scope.declare("self", self);
+        scope.declare("caller", caller);
+        scope.declare("result", self);
+
         for (int i=0; i<this.parameters.length; i++) {
             scope.declare(this.parameters[i], parameters[i]);
         }
+        
         execute(new Scope(scope));
         return scope.get("result");
 

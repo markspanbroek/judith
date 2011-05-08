@@ -1,7 +1,5 @@
 package net.spanbroek.judith.runtime;
 
-import net.spanbroek.judith.runtime.ObjectCore;
-import net.spanbroek.judith.runtime.Method;
 import net.spanbroek.judith.Exception;
 
 /**
@@ -22,7 +20,7 @@ public class Object {
      */
     public Object(Object parent, Scope scope) {
         this(scope);
-        getCore().setParent(parent.call("copy"));
+        core.setParent(parent.call("copy"));
     }
 
     /**
@@ -32,7 +30,7 @@ public class Object {
      */
     public Object(Scope scope) {
         this(new ObjectCore());
-        getCore().setScope(new Scope(scope));
+        core.setScope(new Scope(scope));
     }
 
     /**
@@ -119,7 +117,7 @@ public class Object {
 
         // check whether the method was found
         if (method != null) {
-            Scope scope = createScopeForMethodExecution(self, caller);
+            Scope scope = createMethodScope(self, caller);
 
             // execute the method
             return method.execute(parameters, self, caller, scope);
@@ -160,13 +158,10 @@ public class Object {
 
     }
 
-    protected Scope createScopeForMethodExecution(Object self, Object caller) {
+    protected Scope createMethodScope(Object self, Object caller) {
         // create a new child scope of the object scope, containing the
         // 'self', 'caller' and 'result' objects
         Scope scope = new Scope(getCore().getScope());
-        scope.declare("self", self);
-        scope.declare("caller", caller);
-        scope.declare("result", self);
         return scope;
     }
 

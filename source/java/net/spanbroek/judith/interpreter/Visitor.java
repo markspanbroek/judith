@@ -1,6 +1,5 @@
 package net.spanbroek.judith.interpreter;
 
-import net.spanbroek.judith.runtime.SelflessObject;
 import net.spanbroek.judith.tree.Assignment;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.*;
@@ -137,7 +136,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     @Override
     public void visit(net.spanbroek.judith.tree.Lambda node) {
 
-        Object function = new SelflessObject(world.get("Function"), scope);
+        Object function = new Object(world.get("Function"), scope);
 
         Method evaluateMethod = new InterpretedExpression (
           node.getIdentifiers(),
@@ -154,7 +153,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     @Override
     public void visit(net.spanbroek.judith.tree.LambdaBlock node) {
 
-        Object command = new SelflessObject(world.get("Command"), scope);
+        Object command = new Object(world.get("Command"), scope);
 
         Method runMethod = new InterpretedMethod(
           node.getIdentifiers(),
@@ -163,7 +162,11 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         ) {
             @Override
             public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
-                super.execute(parameters, self, caller, scope);
+                for (int i=0; i<this.parameters.length; i++) {
+                    scope.declare(this.parameters[i], parameters[i]);
+                }
+
+                execute(new Scope(scope));
                 return self;
             }
         };

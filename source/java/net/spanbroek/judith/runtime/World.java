@@ -14,7 +14,7 @@ public class World extends Scope {
     private Object numberPrototype = null;
     private Object textPrototype = null;
     private Object listPrototype = null;
-    
+
     /**
      * Initializes the global context of Judith execution.
      */
@@ -168,10 +168,10 @@ public class World extends Scope {
             throw new IllegalStateException("list prototype already set");
         }
     }
-    
+
     private void interpret(String file) {
 
-        try {    
+        try {
             Interpreter interpreter = new Interpreter(this, this);
             InputStream in = World.class.getResourceAsStream(file);
             Reader reader = new InputStreamReader(in, "UTF-8");
