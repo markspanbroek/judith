@@ -161,10 +161,10 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
           world
         ) {
             @Override
-            public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
-                declareParameters(scope, parameters);
+            public Object execute(MethodCall methodCall, Scope scope) {
+                declareParameters(scope, methodCall);
                 execute(new Scope(scope));
-                return self;
+                return methodCall.getSelf();
             }
         };
 

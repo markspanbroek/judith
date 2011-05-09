@@ -12,7 +12,9 @@ public class Proxy extends Object {
     }
 
     @Override
-    protected Object call(String name, Object[] parameters, Object self, Object caller) {
+    protected Object call(MethodCall methodCall) {
+        final String name = methodCall.getName();
+        final Object[] parameters = methodCall.getParameters();
         return receiver.call("call", world.wrap(name), world.wrap(parameters));
     }
 

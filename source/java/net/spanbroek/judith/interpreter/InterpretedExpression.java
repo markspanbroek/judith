@@ -2,6 +2,7 @@ package net.spanbroek.judith.interpreter;
 
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.Method;
+import net.spanbroek.judith.runtime.MethodCall;
 import net.spanbroek.judith.runtime.Scope;
 import net.spanbroek.judith.runtime.World;
 import net.spanbroek.judith.tree.Expression;
@@ -18,9 +19,9 @@ public class InterpretedExpression extends Method {
     }
 
     @Override
-    public Object execute(Object[] parameters, Object self, Object caller, Scope scope) {
-        declareParameters(scope, parameters);
-        return evaluate(expression, scope, self);
+    public Object execute(MethodCall methodCall, Scope scope) {
+        declareParameters(scope, methodCall);
+        return evaluate(expression, scope, methodCall.getSelf());
     }
 
     private Object evaluate(Expression expression, Scope scope, Object self) {

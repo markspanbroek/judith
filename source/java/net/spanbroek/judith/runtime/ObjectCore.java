@@ -122,7 +122,9 @@ class ObjectCore implements Cloneable {
         aboriginal = object;
     }
 
-    public Method getMethod(String name, Object[] parameters) {
+    public Method getMethod(MethodCall methodCall) {
+        final String name = methodCall.getName();
+        final Object[] parameters = methodCall.getParameters();
         return getClazz().getMethod(name, parameters.length);
     }
 

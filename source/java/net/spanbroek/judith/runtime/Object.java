@@ -93,28 +93,17 @@ public class Object {
      * @throws Exception when the method could not be found.
      */
     public Object call(String name, Object[] parameters, Object caller) {
-        return call(name, parameters, this, caller);
+        return call(new MethodCall(this, name, parameters, caller));
     }
 
-    /**
-     * Handles a method call. The self object is the object whose method was 
-     * called. This is not necessarily equal to the current object, because
-     * a call could have been forwarded from a child object.
-     *
-     * @throws Exception when the method could not be found.
-     */
-    protected Object call(String name, Object[] parameters,
-      Object self, Object caller) {
-
+    protected Object call(MethodCall methodCall) {
         resolveReplacements();
-        
-        Method method = core.getMethod(name, parameters);
+        Method method = core.getMethod(methodCall);
         if (method != null) {
             Scope scope = new Scope(core.getScope());
-            return method.execute(parameters, self, caller, scope);
-        }
-        else {
-            return forwardCallToParent(name, parameters, self, caller);
+            return method.execute(methodCall, scope);
+        } else {
+            return forwardCallToParent(methodCall);
         }
     }
 
@@ -127,7 +116,7 @@ public class Object {
      *   ancestors.
      */
     public java.lang.Object getNativeObject() {
-        ObjectCore core = getCore();
+        resolveReplacements();
         if (core.hasNativeObject()) {
             return core.getNativeObject();
         }
@@ -155,7 +144,7 @@ public class Object {
      * compatible with 'B'.
      */
     public boolean isCompatibleWith(Object object) {
-        ObjectCore core = getCore();
+        resolveReplacements();
         if (core.getClazz() == object.getCore().getClazz()) {
             return true;
         }
@@ -174,7 +163,7 @@ public class Object {
      * object.
      */
     boolean isDescendantOf(Object object) {
-        ObjectCore core = getCore();
+        resolveReplacements();
         if (core.hasParent()) {
             if (core.getParent().equals(object)) {
                 return true;
@@ -218,30 +207,12 @@ public class Object {
         }
     }
 
-    private Object forwardCallToParent(String name, Object[] parameters, Object self, Object caller) {
+    private Object forwardCallToParent(MethodCall methodCall) {
             if (core.hasParent()) {
-                return core.getParent().call(name, parameters, self, caller);
+                return core.getParent().call(methodCall);
             }
             else {
-                throw new Exception("unknown method: " + describeMethod(name, parameters));
+                throw new Exception("unknown method: " + methodCall);
             }
-    }
-
-    private String describeMethod(String name, Object[] parameters) {
-        String description = name;
-        if (parameters.length > 0) {
-            description += "(";
-            for (int i = 0; i < parameters.length; i++) {
-                if (i > 0) {
-                    description += ", ";
-                }
-                description += "object";
-                if (parameters.length > 1) {
-                    description += i;
-                }
-            }
-            description += ")";
-        }
-        return description;
     }
 }

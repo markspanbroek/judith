@@ -1,7 +1,6 @@
 package net.spanbroek.judith.runtime;
 
 import net.spanbroek.judith.runtime.Object;
-import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.Exception;
 
 /**
@@ -27,6 +26,7 @@ class Parent extends Object {
     /**
      * Returns the current core of the wrapped object. 
      */
+    @Override
     ObjectCore getCurrentCore() {
         return wrapped.getCurrentCore();
     }
@@ -34,6 +34,7 @@ class Parent extends Object {
     /**
      * Sets the core of the wrapped object.
      */
+    @Override
     void setCore(ObjectCore core) {
         wrapped.setCore(core);
     }
@@ -44,10 +45,10 @@ class Parent extends Object {
      * wrapped object. If the caller is not a descendant of the wrapped object,
      * an Exception is thrown.
      */
-    protected Object call(String name, Object[] parameters,
-      Object self, Object caller) {
-        if (caller.isDescendantOf(self)) {
-            return wrapped.call(name, parameters, caller, caller);
+    @Override
+    protected Object call(MethodCall methodCall) {
+        if (methodCall.getCaller().isDescendantOf(methodCall.getSelf())) {
+            return wrapped.call(createForward(methodCall));
         }
         else {
             throw new Exception(
@@ -57,10 +58,17 @@ class Parent extends Object {
         }
     }
     
+    @Override
     public Object copy() {
         throw new Exception(
           "parent objects can not be copied, or derived from"
         );
     }
 
+    protected MethodCall createForward(MethodCall methodCall) {
+        final Object caller = methodCall.getCaller();
+        final String name = methodCall.getName();
+        final Object[] parameters = methodCall.getParameters();
+        return new MethodCall(caller, name, parameters, caller);
+    }
 }
