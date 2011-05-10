@@ -98,47 +98,20 @@ public class Object {
 
     protected Object call(MethodCall methodCall) {
         resolveReplacements();
-
-        String name = methodCall.getName();
-        Object[] parameters = methodCall.getParameters();
-        Method method = replaceable.getClazz().getMethod(name, parameters.length);
-
-        if (method != null) {
-            Scope scope = new Scope(replaceable.getScope());
-            return method.execute(methodCall, scope);
-        } else {
-            return forwardCallToParent(methodCall);
-        }
+        return replaceable.call(methodCall);
     }
 
-    /**
-     * Returns the native Java object that is associated with this judith
-     * object, or with one of its ancestors.
-     *
-     * @return the native Java object, or <code>null</code> when no native Java
-     *   object was associated with this judith object, or with one of its
-     *   ancestors.
-     */
     public java.lang.Object getNativeObject() {
         resolveReplacements();
-        if (replaceable.hasNativeObject()) {
-            return replaceable.getNativeObject();
-        }
-        else {
-            if (replaceable.hasParent()) {
-                return replaceable.getParent().getNativeObject();
-            }
-            else {
-                return null;
-            }
-        }
+        return replaceable.getNativeObject();
     }
 
     /**
      * Associates the specified native Java object with this judith object.
      */
     public void setNativeObject(java.lang.Object object) {
-        getCore().setNativeObject(object);
+        resolveReplacements();
+        replaceable.setNativeObject(object);
     }
 
     /**
@@ -208,15 +181,6 @@ public class Object {
             ReplaceableObject oldCore = getCurrentCore();
             setCore(getCurrentCore().getReplacement());
             oldCore.setReplaced();
-        }
-    }
-
-    private Object forwardCallToParent(MethodCall methodCall) {
-        if (replaceable.hasParent()) {
-            return replaceable.getParent().call(methodCall);
-        }
-        else {
-            throw new Exception("unknown method: " + methodCall);
         }
     }
 }

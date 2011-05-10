@@ -1,5 +1,6 @@
 package net.spanbroek.judith.runtime;
 
+import net.spanbroek.judith.Exception;
 import net.spanbroek.judith.Error;
 
 abstract class BasicObject implements Cloneable {
@@ -38,6 +39,14 @@ abstract class BasicObject implements Cloneable {
 
     void setClazz(ReplaceableClass clazz) {
         this.clazz = clazz;
+    }
+
+    Object call(MethodCall methodCall) {
+        if (clazz.hasMethod(methodCall)) {
+            return clazz.executeMethod(methodCall, new Scope(getScope()));
+        } else {
+            throw new Exception("unknown method: " + methodCall);
+        }
     }
 
     BasicObject copy() {

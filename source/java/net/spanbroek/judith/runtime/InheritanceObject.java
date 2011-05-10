@@ -24,6 +24,15 @@ abstract class InheritanceObject extends BasicObject {
     }
 
     @Override
+    Object call(MethodCall methodCall) {
+        if (!getClazz().hasMethod(methodCall) && hasParent()) {
+            return getParent().call(methodCall);
+        }
+
+        return super.call(methodCall);
+    }
+
+    @Override
     InheritanceObject copy() {
         InheritanceObject result = (InheritanceObject) super.copy();
         if (hasParent()) {

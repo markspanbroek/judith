@@ -4,12 +4,16 @@ abstract class NativeObject extends InheritanceObject {
 
     private java.lang.Object nativeObject = null;
 
-    boolean hasNativeObject() {
-        return nativeObject != null;
-    }
-
     java.lang.Object getNativeObject() {
-        return nativeObject;
+        if (nativeObject != null) {
+            return nativeObject;
+        } else {
+            if (hasParent()) {
+                return getParent().getNativeObject();
+            } else {
+                return null;
+            }
+        }
     }
 
     void setNativeObject(java.lang.Object object) {
