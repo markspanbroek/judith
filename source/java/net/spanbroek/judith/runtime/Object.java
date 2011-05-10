@@ -12,7 +12,7 @@ public class Object {
     /**
      * The core of this object, which contains the instance variables.
      */
-    private ObjectCore core;
+    private ReplaceableObject replaceable;
 
     /**
      * Constructs a new judith object using the specified parent object and 
@@ -20,7 +20,7 @@ public class Object {
      */
     public Object(Object parent, Scope scope) {
         this(scope);
-        core.setParent(parent.call("copy"));
+        replaceable.setParent(parent.call("copy"));
     }
 
     /**
@@ -29,22 +29,22 @@ public class Object {
      * inheritance chain.
      */
     public Object(Scope scope) {
-        this(new ObjectCore());
-        core.setScope(new Scope(scope));
+        this(new ReplaceableObject());
+        replaceable.setScope(new Scope(scope));
     }
 
     /**
      * Constructs a new judith object using the specified object core.
      */
-    Object(ObjectCore core) {
-        this.core = core;
+    Object(ReplaceableObject core) {
+        this.replaceable = core;
     }
 
     /**
      * Returns the core of this object. Resolves replacements before returning
      * the core.
      */
-    synchronized ObjectCore getCore() {
+    synchronized ReplaceableObject getCore() {
         resolveReplacements();
         return getCurrentCore();
     }
@@ -52,15 +52,15 @@ public class Object {
     /**
      * Returns the core of this object without first resolving replacements.
      */
-    ObjectCore getCurrentCore() {
-        return core;
+    ReplaceableObject getCurrentCore() {
+        return replaceable;
     }
 
     /**
      * Sets the core of this object to the specified core.
      */
-    void setCore(ObjectCore core) {
-        this.core = core;
+    void setCore(ReplaceableObject core) {
+        this.replaceable = core;
     }
 
     /**
@@ -98,9 +98,13 @@ public class Object {
 
     protected Object call(MethodCall methodCall) {
         resolveReplacements();
-        Method method = core.getMethod(methodCall);
+
+        String name = methodCall.getName();
+        Object[] parameters = methodCall.getParameters();
+        Method method = replaceable.getClazz().getMethod(name, parameters.length);
+
         if (method != null) {
-            Scope scope = new Scope(core.getScope());
+            Scope scope = new Scope(replaceable.getScope());
             return method.execute(methodCall, scope);
         } else {
             return forwardCallToParent(methodCall);
@@ -117,12 +121,12 @@ public class Object {
      */
     public java.lang.Object getNativeObject() {
         resolveReplacements();
-        if (core.hasNativeObject()) {
-            return core.getNativeObject();
+        if (replaceable.hasNativeObject()) {
+            return replaceable.getNativeObject();
         }
         else {
-            if (core.hasParent()) {
-                return core.getParent().getNativeObject();
+            if (replaceable.hasParent()) {
+                return replaceable.getParent().getNativeObject();
             }
             else {
                 return null;
@@ -145,12 +149,12 @@ public class Object {
      */
     public boolean isCompatibleWith(Object object) {
         resolveReplacements();
-        if (core.getClazz() == object.getCore().getClazz()) {
+        if (replaceable.getClazz() == object.getCore().getClazz()) {
             return true;
         }
         else {
-            if (core.hasParent()) {
-                return core.getParent().isCompatibleWith(object);
+            if (replaceable.hasParent()) {
+                return replaceable.getParent().isCompatibleWith(object);
             }
             else {
                 return false;
@@ -164,12 +168,12 @@ public class Object {
      */
     boolean isDescendantOf(Object object) {
         resolveReplacements();
-        if (core.hasParent()) {
-            if (core.getParent().equals(object)) {
+        if (replaceable.hasParent()) {
+            if (replaceable.getParent().equals(object)) {
                 return true;
             }
             else {
-                return core.getParent().isDescendantOf(object);
+                return replaceable.getParent().isDescendantOf(object);
             }
         }
         else {
@@ -201,15 +205,15 @@ public class Object {
 
     private void resolveReplacements() {
         while (getCurrentCore().hasReplacement()) {
-            ObjectCore oldCore = getCurrentCore();
+            ReplaceableObject oldCore = getCurrentCore();
             setCore(getCurrentCore().getReplacement());
             oldCore.setReplaced();
         }
     }
 
     private Object forwardCallToParent(MethodCall methodCall) {
-        if (core.hasParent()) {
-            return core.getParent().call(methodCall);
+        if (replaceable.hasParent()) {
+            return replaceable.getParent().call(methodCall);
         }
         else {
             throw new Exception("unknown method: " + methodCall);

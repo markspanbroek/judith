@@ -19,7 +19,7 @@ class Parent extends Object {
      * Creates a parent object wrapper for the specified object.
      */
     public Parent(Object wrapped) {
-        super((ObjectCore)null);
+        super((ReplaceableObject)null);
         this.wrapped = wrapped;
     }
 
@@ -27,7 +27,7 @@ class Parent extends Object {
      * Returns the current core of the wrapped object. 
      */
     @Override
-    ObjectCore getCurrentCore() {
+    ReplaceableObject getCurrentCore() {
         return wrapped.getCurrentCore();
     }
 
@@ -35,7 +35,7 @@ class Parent extends Object {
      * Sets the core of the wrapped object.
      */
     @Override
-    void setCore(ObjectCore core) {
+    void setCore(ReplaceableObject core) {
         wrapped.setCore(core);
     }
 
