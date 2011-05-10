@@ -47,7 +47,10 @@ class Parent extends Object {
      */
     @Override
     protected Object call(MethodCall methodCall) {
-        if (methodCall.getCaller().isDescendantOf(methodCall.getSelf())) {
+        final Object caller = methodCall.getCaller();
+        final Object self = methodCall.getSelf();
+        
+        if (caller.isDescendantOf(self)) {
             return wrapped.call(createForward(methodCall));
         }
         else {

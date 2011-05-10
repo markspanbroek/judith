@@ -199,7 +199,7 @@ public class Object {
         getCore().getClazz().setReplacement(object);
     }
 
-    protected void resolveReplacements() {
+    private void resolveReplacements() {
         while (getCurrentCore().hasReplacement()) {
             ObjectCore oldCore = getCurrentCore();
             setCore(getCurrentCore().getReplacement());
@@ -208,11 +208,11 @@ public class Object {
     }
 
     private Object forwardCallToParent(MethodCall methodCall) {
-            if (core.hasParent()) {
-                return core.getParent().call(methodCall);
-            }
-            else {
-                throw new Exception("unknown method: " + methodCall);
-            }
+        if (core.hasParent()) {
+            return core.getParent().call(methodCall);
+        }
+        else {
+            throw new Exception("unknown method: " + methodCall);
+        }
     }
 }

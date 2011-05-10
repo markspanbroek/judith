@@ -106,8 +106,8 @@ object Point := Object
   [
     Assert.that(caller : self).isTrue
 
-    Assert.that(x : Objects.Number).isTrue
-    Assert.that(y : Objects.Number).isTrue
+    Assert.that(x' : Objects.Number).isTrue
+    Assert.that(y' : Objects.Number).isTrue
 
     x := x'
     y := y'

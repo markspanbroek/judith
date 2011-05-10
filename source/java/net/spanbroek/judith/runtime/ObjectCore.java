@@ -32,7 +32,8 @@ class ObjectCore implements Cloneable {
      * the object declaration. For example:
      * <pre>
      *   object outer := "This is an outer object of the foo object"
-     *   object foo |[
+     *   object foo := Object
+     *   |[
      *      object inner := "This is an inner object of the foo object"
      *   ]|
      * </pre>

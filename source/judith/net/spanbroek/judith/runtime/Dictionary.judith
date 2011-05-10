@@ -23,5 +23,5 @@
         ]    
     ]|
 
-    Objects.Dictionary.replace(Dictionary)    
+    Objects.Dictionary.replace(Dictionary)
 ]
