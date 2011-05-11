@@ -40,4 +40,29 @@ abstract class InheritanceObject extends BasicObject {
         }
         return result;
     }
+
+    @Override
+    boolean isCompatibleWith(Object object) {
+        if (super.isCompatibleWith(object)) {
+            return true;
+        } else {
+            if (hasParent()) {
+                return getParent().isCompatibleWith(object);
+            } else {
+                return false;
+            }
+        }
+    }
+
+    boolean isDescendantOf(Object object) {
+        if (hasParent()) {
+            if (getParent().equals(object)) {
+                return true;
+            } else {
+                return getParent().isDescendantOf(object);
+            }
+        } else {
+            return false;
+        }
+    }
 }

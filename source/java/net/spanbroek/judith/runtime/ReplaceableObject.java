@@ -20,7 +20,7 @@ class ReplaceableObject extends NativeObject {
     /**
      * Call this method to indicate that this object core has been replaced.
      */
-    public void setReplaced() {
+    public void markAsReplaced() {
         hasBeenReplaced = true;
     }
 

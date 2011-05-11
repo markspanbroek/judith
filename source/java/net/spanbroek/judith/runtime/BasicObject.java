@@ -63,4 +63,8 @@ abstract class BasicObject implements Cloneable {
             throw new Error(exception);
         }
     }
+
+    boolean isCompatibleWith(Object object) {
+        return getClazz() == object.getClazz();
+    }
 }

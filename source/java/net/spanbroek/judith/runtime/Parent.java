@@ -1,6 +1,5 @@
 package net.spanbroek.judith.runtime;
 
-import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.Exception;
 
 /**

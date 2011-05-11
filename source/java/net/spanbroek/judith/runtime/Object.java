@@ -41,15 +41,6 @@ public class Object {
     }
 
     /**
-     * Returns the core of this object. Resolves replacements before returning
-     * the core.
-     */
-    synchronized ReplaceableObject getCore() {
-        resolveReplacements();
-        return getCurrentCore();
-    }
-
-    /**
      * Returns the core of this object without first resolving replacements.
      */
     ReplaceableObject getCurrentCore() {
@@ -67,14 +58,16 @@ public class Object {
      * Adds an inner object to this object.
      */
     public void declare(String name, Object object) {
-        getCore().getScope().declare(name, object);
+        resolveReplacements();
+        getCurrentCore().getScope().declare(name, object);
     }
 
     /**
      * Adds a method to this object using the specified name.
      */
     public void declare(String name, Method method) {
-        getCore().getClazz().declare(name, method);
+        resolveReplacements();
+        getCurrentCore().getClazz().declare(name, method);
     }
 
     /**
@@ -98,12 +91,12 @@ public class Object {
 
     protected Object call(MethodCall methodCall) {
         resolveReplacements();
-        return replaceable.call(methodCall);
+        return getCurrentCore().call(methodCall);
     }
 
     public java.lang.Object getNativeObject() {
         resolveReplacements();
-        return replaceable.getNativeObject();
+        return getCurrentCore().getNativeObject();
     }
 
     /**
@@ -111,7 +104,7 @@ public class Object {
      */
     public void setNativeObject(java.lang.Object object) {
         resolveReplacements();
-        replaceable.setNativeObject(object);
+        getCurrentCore().setNativeObject(object);
     }
 
     /**
@@ -122,17 +115,7 @@ public class Object {
      */
     public boolean isCompatibleWith(Object object) {
         resolveReplacements();
-        if (replaceable.getClazz() == object.getCore().getClazz()) {
-            return true;
-        }
-        else {
-            if (replaceable.hasParent()) {
-                return replaceable.getParent().isCompatibleWith(object);
-            }
-            else {
-                return false;
-            }
-        }
+        return getCurrentCore().isCompatibleWith(object);
     }
 
     /**
@@ -141,24 +124,16 @@ public class Object {
      */
     boolean isDescendantOf(Object object) {
         resolveReplacements();
-        if (replaceable.hasParent()) {
-            if (replaceable.getParent().equals(object)) {
-                return true;
-            }
-            else {
-                return replaceable.getParent().isDescendantOf(object);
-            }
-        }
-        else {
-            return false;
-        }
+        return getCurrentCore().isDescendantOf(object);
     }
 
     /**
      * Tests for equality.
      */
     public boolean equals(Object object) {
-        return getCore() == object.getCore();
+        resolveReplacements();
+        object.resolveReplacements();
+        return getCurrentCore() == object.getCurrentCore();
     }
 
     /**
@@ -166,21 +141,28 @@ public class Object {
      * scope and methods are shared between all copies.
      */
     public Object copy() {
-        return new Object(getCore().copy());
+        resolveReplacements();
+        return new Object(getCurrentCore().copy());
     }
 
     /**
      * Registers the specified object as a replacement for this object.
      */
     public synchronized void replace(Object object) {
-        getCore().getClazz().setReplacement(object);
+        resolveReplacements();
+        getCurrentCore().getClazz().setReplacement(object);
+    }
+
+    ReplaceableClass getClazz() {
+        resolveReplacements();
+        return getCurrentCore().getClazz();
     }
 
     private void resolveReplacements() {
         while (getCurrentCore().hasReplacement()) {
             ReplaceableObject oldCore = getCurrentCore();
             setCore(getCurrentCore().getReplacement());
-            oldCore.setReplaced();
+            oldCore.markAsReplaced();
         }
     }
 }
