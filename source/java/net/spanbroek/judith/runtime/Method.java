@@ -4,8 +4,8 @@ public abstract class Method {
 
     protected String[] parameterNames;
 
-    public Method(String... parameters) {
-        this.parameterNames = parameters;
+    public Method(String... parameterNames) {
+        this.parameterNames = parameterNames;
     }
 
     public Object execute(MethodCall methodCall, Scope scope) {
@@ -23,13 +23,11 @@ public abstract class Method {
         return parameterNames.length;
     }
 
-    protected void declareImplicitParameters(Scope scope, MethodCall methodCall) {
+    private void declareImplicitParameters(Scope scope, MethodCall methodCall) {
         scope.declare("self", methodCall.getSelf());
         scope.declare("caller", methodCall.getCaller());
         scope.declare("result", methodCall.getSelf());
-        if (methodCall.getParent() != null) {
-            scope.declare("parent", methodCall.getParent());
-        }
+        scope.declare("parent", methodCall.getParent());
     }
 
     protected void declareParameters(Scope scope, MethodCall methodCall) {
