@@ -6,7 +6,7 @@
             result := self.message
         ]
     ]|
-    
+
     Objects := Objects
     |[
         method Exception

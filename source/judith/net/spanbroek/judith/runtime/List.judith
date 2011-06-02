@@ -34,8 +34,6 @@
 
         method setElementType(elementType') 
         [
-            Assert.that(caller : self).isTrue
-
             Assert.that(self.length).equals(0)
             elementType := elementType'
         ]

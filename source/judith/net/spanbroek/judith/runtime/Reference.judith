@@ -2,29 +2,28 @@
     object Reference := Object
     |[
         object value := null
-        
+
         method initialize(value')
         [
-            Assert.that(caller : self).isTrue
             value := value'
         ]
-        
+
         method create(value)
         [
             result := self.copy.initialize(value)
         ]
-        
+
         method get
         [
             result := value
         ]
-        
+
         method set(value')
         [
             value := value'
         ]
     ]|
-    
+
     Objects := Objects
     |[
         method Reference 

@@ -20,7 +20,7 @@
             object continuation := self.createContinuation(parseResult)
             object context := self.createContext(input)
             object robot := Robot.copy
-            
+
             context := context
             |[
                 method doLater(command)
@@ -28,42 +28,39 @@
                     robot.add(command)
                 ]
             ]|
-            
+
             object self' := self
             robot.add([self'.run(context, 0, List.copy, continuation)])
             robot.execute
-            
+
             result := parseResult.get
         ]
-        
+
         method createContext(input)
         [
-            Assert.that(caller).equals(self)
-
-            result := Object 
+            result := Object
             |[
-                method input 
+                method input
                 [
                     result := input
                 ]
             ]|
         ]
-        
+
         method createContinuation(parseResult)
         [
-            Assert.that(caller).equals(self)
             Assert.that(parseResult : Reference).isTrue
-            
-            result := Function 
+
+            result := Function
             |[
-                method run(index, result) 
+                method run(index, result)
                 [
                     parseResult.set(result)
                 ]
             ]|
         ]
     ]|
-    
+
     object Parsing := Object
     |[
         method Parser
@@ -71,12 +68,12 @@
             result := Parser
         ]
     ]|
-    
+
     Objects := Objects
     |[
         method Parsing
         [
             result := Parsing
         ]
-    ]|    
+    ]|
 ]
