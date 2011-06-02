@@ -1,11 +1,9 @@
 package net.spanbroek.judith.runtime;
 
-import net.spanbroek.judith.runtime.Object;
-
 class ObjectBuilder {
 
     private World world;
-    
+
     public static void build(World world) {
         ObjectBuilder builder = new ObjectBuilder(world);
         builder.declareObject();
@@ -33,7 +31,7 @@ class ObjectBuilder {
         }
         world.get("Object").declare("copy", new ObjectCopyMethod());
     }
-    
+
     public void declareReplaceMethod() {
         class ObjectReplaceMethod extends Method {
             public ObjectReplaceMethod() {
@@ -45,7 +43,7 @@ class ObjectBuilder {
         }
         world.get("Object").declare("replace", new ObjectReplaceMethod());
     }
-    
+
     public void declareEqualsMethod() {
         class ObjectEqualsMethod extends Method {
             public ObjectEqualsMethod() {
@@ -59,7 +57,7 @@ class ObjectBuilder {
         }
         world.get("Object").declare("equals", new ObjectEqualsMethod());
     }
-    
+
     public void declareColonMethod() {
         class ObjectColonMethod extends Method {
             public ObjectColonMethod() {

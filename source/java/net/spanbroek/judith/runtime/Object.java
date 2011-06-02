@@ -25,6 +25,7 @@ public class Object {
     void setCore(ReplaceableObject core) {
         this.replaceable = core;
     }
+
     public void declare(String name, Object object) {
         resolveReplacements();
         getCurrentCore().getScope().declare(name, object);
@@ -41,6 +42,11 @@ public class Object {
 
     protected Object call(MethodCall methodCall) {
         resolveReplacements();
+
+        Object self = methodCall.getSelf();
+        Object parent = getCurrentCore().getParent();
+        methodCall.setParent(new Parent(parent, self));
+
         return getCurrentCore().call(methodCall);
     }
 

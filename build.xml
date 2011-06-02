@@ -31,8 +31,9 @@
 
   <target name='compile' depends='source'>
     <mkdir dir='build/classes'/>
-    <javac srcdir='build/java' destdir='build/classes' debug='true'>
-      <!--compilerarg value='-Xlint:unchecked'/-->
+    <javac destdir='build/classes' debug='true' includeantruntime="false">
+      <compilerarg value='-Xlint:unchecked'/>
+      <src path="build/java"/>
       <classpath>
         <fileset dir='libraries'>
           <include name='**/*.jar'/>

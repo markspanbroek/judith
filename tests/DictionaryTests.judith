@@ -13,7 +13,7 @@ object DictionaryTests := Object
     [
         Assert.that([ dictionary.get("foo") ]).throws(AssertionFailedException)
     ]
-    
+
     method hasMethodThrowsWhenNotGivenAString
     [
         Assert.that([ dictionary.has(1) ]).throws(AssertionFailedException)
@@ -23,7 +23,7 @@ object DictionaryTests := Object
     [
         Assert.that([ dictionary.get(1) ]).throws(AssertionFailedException)
     ]
-    
+
     method setMethodThrowsWhenNotGivenAString
     [
         Assert.that([ dictionary.set(1, "1") ]).throws(AssertionFailedException)
@@ -36,13 +36,13 @@ object DictionaryTests := Object
         Assert.that(dictionary.has("foo")).isTrue
         Assert.that(dictionary.get("foo")).equals(foo)
     ]
-    
+
     method copiesAreIndependent
     [
         Dictionary.copy.set("bar", null)
         Assert.that(not Dictionary.copy.has("bar")).isTrue
     ]
-    
+
     method implicitCopiesAreIndependent
     [
         object one := Dictionary.copy
@@ -50,7 +50,7 @@ object DictionaryTests := Object
         one.set("baz", null)
         Assert.that(not two.has("baz")).isTrue
     ]
-    
+
 ]|
 
 DictionaryTests
