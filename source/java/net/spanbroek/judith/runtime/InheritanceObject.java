@@ -20,7 +20,6 @@ abstract class InheritanceObject extends BasicObject {
 
     void setParent(Object parent) {
         this.parent = parent;
-        getScope().declare("parent", new Parent(parent));
     }
 
     @Override
@@ -29,6 +28,7 @@ abstract class InheritanceObject extends BasicObject {
             return getParent().call(methodCall);
         }
 
+        methodCall.setParent(new Parent(parent, methodCall.getSelf()));
         return super.call(methodCall);
     }
 

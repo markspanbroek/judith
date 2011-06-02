@@ -27,6 +27,9 @@ public abstract class Method {
         scope.declare("self", methodCall.getSelf());
         scope.declare("caller", methodCall.getCaller());
         scope.declare("result", methodCall.getSelf());
+        if (methodCall.getParent() != null) {
+            scope.declare("parent", methodCall.getParent());
+        }
     }
 
     protected void declareParameters(Scope scope, MethodCall methodCall) {

@@ -9,17 +9,16 @@ import net.spanbroek.judith.Exception;
  */
 class Parent extends Object {
 
-    /**
-     * The wrapped object.
-     */
     private Object wrapped;
+    private Object self;
 
     /**
      * Creates a parent object wrapper for the specified object.
      */
-    public Parent(Object wrapped) {
+    public Parent(Object wrapped, Object self) {
         super((ReplaceableObject)null);
         this.wrapped = wrapped;
+        this.self = self;
     }
 
     /**
@@ -46,18 +45,7 @@ class Parent extends Object {
      */
     @Override
     protected Object call(MethodCall methodCall) {
-        final Object caller = methodCall.getCaller();
-        final Object self = methodCall.getSelf();
-        
-        if (caller.isDescendantOf(self)) {
-            return wrapped.call(createForward(methodCall));
-        }
-        else {
-            throw new Exception(
-              "only descendants are allowed to call the methods of " +
-              "a parent object"
-            );
-        }
+        return wrapped.call(createForward(methodCall));
     }
     
     @Override
@@ -68,9 +56,9 @@ class Parent extends Object {
     }
 
     protected MethodCall createForward(MethodCall methodCall) {
-        final Object caller = methodCall.getCaller();
         final String name = methodCall.getName();
         final Object[] parameters = methodCall.getParameters();
-        return new MethodCall(caller, name, parameters, caller);
+        Object caller = methodCall.getCaller();
+        return new MethodCall(self, name, parameters, caller);
     }
 }

@@ -2,10 +2,11 @@ package net.spanbroek.judith.runtime;
 
 public class MethodCall {
 
-    private final Object caller;
-    private final Object self;
-    private final String name;
-    private final Object[] parameters;
+    private Object caller;
+    private Object self;
+    private String name;
+    private Object[] parameters;
+    private Parent parent;
 
     public MethodCall(Object self, String name, Object[] parameters, Object caller) {
         this.self = self;
@@ -28,6 +29,14 @@ public class MethodCall {
 
     public Object[] getParameters() {
         return parameters;
+    }
+
+    public Parent getParent() {
+        return parent;
+    }
+
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
     @Override
