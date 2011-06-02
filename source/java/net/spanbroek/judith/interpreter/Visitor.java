@@ -197,7 +197,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
         // call the method
         try {
-            stack.push(operand.call(node.getIdentifier(), parameters, self));
+            stack.push(operand.call(node.getIdentifier(), parameters));
         }
         catch(Exception exception) {
             // update stack trace when exception is caught

@@ -2,21 +2,15 @@ package net.spanbroek.judith.runtime;
 
 public class MethodCall {
 
-    private Object caller;
     private Object self;
     private String name;
     private Object[] parameters;
     private Parent parent;
 
-    public MethodCall(Object self, String name, Object[] parameters, Object caller) {
+    public MethodCall(Object self, String name, Object[] parameters) {
         this.self = self;
         this.name = name;
         this.parameters = parameters;
-        this.caller = caller;
-    }
-
-    public Object getCaller() {
-        return caller;
     }
 
     public Object getSelf() {

@@ -32,7 +32,7 @@ class ListBuilder {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 Object parent = scope.get("parent");
-                Object result = parent.call("copy", new Object[]{}, self);
+                Object result = parent.call("copy", new Object[]{});
                 List<Object> original = (List<Object>)self.getNativeObject();
                 List<Object> copy = new ArrayList<Object>(original);
                 result.setNativeObject(copy);

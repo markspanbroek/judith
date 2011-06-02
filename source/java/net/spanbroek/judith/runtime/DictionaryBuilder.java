@@ -79,7 +79,7 @@ class DictionaryBuilder {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 Object parent = scope.get("parent");
-                Object result = parent.call("copy", new Object[]{}, self);
+                Object result = parent.call("copy", new Object[]{});
                 HashMap<String,Object> original = (HashMap<String,Object>)self.getNativeObject();
                 HashMap<String,Object> copy = new HashMap<String,Object>(original);
                 result.setNativeObject(copy);

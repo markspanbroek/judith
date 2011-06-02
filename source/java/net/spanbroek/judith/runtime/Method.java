@@ -25,8 +25,8 @@ public abstract class Method {
 
     private void declareImplicitParameters(Scope scope, MethodCall methodCall) {
         scope.declare("self", methodCall.getSelf());
-        scope.declare("result", methodCall.getSelf());
         scope.declare("parent", methodCall.getParent());
+        scope.declare("result", methodCall.getSelf());
     }
 
     protected void declareParameters(Scope scope, MethodCall methodCall) {
