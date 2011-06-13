@@ -50,9 +50,10 @@ public class Object {
         return getCurrentCore().call(methodCall);
     }
 
-    public java.lang.Object getNativeObject() {
+    @SuppressWarnings("unchecked")
+    public <T> T getNativeObject() {
         resolveReplacements();
-        return getCurrentCore().getNativeObject();
+        return (T) getCurrentCore().getNativeObject();
     }
 
     public void setNativeObject(java.lang.Object object) {

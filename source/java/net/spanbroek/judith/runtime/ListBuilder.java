@@ -1,6 +1,7 @@
 package net.spanbroek.judith.runtime;
 
 import java.util.*;
+import java.util.List;
 
 class ListBuilder {
 
@@ -33,7 +34,7 @@ class ListBuilder {
                 Object self = scope.get("self");
                 Object parent = scope.get("parent");
                 Object result = parent.call("copy", new Object[]{});
-                List<Object> original = (List<Object>)self.getNativeObject();
+                List<Object> original = self.getNativeObject();
                 List<Object> copy = new ArrayList<Object>(original);
                 result.setNativeObject(copy);
                 scope.set("result", result);
@@ -46,7 +47,7 @@ class ListBuilder {
         class ListLengthMethod extends Method {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
-                List<Object> list = (List<Object>)self.getNativeObject();
+                List<Object> list = self.getNativeObject();
                 scope.set("result", world.wrap(list.size()));
             }
         }
@@ -60,7 +61,7 @@ class ListBuilder {
             }
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
-                List<Object> list = (List<Object>)self.getNativeObject();
+                List<Object> list = self.getNativeObject();
                 double index = (Double)world.unwrap(scope.get("index"));
                 scope.set("result", list.get((int)index));
             }
@@ -75,7 +76,7 @@ class ListBuilder {
             }
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
-                List<Object> list = (List<Object>)self.getNativeObject();
+                List<Object> list = self.getNativeObject();
                 double index = (Double)world.unwrap(scope.get("index"));
                 list.set((int)index, scope.get("element"));
             }
@@ -90,7 +91,7 @@ class ListBuilder {
             }
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
-                List<Object> list = (List<Object>)self.getNativeObject();
+                List<Object> list = self.getNativeObject();
                 list.add(scope.get("element"));
             }
         }
@@ -105,7 +106,7 @@ class ListBuilder {
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 double index = (Double)world.unwrap(scope.get("index"));
-                List<Object> list = (List<Object>)self.getNativeObject();
+                List<Object> list = self.getNativeObject();
                 scope.set("result", list.remove((int)index));
             }
         }
