@@ -31,7 +31,7 @@ class DictionaryBuilder {
 
             @Override
             protected void execute(Scope scope) {
-                HashMap<String, Object> map
+                HashMap<String, Object> map;
                 map = scope.get("self").getNativeObject();
                 String key = scope.get("key").getNativeObject();
                 scope.set("result", world.wrap(map.containsKey(key)));
