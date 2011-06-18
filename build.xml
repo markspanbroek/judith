@@ -1,5 +1,11 @@
 <project default='default' basedir='.'>
 
+  <path id='classpath'>
+    <fileset dir='libraries'>
+      <include name='**/*.jar'/>
+    </fileset>
+  </path>
+
   <target name='sablecc.check'>
     <uptodate
         property='sablecc.notneeded'
@@ -11,39 +17,28 @@
   <target name='sablecc' depends='sablecc.check' unless='sablecc.notneeded'>
     <mkdir dir='build/java'/>
     <taskdef name='sablecc' classname='org.sablecc.ant.taskdef.Sablecc'>
-      <classpath>
-        <pathelement path='libraries/sablecc.jar'/>
-        <pathelement path='libraries/sablecc-anttask.jar'/>
-      </classpath>
+      <classpath refid='classpath'/>
     </taskdef>
     <sablecc src='source/sablecc' outputdirectory='build/java'>
       <include name='**/*.sablecc'/>
     </sablecc>
   </target>
 
-  <target name='source' depends='sablecc'>
-    <mkdir dir='build/java'/>
-    <copy todir='build/java'>
-      <fileset dir='source/java'/>
-      <fileset dir='source/judith'/>
-    </copy>
-  </target>
-
-  <target name='compile' depends='source'>
+  <target name='compile' depends='sablecc'>
     <mkdir dir='build/classes'/>
     <javac destdir='build/classes' debug='true' includeantruntime="false">
-      <compilerarg value='-Xlint:unchecked'/>
       <src path="build/java"/>
-      <classpath>
-        <fileset dir='libraries'>
-          <include name='**/*.jar'/>
-        </fileset>
-      </classpath>
+      <classpath refid='classpath'/>
+    </javac>
+    <javac destdir='build/classes' debug='true' includeantruntime="false">
+      <compilerarg value='-Xlint:unchecked'/>
+      <src path="source/java"/>
+      <classpath refid='classpath'/>
     </javac>
     <copy todir='build/classes'>
-      <fileset dir='build/java'>
-        <exclude name='**/*.java'/>
-      </fileset>
+      <fileset dir='source/java'/>
+      <fileset dir='build/java'/>
+      <fileset dir='source/judith'/>
     </copy>
   </target>
 
@@ -90,23 +85,11 @@
     </java>
   </target>
 
-  <target name='javadoc' depends='source'>
-    <mkdir dir='build/javadoc'/>
-    <javadoc sourcepath='build/java' destdir='build/javadoc'>
-      <packageset dir='build/java'/>
-      <classpath>
-        <fileset dir='libraries'>
-          <include name='**/*.jar'/>
-        </fileset>
-      </classpath>
-    </javadoc>
-  </target>
-
   <target name='clean'>
     <delete dir='build'/>
   </target>
 
   <target name='default' depends='test'/>
-  <target name='all' depends='default,javadoc'/>
+  <target name='all' depends='default'/>
 
 </project>

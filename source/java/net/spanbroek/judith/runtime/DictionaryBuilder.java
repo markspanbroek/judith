@@ -25,15 +25,15 @@ class DictionaryBuilder {
 
     private void declareHasMethod() {
         class HasMethod extends Method {
-            public HasMethod() {
+            public HasMethod() { 
                 super("key");
             }
 
             @Override
             protected void execute(Scope scope) {
-                HashMap<String, Object> map;
-                map = (HashMap<String, Object>)scope.get("self").getNativeObject();
-                String key = (String) scope.get("key").getNativeObject();
+                HashMap<String, Object> map
+                map = scope.get("self").getNativeObject();
+                String key = scope.get("key").getNativeObject();
                 scope.set("result", world.wrap(map.containsKey(key)));
             }
         }
@@ -49,8 +49,8 @@ class DictionaryBuilder {
             @Override
             protected void execute(Scope scope) {
                 HashMap<String, Object> map;
-                map = (HashMap<String, Object>)scope.get("self").getNativeObject();
-                String key = (String) scope.get("key").getNativeObject();
+                map = scope.get("self").getNativeObject();
+                String key = scope.get("key").getNativeObject();
                 scope.set("result", map.get(key));
             }
         }
@@ -66,8 +66,8 @@ class DictionaryBuilder {
             @Override
             protected void execute(Scope scope) {
                 HashMap<String, Object> map;
-                map = (HashMap<String, Object>)scope.get("self").getNativeObject();
-                String key = (String) scope.get("key").getNativeObject();
+                map = scope.get("self").getNativeObject();
+                String key = scope.get("key").getNativeObject();
                 map.put(key, scope.get("value"));
             }
         }
@@ -80,7 +80,7 @@ class DictionaryBuilder {
                 Object self = scope.get("self");
                 Object parent = scope.get("parent");
                 Object result = parent.call("copy", new Object[]{});
-                HashMap<String,Object> original = (HashMap<String,Object>)self.getNativeObject();
+                HashMap<String,Object> original = self.getNativeObject();
                 HashMap<String,Object> copy = new HashMap<String,Object>(original);
                 result.setNativeObject(copy);
                 scope.set("result", result);

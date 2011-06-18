@@ -1,6 +1,5 @@
 package net.spanbroek.judith.interpreter;
 
-import net.spanbroek.judith.tree.Assignment;
 import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.*;
 import net.spanbroek.judith.Exception;
@@ -8,7 +7,7 @@ import java.util.*;
 
 public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
-    protected Stack stack = new Stack();
+    protected Stack<java.lang.Object> stack = new Stack<java.lang.Object>();
     protected World world;
     protected Scope scope;
     protected Object self;
@@ -19,7 +18,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         this.self = self;
     }
 
-    public Stack getStack() {
+    public Stack<java.lang.Object> getStack() {
         return stack;
     }
 

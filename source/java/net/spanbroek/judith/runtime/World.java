@@ -126,7 +126,8 @@ public class World extends Scope {
         }
 
         if (object.isCompatibleWith(listPrototype)) {
-            return ((List<Object>)object.getNativeObject()).toArray(new Object[]{});
+            List<Object> list = object.getNativeObject();
+            return list.toArray(new Object[]{});
         }
 
         return null;
