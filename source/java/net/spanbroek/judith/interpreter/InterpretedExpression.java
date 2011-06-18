@@ -21,11 +21,11 @@ public class InterpretedExpression extends Method {
     @Override
     public Object execute(MethodCall methodCall, Scope scope) {
         declareParameters(scope, methodCall);
-        return evaluate(expression, scope, methodCall.getSelf());
+        return evaluate(scope);
     }
 
-    private Object evaluate(Expression expression, Scope scope, Object self) {
-        Visitor visitor = new Visitor(world, scope, self);
+    private Object evaluate(Scope scope) {
+        Visitor visitor = new Visitor(world, scope);
         visitor.visit(expression);
         return (Object) visitor.getStack().pop();
     }

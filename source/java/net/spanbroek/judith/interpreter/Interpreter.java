@@ -25,7 +25,7 @@ public class Interpreter {
     }
 
     public void interpret(Statement... statements) {
-        new Visitor(world, scope, scope.get("self")).visit(statements);
+        new Visitor(world, scope).visit(statements);
     }
 
     public void interpret(Program program) {

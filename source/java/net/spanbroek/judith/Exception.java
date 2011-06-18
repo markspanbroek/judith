@@ -37,6 +37,7 @@ public class Exception extends java.lang.RuntimeException {
         return object;
     }
 
+    @Override
     public String toString() {
         String result = getObjectAsText();
         if (result == null) {

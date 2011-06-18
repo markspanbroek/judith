@@ -10,12 +10,10 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     protected Stack<java.lang.Object> stack = new Stack<java.lang.Object>();
     protected World world;
     protected Scope scope;
-    protected Object self;
 
-    public Visitor(World world, Scope scope, Object self) {
+    public Visitor(World world, Scope scope) {
         this.world = world;
         this.scope = scope;
-        this.self = self;
     }
 
     public Stack<java.lang.Object> getStack() {

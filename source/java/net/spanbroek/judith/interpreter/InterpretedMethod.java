@@ -34,7 +34,7 @@ public class InterpretedMethod extends Method {
      */
     protected void execute(Scope scope) {
 
-        new Visitor(world, scope, scope.get("self")).visit(statements);
+        new Visitor(world, scope).visit(statements);
 
     }
 
