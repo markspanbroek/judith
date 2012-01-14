@@ -4,6 +4,8 @@ import net.spanbroek.judith.Error;
 
 class ReplaceableObject extends NativeObject {
 
+    private ReplaceableClass clazz = new ReplaceableClass();
+
     private boolean hasBeenReplaced = false;
 
     boolean hasReplacement() {
@@ -44,5 +46,10 @@ class ReplaceableObject extends NativeObject {
     @Override
     ReplaceableObject copy() {
         return (ReplaceableObject)super.copy();
+    }
+
+    @Override
+    ReplaceableClass getClazz() {
+        return clazz;
     }
 }

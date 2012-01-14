@@ -20,11 +20,6 @@ abstract class BasicObject implements Cloneable {
      */
     private Scope scope;
 
-    /**
-     * The class of the object. Contains the methods of this object.
-     */
-    private ReplaceableClass clazz = new ReplaceableClass();
-
     Scope getScope() {
         return scope;
     }
@@ -33,15 +28,10 @@ abstract class BasicObject implements Cloneable {
         this.scope = scope;
     }
 
-    ReplaceableClass getClazz() {
-        return clazz;
-    }
-
-    void setClazz(ReplaceableClass clazz) {
-        this.clazz = clazz;
-    }
+    abstract BasicClass getClazz();
 
     Object call(MethodCall methodCall) {
+        BasicClass clazz = getClazz();
         if (clazz.hasMethod(methodCall)) {
             return clazz.executeMethod(methodCall, new Scope(getScope()));
         } else {
