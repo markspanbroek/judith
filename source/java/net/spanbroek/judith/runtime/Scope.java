@@ -23,7 +23,7 @@ public class Scope {
     /**
      * The name-object map.
      */
-    protected Map<String,Object> map;
+    private Map<String,Object> bindings;
 
     /**
      * Creates a new scope that is not nested inside a parent scope.
@@ -31,7 +31,7 @@ public class Scope {
     public Scope() {
 
         this.parent = null;
-        this.map = new HashMap<String,Object>();
+        this.bindings = new HashMap<String,Object>();
 
     }
 
@@ -41,18 +41,18 @@ public class Scope {
     public Scope(Scope parent) {
 
         this.parent = parent;
-        this.map = new HashMap<String,Object>();
+        this.bindings = new HashMap<String,Object>();
 
     }
 
     /**
      * Creates a new scope that is nested inside the specified parent scope, and
-     * that contains the name-object mappings from the specified map.
+     * that contains the name-object bindings from the specified map.
      */
-    protected Scope(Scope parent, Map<String,Object> map) {
+    private Scope(Scope parent, Map<String,Object> map) {
 
         this.parent = parent;
-        this.map = map;
+        this.bindings = map;
 
     }
 
@@ -61,18 +61,15 @@ public class Scope {
      */
     public boolean contains(String name) {
 
-        if (map.containsKey(name)) {
+        if (bindings.containsKey(name)) {
             return true;
         }
-        else {
-            if (parent != null) {
-                return parent.contains(name);
-            }
-            else {
-                return false;
-            }
+
+        if (parent == null) {
+            return false;
         }
 
+        return parent.contains(name);
     }
 
     /**
@@ -83,7 +80,7 @@ public class Scope {
      */
     public Object get(String name) {
 
-        Object result = map.get(name);
+        Object result = bindings.get(name);
         if (result == null) {
             if (parent != null) {
                 result = parent.get(name);
@@ -100,14 +97,14 @@ public class Scope {
      * Assigns the specified object to the specified name. This name should have
      * been declared previously.
      *
-     * @throws Exception when the specified name hasn't been declared 
+     * @throws Exception when the specified name hasn't been declared
      *   before.
      * @see #declare(String, Object)
      */
     public void set(String name, Object object) {
 
-        if (map.containsKey(name)) {
-            map.put(name, object);
+        if (bindings.containsKey(name)) {
+            bindings.put(name, object);
         }
         else {
             if (parent != null) {
@@ -125,7 +122,7 @@ public class Scope {
      */
     public void declare(String name, Object object) {
 
-        map.put(name, object);
+        bindings.put(name, object);
 
     }
 
@@ -137,7 +134,7 @@ public class Scope {
 
         return new Scope(
           parent,
-          new HashMap<String,Object>(map)
+          new HashMap<String,Object>(bindings)
         );
 
     }
