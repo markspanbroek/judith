@@ -142,7 +142,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         );
 
         function.declare("evaluate", evaluateMethod);
-        
+
         stack.push(function);
 
     }
@@ -159,14 +159,14 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         ) {
             @Override
             public Object execute(MethodCall methodCall, Scope scope) {
-                declareParameters(scope, methodCall);
+                methodCall.declareExplicitParameters(scope, parameterNames);
                 execute(new Scope(scope));
                 return methodCall.getSelf();
             }
         };
 
         command.declare("execute", runMethod);
-        
+
         stack.push(command);
 
     }
@@ -244,7 +244,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
             nodes[i].accept(this);
 
             // a methodcall will leave an object on the stack that is not used
-            // in this case, so it must be removed from the stack before 
+            // in this case, so it must be removed from the stack before
             // proceeding
             if (nodes[i] instanceof net.spanbroek.judith.tree.MethodCall) {
                 stack.pop();

@@ -20,7 +20,7 @@ public class InterpretedExpression extends Method {
 
     @Override
     public Object execute(MethodCall methodCall, Scope scope) {
-        declareParameters(scope, methodCall);
+        methodCall.declareExplicitParameters(scope, parameterNames);
         return evaluate(scope);
     }
 

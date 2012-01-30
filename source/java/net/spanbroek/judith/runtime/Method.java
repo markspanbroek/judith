@@ -10,7 +10,7 @@ public abstract class Method {
 
     public Object execute(MethodCall methodCall, Scope scope) {
         methodCall.declareImplicitParameters(scope);
-        declareParameters(scope, methodCall);
+        methodCall.declareExplicitParameters(scope, parameterNames);
 
         execute(new Scope(scope));
 
@@ -21,15 +21,5 @@ public abstract class Method {
 
     public int getParameterCount() {
         return parameterNames.length;
-    }
-
-    protected void declareParameters(Scope scope, MethodCall methodCall) {
-        Object[] parameters = methodCall.getParameters();
-
-        assert parameters.length == parameterNames.length;
-
-        for (int i = 0; i < this.parameterNames.length; i++) {
-            scope.declare(this.parameterNames[i], parameters[i]);
-        }
     }
 }

@@ -40,6 +40,13 @@ public class MethodCall {
         scope.declare("result", getSelf());
     }
 
+    public void declareExplicitParameters(Scope scope, String... parameterNames)
+    {
+        for (int i=0; i<parameterNames.length; i++) {
+            scope.declare(parameterNames[i], parameters[i]);
+        }
+    }
+
     @Override
     public String toString() {
         String description = name;
