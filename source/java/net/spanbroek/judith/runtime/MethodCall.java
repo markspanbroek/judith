@@ -33,6 +33,13 @@ public class MethodCall {
         this.parent = parent;
     }
 
+    public void declareImplicitParameters(Scope scope)
+    {
+        scope.declare("self", getSelf());
+        scope.declare("parent", getParent());
+        scope.declare("result", getSelf());
+    }
+
     @Override
     public String toString() {
         String description = name;

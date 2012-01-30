@@ -9,9 +9,9 @@ public abstract class Method {
     }
 
     public Object execute(MethodCall methodCall, Scope scope) {
-        declareImplicitParameters(scope, methodCall);
+        methodCall.declareImplicitParameters(scope);
         declareParameters(scope, methodCall);
-        
+
         execute(new Scope(scope));
 
         return scope.get("result");
@@ -21,12 +21,6 @@ public abstract class Method {
 
     public int getParameterCount() {
         return parameterNames.length;
-    }
-
-    private void declareImplicitParameters(Scope scope, MethodCall methodCall) {
-        scope.declare("self", methodCall.getSelf());
-        scope.declare("parent", methodCall.getParent());
-        scope.declare("result", methodCall.getSelf());
     }
 
     protected void declareParameters(Scope scope, MethodCall methodCall) {
