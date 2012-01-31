@@ -7,7 +7,7 @@ import java.io.*;
 class IOBuilder {
 
     private World world;
-    
+
     public static void build(World world) {
         IOBuilder builder = new IOBuilder(world);
         builder.buildWriteMethod();
@@ -17,14 +17,14 @@ class IOBuilder {
     private IOBuilder(World world) {
         this.world = world;
     }
-    
-    private void buildWriteMethod() {         
+
+    private void buildWriteMethod() {
         class WriteMethod extends Method {
-        
+
             public WriteMethod() {
-                super("text");
+                super("write", "text");
             }
-            
+
             protected void execute(Scope scope) {
                 // TODO: something goes wrong here, when using 'parent' and 'replace'
                 //scope.get("parent").call("write", new Object[]{scope.get("text")}, scope.get("self"));
@@ -35,16 +35,19 @@ class IOBuilder {
         Object io = world.get("Objects").call("IO");
         Object standardOutput = io.call("StandardOutput");
         Object newStandardOutput = new Object(standardOutput, world);
-        newStandardOutput.declare("write", new WriteMethod());
+        newStandardOutput.declare(new WriteMethod());
         standardOutput.replace(newStandardOutput);
     }
 
     private void buildReadLineMethod() {
         class ReadLineMethod extends Method {
+            public ReadLineMethod() {
+                super("readLine");
+            }
             protected void execute(Scope scope) {
                 try {
                     scope.set(
-                        "result", 
+                        "result",
                         world.wrap(
                             new BufferedReader(
                                 new InputStreamReader(System.in)
@@ -60,8 +63,8 @@ class IOBuilder {
         Object io = world.get("Objects").call("IO");
         Object standardInput = io.call("StandardInput");
         Object newStandardInput = new Object(standardInput, world);
-        newStandardInput.declare("readLine", new ReadLineMethod());
-        standardInput.replace(newStandardInput);                
+        newStandardInput.declare(new ReadLineMethod());
+        standardInput.replace(newStandardInput);
     }
 
 }

@@ -33,6 +33,10 @@ public class MethodCall {
         this.parent = parent;
     }
 
+    public String getSignature() {
+        return name + "," + parameters.length;
+    }
+
     public void declareImplicitParameters(Scope scope)
     {
         scope.declare("self", getSelf());

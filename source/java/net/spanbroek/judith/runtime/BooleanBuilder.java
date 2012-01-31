@@ -6,7 +6,7 @@ class BooleanBuilder {
 
     private World world;
     private Object booleanToBe;
-    
+
     public static void build(World world) {
         BooleanBuilder builder = new BooleanBuilder(world);
         builder.declareEqualsMethod();
@@ -21,11 +21,11 @@ class BooleanBuilder {
         booleanToBe = new Object(world.get("Object"), world);
         booleanToBe.setNativeObject(false);
     }
-    
+
     private void declareEqualsMethod() {
         class BooleanEqualsMethod extends Method {
             public BooleanEqualsMethod() {
-                super("boolean");
+                super("equals", "boolean");
             }
             protected void execute(Scope scope) {
                 boolean self = (Boolean)scope.get("self").getNativeObject();
@@ -33,11 +33,14 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self == bool));
             }
         }
-        booleanToBe.declare("equals", new BooleanEqualsMethod());
+        booleanToBe.declare(new BooleanEqualsMethod());
     }
-    
+
     private void declareNotMethod() {
         class BooleanNotMethod extends Method {
+            public BooleanNotMethod() {
+                super("not");
+            }
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
@@ -45,13 +48,13 @@ class BooleanBuilder {
                 );
             }
         }
-        booleanToBe.declare("not", new BooleanNotMethod());
+        booleanToBe.declare(new BooleanNotMethod());
     }
-    
+
     private void declareAndMethod() {
         class BooleanAndMethod extends Method {
             public BooleanAndMethod() {
-                super("boolean");
+                super("and", "boolean");
             }
             protected void execute(Scope scope) {
                 boolean self = (Boolean)scope.get("self").getNativeObject();
@@ -59,13 +62,13 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self && bool));
             }
         }
-        booleanToBe.declare("and", new BooleanAndMethod());
+        booleanToBe.declare(new BooleanAndMethod());
     }
-    
+
     private void declareOrMethod() {
         class BooleanOrMethod extends Method {
             public BooleanOrMethod() {
-                super("boolean");
+                super("or", "boolean");
             }
             protected void execute(Scope scope) {
                 boolean self = (Boolean)scope.get("self").getNativeObject();
@@ -73,16 +76,19 @@ class BooleanBuilder {
                 scope.set("result", world.wrap(self || bool));
             }
         }
-        booleanToBe.declare("or", new BooleanOrMethod());
+        booleanToBe.declare(new BooleanOrMethod());
     }
 
     private void declareBoolean() {
         class BooleanMethod extends Method {
+            public BooleanMethod() {
+                super("Boolean");
+            }
             protected void execute(Scope scope) {
                 scope.set("result", booleanToBe.copy());
             }
         }
-        world.get("Objects").declare("Boolean", new BooleanMethod());
+        world.get("Objects").declare(new BooleanMethod());
         world.setBoolean(booleanToBe);
-    }    
+    }
 }

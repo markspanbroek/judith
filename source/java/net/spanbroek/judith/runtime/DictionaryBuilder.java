@@ -25,8 +25,8 @@ class DictionaryBuilder {
 
     private void declareHasMethod() {
         class HasMethod extends Method {
-            public HasMethod() { 
-                super("key");
+            public HasMethod() {
+                super("has", "key");
             }
 
             @Override
@@ -37,13 +37,13 @@ class DictionaryBuilder {
                 scope.set("result", world.wrap(map.containsKey(key)));
             }
         }
-        dictionaryToBe.declare("has", new HasMethod());
+        dictionaryToBe.declare(new HasMethod());
     }
 
     private void declareGetMethod() {
         class GetMethod extends Method {
             public GetMethod() {
-                super("key");
+                super("get", "key");
             }
 
             @Override
@@ -54,13 +54,13 @@ class DictionaryBuilder {
                 scope.set("result", map.get(key));
             }
         }
-        dictionaryToBe.declare("get", new GetMethod());
+        dictionaryToBe.declare(new GetMethod());
     }
 
     private void declareSetMethod() {
         class SetMethod extends Method {
             public SetMethod() {
-                super("key", "value");
+                super("set", "key", "value");
             }
 
             @Override
@@ -71,11 +71,14 @@ class DictionaryBuilder {
                 map.put(key, scope.get("value"));
             }
         }
-        dictionaryToBe.declare("set", new SetMethod());
+        dictionaryToBe.declare(new SetMethod());
     }
 
     private void declareCopyMethod() {
         class CopyMethod extends Method {
+            public CopyMethod() {
+                super("copy");
+            }
             protected void execute(Scope scope) {
                 Object self = scope.get("self");
                 Object parent = scope.get("parent");
@@ -86,15 +89,18 @@ class DictionaryBuilder {
                 scope.set("result", result);
             }
         }
-        dictionaryToBe.declare("copy", new CopyMethod());
+        dictionaryToBe.declare(new CopyMethod());
     }
 
     private void declareDictionary() {
         class DictionaryMethod extends Method {
+            public DictionaryMethod() {
+                super("Dictionary");
+            }
             protected void execute(Scope scope) {
                 scope.set("result", dictionaryToBe.copy());
             }
         }
-        world.get("Objects").declare("Dictionary", new DictionaryMethod());
+        world.get("Objects").declare(new DictionaryMethod());
     }
 }

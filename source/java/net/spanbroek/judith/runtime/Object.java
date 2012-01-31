@@ -31,9 +31,9 @@ public class Object {
         getCurrentCore().getScope().declare(name, object);
     }
 
-    public void declare(String name, Method method) {
+    public void declare(Method method) {
         resolveReplacements();
-        getCurrentCore().getClazz().declare(name, method);
+        getCurrentCore().getClazz().declare(method);
     }
 
     public Object call(String name, Object... parameters) {
@@ -62,7 +62,7 @@ public class Object {
     }
 
     /**
-     * Determines whether or not this object is compatible with the specified 
+     * Determines whether or not this object is compatible with the specified
      * object. For each object 'A' holds that it is compatible with object 'B',
      * when 'A' is of the same class as 'B', or if the parent of 'A' is
      * compatible with 'B'.

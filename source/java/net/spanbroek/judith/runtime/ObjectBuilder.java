@@ -23,31 +23,34 @@ class ObjectBuilder {
 
     public void declareCopyMethod() {
         class ObjectCopyMethod extends Method {
+            public ObjectCopyMethod() {
+                super("copy");
+            }
             protected void execute(Scope scope) {
                 scope.set("result",
                   scope.get("self").copy()
                 );
             }
         }
-        world.get("Object").declare("copy", new ObjectCopyMethod());
+        world.get("Object").declare(new ObjectCopyMethod());
     }
 
     public void declareReplaceMethod() {
         class ObjectReplaceMethod extends Method {
             public ObjectReplaceMethod() {
-                super("object");
+                super("replace", "object");
             }
             protected void execute(Scope scope) {
                 scope.get("self").replace(scope.get("object"));
             }
         }
-        world.get("Object").declare("replace", new ObjectReplaceMethod());
+        world.get("Object").declare(new ObjectReplaceMethod());
     }
 
     public void declareEqualsMethod() {
         class ObjectEqualsMethod extends Method {
             public ObjectEqualsMethod() {
-                super("object");
+                super("equals", "object");
             }
             protected void execute(Scope scope) {
                 scope.set("result",
@@ -55,13 +58,13 @@ class ObjectBuilder {
                 );
             }
         }
-        world.get("Object").declare("equals", new ObjectEqualsMethod());
+        world.get("Object").declare(new ObjectEqualsMethod());
     }
 
     public void declareColonMethod() {
         class ObjectColonMethod extends Method {
             public ObjectColonMethod() {
-                super("object");
+                super("colon", "object");
             }
             protected void execute(Scope scope) {
                 scope.set("result",
@@ -69,7 +72,7 @@ class ObjectBuilder {
                 );
             }
         }
-        world.get("Object").declare("colon", new ObjectColonMethod());
+        world.get("Object").declare(new ObjectColonMethod());
     }
 
 }

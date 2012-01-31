@@ -41,12 +41,12 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         net.spanbroek.judith.tree.Method[] methods = node.getMethods();
         for (int i=0; i<methods.length; i++) {
             Method method = new InterpretedMethod(
+              methods[i].getIdentifier(),
               methods[i].getParameters(),
               methods[i].getStatements(),
               world
             );
             result.declare(
-              methods[i].getIdentifier(),
               method
             );
         }
@@ -136,12 +136,13 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         Object function = new Object(world.get("Function"), scope);
 
         Method evaluateMethod = new InterpretedExpression (
+          "evaluate",
           node.getIdentifiers(),
           node.getExpression(),
           world
         );
 
-        function.declare("evaluate", evaluateMethod);
+        function.declare(evaluateMethod);
 
         stack.push(function);
 
@@ -153,6 +154,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         Object command = new Object(world.get("Command"), scope);
 
         Method runMethod = new InterpretedMethod(
+          "execute",
           node.getIdentifiers(),
           node.getStatements(),
           world
@@ -165,7 +167,7 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
             }
         };
 
-        command.declare("execute", runMethod);
+        command.declare(runMethod);
 
         stack.push(command);
 

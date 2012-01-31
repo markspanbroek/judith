@@ -5,7 +5,7 @@ class NumberBuilder {
     private World world;
 
     private Object numberToBe;
-    
+
     public static void build(World world) {
         NumberBuilder builder = new NumberBuilder(world);
         builder.declareEqualsMethod();
@@ -30,11 +30,11 @@ class NumberBuilder {
         numberToBe = new Object(world.get("Object"), world);
         numberToBe.setNativeObject(0d);
     }
-    
+
     private void declareEqualsMethod() {
         class NumberEqualsMethod extends Method {
             public NumberEqualsMethod() {
-                super("number");
+                super("equals", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -42,13 +42,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self == number));
             }
         }
-        numberToBe.declare("equals", new NumberEqualsMethod());
+        numberToBe.declare(new NumberEqualsMethod());
     }
-    
+
     private void declareAtmostMethod() {
         class NumberAtMostMethod extends Method {
             public NumberAtMostMethod() {
-                super("number");
+                super("atmost", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -56,13 +56,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self <= number));
             }
         }
-        numberToBe.declare("atmost", new NumberAtMostMethod());
+        numberToBe.declare(new NumberAtMostMethod());
     }
-    
+
     private void declareAtleastMethod() {
         class NumberAtLeastMethod extends Method {
             public NumberAtLeastMethod() {
-                super("number");
+                super("atleast", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -70,13 +70,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self >= number));
             }
         }
-        numberToBe.declare("atleast", new NumberAtLeastMethod());
+        numberToBe.declare(new NumberAtLeastMethod());
     }
-    
+
     private void declareLessthanMethod() {
         class NumberLessThanMethod extends Method {
             public NumberLessThanMethod() {
-                super("number");
+                super("lessthan", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -84,13 +84,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self < number));
             }
         }
-        numberToBe.declare("lessthan", new NumberLessThanMethod());
+        numberToBe.declare(new NumberLessThanMethod());
     }
-    
+
     private void declareMorethanMethod() {
         class NumberMoreThanMethod extends Method {
             public NumberMoreThanMethod() {
-                super("number");
+                super("morethan", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -98,13 +98,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self > number));
             }
         }
-        numberToBe.declare("morethan", new NumberMoreThanMethod());
+        numberToBe.declare(new NumberMoreThanMethod());
     }
-    
+
     private void declarePlusMethod() {
         class NumberPlusMethod extends Method {
             public NumberPlusMethod() {
-                super("number");
+                super("plus", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -112,13 +112,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self + number));
             }
         }
-        numberToBe.declare("plus", new NumberPlusMethod());
+        numberToBe.declare(new NumberPlusMethod());
     }
 
     private void declareMinusMethod() {
         class NumberMinusMethod extends Method {
             public NumberMinusMethod() {
-                super("number");
+                super("minus", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -126,13 +126,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self - number));
             }
         }
-        numberToBe.declare("minus", new NumberMinusMethod());
+        numberToBe.declare(new NumberMinusMethod());
     }
 
     private void declareStarMethod() {
         class NumberStarMethod extends Method {
             public NumberStarMethod() {
-                super("number");
+                super("star", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -140,13 +140,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self * number));
             }
         }
-        numberToBe.declare("star", new NumberStarMethod());
+        numberToBe.declare(new NumberStarMethod());
     }
 
     private void declareSlashMethod() {
         class NumberSlashMethod extends Method {
             public NumberSlashMethod() {
-                super("number");
+                super("slash", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -154,13 +154,13 @@ class NumberBuilder {
                 scope.set("result", world.wrap(self / number));
             }
         }
-        numberToBe.declare("slash", new NumberSlashMethod());
+        numberToBe.declare(new NumberSlashMethod());
     }
 
     private void declareCarrotMethod() {
         class NumberCarrotMethod extends Method {
             public NumberCarrotMethod() {
-                super("number");
+                super("carrot", "number");
             }
             protected void execute(Scope scope) {
                 double self = (Double)scope.get("self").getNativeObject();
@@ -168,11 +168,14 @@ class NumberBuilder {
                 scope.set("result", world.wrap(Math.pow(self,number)));
             }
         }
-        numberToBe.declare("carrot", new NumberCarrotMethod());
+        numberToBe.declare(new NumberCarrotMethod());
     }
 
     private void declareUnaryMinusMethod() {
         class NumberUnaryMinusMethod extends Method {
+            public NumberUnaryMinusMethod() {
+                super("minus");
+            }
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
@@ -180,11 +183,14 @@ class NumberBuilder {
                 );
             }
         }
-        numberToBe.declare("minus", new NumberUnaryMinusMethod());
+        numberToBe.declare(new NumberUnaryMinusMethod());
     }
-    
+
     private void declareFloorMethod() {
         class NumberFloorMethod extends Method {
+            public NumberFloorMethod() {
+                super("floor");
+            }
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
@@ -194,11 +200,14 @@ class NumberBuilder {
                 );
             }
         }
-        numberToBe.declare("floor", new NumberFloorMethod());
+        numberToBe.declare(new NumberFloorMethod());
     }
-    
+
     private void declareCeilingMethod() {
         class NumberCeilingMethod extends Method {
+            public NumberCeilingMethod() {
+                super("ceiling");
+            }
             protected void execute(Scope scope) {
                 scope.set(
                   "result",
@@ -208,11 +217,14 @@ class NumberBuilder {
                 );
             }
         }
-        numberToBe.declare("ceiling", new NumberCeilingMethod());
+        numberToBe.declare(new NumberCeilingMethod());
     }
 
     private void declareAsTextMethod() {
         class AsTextMethod extends Method {
+            public AsTextMethod() {
+                super("asText");
+            }
             protected void execute(Scope scope) {
                 double value = (Double)scope.get("self").getNativeObject();
                 scope.set(
@@ -223,16 +235,19 @@ class NumberBuilder {
                 );
             }
         }
-        numberToBe.declare("asText", new AsTextMethod());
+        numberToBe.declare(new AsTextMethod());
     }
 
     private void declareNumber() {
         class NumberMethod extends Method {
+            public NumberMethod() {
+                super("Number");
+            }
             protected void execute(Scope scope) {
                 scope.set("result", numberToBe.copy());
             }
         }
-        world.get("Objects").declare("Number", new NumberMethod());
+        world.get("Objects").declare(new NumberMethod());
         world.setNumber(numberToBe);
     }
 

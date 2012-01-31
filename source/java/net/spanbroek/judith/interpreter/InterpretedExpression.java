@@ -12,8 +12,8 @@ public class InterpretedExpression extends Method {
     private World world;
     private Expression expression;
 
-    public InterpretedExpression(String[] parameters, Expression expression, World world) {
-        super(parameters);
+    public InterpretedExpression(String name, String[] parameters, Expression expression, World world) {
+        super(name, parameters);
         this.world = world;
         this.expression = expression;
     }

@@ -2,10 +2,17 @@ package net.spanbroek.judith.runtime;
 
 public abstract class Method {
 
+    private String name;
     protected String[] parameterNames;
 
-    public Method(String... parameterNames) {
+    public Method(String name, String... parameterNames)
+    {
+        this.name = name;
         this.parameterNames = parameterNames;
+    }
+
+    public String getSignature() {
+        return name + "," + parameterNames.length;
     }
 
     public Object execute(MethodCall methodCall, Scope scope) {
@@ -18,8 +25,4 @@ public abstract class Method {
     }
 
     protected abstract void execute(Scope scope);
-
-    public int getParameterCount() {
-        return parameterNames.length;
-    }
 }

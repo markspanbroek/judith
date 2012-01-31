@@ -6,7 +6,7 @@ import net.spanbroek.judith.Exception;
 class ExceptionHandlerBuilder {
 
     private Scope scope;
-    
+
     public static void build(Scope scope) {
         ExceptionHandlerBuilder builder = new ExceptionHandlerBuilder(scope);
         builder.declareExceptionHandler();
@@ -19,13 +19,16 @@ class ExceptionHandlerBuilder {
 
     private void declareExceptionHandler() {
         scope.declare(
-          "ExceptionHandler", 
+          "ExceptionHandler",
           new Object(scope.get("Object"), scope)
         );
     }
-    
+
     private void declareRunMethod() {
         class ExceptionHandlerRunMethod extends Method {
+            public ExceptionHandlerRunMethod() {
+                super("run");
+            }
             protected void execute(Scope scope) {
                 try {
                     scope.get("self").call("try");
@@ -45,7 +48,6 @@ class ExceptionHandlerBuilder {
             }
         }
         scope.get("ExceptionHandler").declare(
-          "run", 
           new ExceptionHandlerRunMethod()
         );
     }

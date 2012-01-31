@@ -13,17 +13,17 @@ public class InterpretedMethod extends Method {
      * The statements that make up this judith method.
      */
     private net.spanbroek.judith.tree.Statement[] statements;
-    
+
     private World world;
 
     /**
-     * Constructs a new interpreted judith method with the specified parameter 
+     * Constructs a new interpreted judith method with the specified parameter
      * names and statements.
      */
-    public InterpretedMethod(String[] parameters,
+    public InterpretedMethod(String name, String[] parameters,
       net.spanbroek.judith.tree.Statement[] statements, World world) {
 
-        super(parameters);
+        super(name, parameters);
         this.statements = statements;
         this.world = world;
 

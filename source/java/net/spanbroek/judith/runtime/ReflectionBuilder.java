@@ -22,17 +22,20 @@ public class ReflectionBuilder {
 
     private void declareReflection() {
         class ReflectionMethod extends Method {
+            public ReflectionMethod() {
+                super("Reflection");
+            }
             protected void execute(Scope scope) {
                 scope.set("result", reflectionToBe.copy());
             }
         }
-        world.get("Objects").declare("Reflection", new ReflectionMethod());
+        world.get("Objects").declare(new ReflectionMethod());
     }
 
     private void declareCallMethodWithoutArguments() {
         class ReflectionCallMethod extends Method {
             public ReflectionCallMethod() {
-                super("object", "methodname");
+                super("call", "object", "methodname");
             }
             protected void execute(Scope scope) {
                 Object object = scope.get("object");
@@ -40,13 +43,13 @@ public class ReflectionBuilder {
                 scope.set("result", object.call(methodName));
             }
         }
-        reflectionToBe.declare("call", new ReflectionCallMethod());
+        reflectionToBe.declare(new ReflectionCallMethod());
     }
 
     private void declareCallMethodWithArguments() {
         class ReflectionCallMethod extends Method {
             public ReflectionCallMethod() {
-                super("object", "methodname", "arguments");
+                super("call", "object", "methodname", "arguments");
             }
             protected void execute(Scope scope) {
                 Object object = scope.get("object");
@@ -55,19 +58,19 @@ public class ReflectionBuilder {
                 scope.set("result", object.call(methodName, arguments));
             }
         }
-        reflectionToBe.declare("call", new ReflectionCallMethod());
+        reflectionToBe.declare(new ReflectionCallMethod());
     }
 
     private void declareCreateProxyFor() {
         class CreateProxyForMethod extends Method {
             public CreateProxyForMethod() {
-                super("receiver");
+                super("createProxyFor", "receiver");
             }
             protected void execute(Scope scope) {
                 Object receiver = scope.get("receiver");
                 scope.set("result", new Proxy(receiver, world));
             }
         }
-        reflectionToBe.declare("createProxyFor", new CreateProxyForMethod());
+        reflectionToBe.declare(new CreateProxyForMethod());
     }
 }
