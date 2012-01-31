@@ -21,18 +21,14 @@ public class InterpretedExpression extends Method {
     @Override
     public Object execute(MethodCall methodCall, Scope scope) {
         methodCall.declareExplicitParameters(scope, parameterNames);
-        return evaluate(scope);
-    }
-
-    private Object evaluate(Scope scope) {
-        Visitor visitor = new Visitor(world, scope);
-        visitor.visit(expression);
-        return (Object) visitor.getStack().pop();
+        execute(scope);
+        return scope.get("result");
     }
 
     @Override
     protected void execute(Scope scope) {
-        throw new UnsupportedOperationException("Not supported");
+        Visitor visitor = new Visitor(world, scope);
+        visitor.visit(expression);
+        scope.declare("result", (Object) visitor.getStack().pop());
     }
-
 }
