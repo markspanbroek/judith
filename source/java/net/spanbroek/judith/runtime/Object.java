@@ -31,7 +31,7 @@ public class Object {
         getCurrentCore().getScope().declare(name, object);
     }
 
-    public void declare(Method method) {
+    public void declare(BasicMethod method) {
         resolveReplacements();
         getCurrentCore().getClazz().declare(method);
     }

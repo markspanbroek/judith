@@ -5,9 +5,9 @@ import java.util.Map;
 
 class BasicClass {
 
-    private Map<String, Method> methods = new HashMap<String, Method>();
+    private Map<String, BasicMethod> methods = new HashMap<String, BasicMethod>();
 
-    void declare(Method method) {
+    void declare(BasicMethod method) {
         methods.put(method.getSignature(), method);
     }
 
@@ -16,7 +16,7 @@ class BasicClass {
     }
 
     Object executeMethod(MethodCall methodCall, Scope scope) {
-        Method method = methods.get(methodCall.getSignature());
+        BasicMethod method = methods.get(methodCall.getSignature());
         return method.execute(methodCall, scope);
     }
 }

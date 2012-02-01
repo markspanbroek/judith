@@ -1,28 +1,21 @@
 package net.spanbroek.judith.runtime;
 
-public abstract class Method {
-
-    private String name;
-    protected String[] parameterNames;
+public abstract class Method extends BasicMethod {
 
     public Method(String name, String... parameterNames)
     {
-        this.name = name;
-        this.parameterNames = parameterNames;
+        super(name, parameterNames);
     }
 
-    public String getSignature() {
-        return name + "," + parameterNames.length;
-    }
-
+    @Override
     public Object execute(MethodCall methodCall, Scope scope) {
         methodCall.declareImplicitParameters(scope);
-        methodCall.declareExplicitParameters(scope, parameterNames);
+        return super.execute(methodCall, scope);
+    }
 
-        execute(new Scope(scope));
-
+    @Override
+    protected Object getResult(MethodCall methodCall, Scope scope) {
         return scope.get("result");
     }
 
-    protected abstract void execute(Scope scope);
 }

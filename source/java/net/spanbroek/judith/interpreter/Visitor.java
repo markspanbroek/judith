@@ -4,6 +4,7 @@ import net.spanbroek.judith.runtime.Object;
 import net.spanbroek.judith.runtime.*;
 import net.spanbroek.judith.Exception;
 import java.util.*;
+import net.spanbroek.judith.tree.Statement;
 
 public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
@@ -40,15 +41,15 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
         // add methods
         net.spanbroek.judith.tree.Method[] methods = node.getMethods();
         for (int i=0; i<methods.length; i++) {
-            Method method = new InterpretedMethod(
-              methods[i].getIdentifier(),
-              methods[i].getParameters(),
-              methods[i].getStatements(),
-              world
-            );
-            result.declare(
-              method
-            );
+            String name = methods[i].getIdentifier();
+            String[] parameterNames = methods[i].getParameters();
+            final Statement[] statements = methods[i].getStatements();
+            result.declare(new Method(name, parameterNames) {
+                @Override
+                protected void execute(Scope scope) {
+                    new Visitor(world, scope).visit(statements);
+                }
+            });
         }
 
         // put result on stack
@@ -131,43 +132,46 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
     }
 
     @Override
-    public void visit(net.spanbroek.judith.tree.Lambda node) {
+    public void visit(final net.spanbroek.judith.tree.Lambda node) {
 
         Object function = new Object(world.get("Function"), scope);
 
-        Method evaluateMethod = new InterpretedExpression (
-          "evaluate",
-          node.getIdentifiers(),
-          node.getExpression(),
-          world
-        );
+        function.declare(new BasicMethod("evaluate", node.getIdentifiers()) {
 
-        function.declare(evaluateMethod);
+            private Visitor visitor = null;
+
+            @Override
+            public void execute(Scope scope) {
+                visitor = new Visitor(world, scope);
+                visitor.visit(node.getExpression());
+            }
+
+            @Override
+            protected Object getResult(MethodCall methodCall, Scope scope) {
+                return (Object) visitor.getStack().pop();
+            }
+        });
 
         stack.push(function);
 
     }
 
     @Override
-    public void visit(net.spanbroek.judith.tree.LambdaBlock node) {
+    public void visit(final net.spanbroek.judith.tree.LambdaBlock node) {
 
         Object command = new Object(world.get("Command"), scope);
 
-        Method runMethod = new InterpretedMethod(
-          "execute",
-          node.getIdentifiers(),
-          node.getStatements(),
-          world
-        ) {
+        command.declare(new BasicMethod("execute", node.getIdentifiers()) {
             @Override
-            public Object execute(MethodCall methodCall, Scope scope) {
-                methodCall.declareExplicitParameters(scope, parameterNames);
-                execute(new Scope(scope));
+            public void execute(Scope scope) {
+                new Visitor(world, scope).visit(node.getStatements());
+
+            }
+            @Override
+            protected Object getResult(MethodCall methodCall, Scope scope) {
                 return methodCall.getSelf();
             }
-        };
-
-        command.declare(runMethod);
+        });
 
         stack.push(command);
 
