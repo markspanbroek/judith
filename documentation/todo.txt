@@ -52,6 +52,29 @@ x Improve lambda
 
 * Add CTypes-like library
 
+* Make Judith parser in Judith
+
+    * option 1
+
+        object parser := objects.parsing.Parser.copy
+        object r := parser.rules;
+        object l := parser.literal;
+
+        # expression = (expression w ("and"|"or") w)? expression1
+        r.expression := (r.expression + r.w + (l.text("and") or l.text("or")) + r.w).optional + r.expression1
+
+        # requires an implementation of foo.x := y translated to foo.xBecomes(y)
+
+    * option 2
+
+        object parser := objects.parsing.Parser.copy
+        object rules := parser.rules
+
+        rules.expression := "(expression w ('and'|'or') w)? expression1"
+
+        # requires an implementation of foo.x := y translated to foo.xBecomes(y)
+        # requires a parser for ebnf
+
 * Make compiler to C
 
 * Make interpreter in judith
