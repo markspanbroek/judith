@@ -23,7 +23,7 @@
         ]
     ]|
 
-    List := List 
+    List := List
     |[
         object elementType := Object
 
@@ -90,5 +90,14 @@
             result := Forwarder.create(self)
         ]
     ]|
+
+    Objects := Objects
+    |[
+        method List
+        [
+            result := List
+        ]
+    ]|
+
 ]
 
