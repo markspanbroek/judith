@@ -1,28 +1,28 @@
 [
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
-    
-    ParserGenerator.replace(ParserGenerator 
-    |[                        
-        method transform(operand, transform) 
-        [  
-            result := Parser 
-            |[ 
-                method run(context, index, result', continuation) 
+
+    ParserGenerator.replace(ParserGenerator
+    |[
+        method transform(operand, transform)
+        [
+            result := Parser
+            |[
+                method run(context, index, result', continuation)
                 [
-                    object newcontinuation := Function 
-                    |[ 
-                        method run(newindex, newresult) 
+                    object newcontinuation := Function
+                    |[
+                        method run(newindex, newresult)
                         [
                             object slice := newresult.slice(result.length, newresult.length)
                             context.doLater([continuation.run(newindex, result'.copy.push(transform.run(slice)))])
                         ]
                     ]|
-              
+
                     context.doLater([operand.run(context, index, result', newcontinuation)])
-            
+
                 ]
-            ]|    
+            ]|
         ]
     ]|)
 ]

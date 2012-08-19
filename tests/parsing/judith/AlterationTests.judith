@@ -12,7 +12,7 @@ object AlterationTests := Object
               method baz []
           ]|
         ")
-        
+
         Assert.that(alteration).isNotNull
     ]
 ]|
