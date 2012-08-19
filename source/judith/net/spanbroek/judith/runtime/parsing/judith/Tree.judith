@@ -1,16 +1,12 @@
 [
-    object Alteration := Object
-    |[
-    ]|
-    
-    object Tree := Object 
+    object Tree := Object
     |[
         method Alteration
         [
             result := Alteration
         ]
     ]|
-    
+
     Objects.Parsing.Judith.replace(
       Objects.Parsing.Judith
       |[

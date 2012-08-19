@@ -1,0 +1,17 @@
+[
+    object Tree := Objects.Parsing.Judith.Tree
+
+    object Alteration := Object
+    |[
+    ]|
+
+    Tree.replace(
+      Tree
+      |[
+          method Alteration
+          [
+              result := Alteration
+          ]
+      ]|
+    )
+]

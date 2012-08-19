@@ -63,11 +63,11 @@ public class World extends Scope {
         interpret("parsing/ParserGenerator-asText.judith");
         interpret("parsing/ParserGenerator-memoization.judith");
         interpret("parsing/Grammar.judith");
-        interpret("parsing/JudithParser.judith");
-        interpret("parsing/judith/tree/Alteration.judith");
- 
-        IOBuilder.build(this);
+        interpret("parsing/judith/JudithParser.judith");
+        interpret("parsing/judith/Tree.judith");
+        interpret("parsing/judith/Tree-Alteration.judith");
 
+        IOBuilder.build(this);
     }
 
     /**
