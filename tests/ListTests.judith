@@ -42,6 +42,12 @@ object ListTests := Object
         list.all.execute
         Assert.that(counter).equals(list.length)
     ]
+
+    method asTextListsAllElements
+    [
+        object list := List.copy.add(1).add(2).add(3)
+        Assert.that(list.asText).equals("{1, 2, 3}")
+    ]
 ]|
 
 ListTests
@@ -49,3 +55,4 @@ ListTests
     .objectsOfIncorrectTypeCannotBeAdded
     .doIsCalledForEachElement
     .allIsCalledForEachElement
+    .asTextListsAllElements

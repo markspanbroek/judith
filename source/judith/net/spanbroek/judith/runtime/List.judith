@@ -89,6 +89,20 @@
         [
             result := Forwarder.create(self)
         ]
+
+        method asText
+        [
+            result := "{"
+            object i := 0
+            do i < self.length - 1
+                result := result + self.get(i).asText + ", "
+                i := i + 1
+            || i < self.length
+                result := result + self.get(i).asText
+                i := i + 1
+            od
+            result := result + "}"
+        ]
     ]|
 
     Objects := Objects
