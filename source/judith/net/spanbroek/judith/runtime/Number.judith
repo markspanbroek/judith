@@ -1,0 +1,26 @@
+[
+    object Number := Objects.Number
+    
+    Number.replace(
+        Number
+        |[
+            method plus(x) 
+            [
+                Assert.that(x : Number).isTrue
+                result := parent.plus(x)
+            ]
+
+            method equals(other)
+            [
+                if (other : Number)
+                    result := parent.equals(other)
+                || true
+                    result := false
+                fi
+            ]
+
+            # TODO: check parameters of rest of Number's methods
+        ]|
+    )
+]
+

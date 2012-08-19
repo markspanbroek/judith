@@ -34,6 +34,7 @@ public class World extends Scope {
         DictionaryBuilder.build(this);
         ReflectionBuilder.build(this);
 
+        interpret("Number.judith");
         interpret("Dictionary.judith");
         interpret("Exception.judith");
         interpret("world.judith");
