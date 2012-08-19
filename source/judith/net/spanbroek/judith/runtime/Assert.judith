@@ -1,0 +1,88 @@
+object Assert := null
+[
+    object Assertion := Object
+    |[
+        object subject := null
+        
+        method setSubject(subject')
+        [
+            subject := subject'
+        ]
+        
+        method create(subject)
+        [
+            result := self.copy.setSubject(subject)
+        ]
+
+        method isTrue
+        [
+            if not subject
+                AssertionFailedException.throw
+            fi
+        ]        
+        
+        method equals(expected)
+        [
+            if not (expected = subject)
+                object message := "Expected '" + expected.asText + "'"
+                message := message + " but got '" + subject.asText + "'"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+
+        method throws(expectedException)
+        [
+            object exception := null
+            ExceptionHandler
+            |[
+                method try
+                [
+                    subject.execute
+                ]
+                
+                method catch(exception')
+                [
+                    exception := exception'
+                ]
+            ]|.run
+            
+            if not (exception : expectedException)
+                object message := "Expected exception to occur"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+        
+        method isNotNull
+        [
+            if subject = null
+                object message := "Expected non-null object"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+        
+        method isNull
+        [
+            if not (subject = null)
+                object message := "Expected null"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+    ]|
+
+    Assert := Object
+    |[
+        method that(assertion) 
+        [
+            result := Assertion.create(assertion)
+        ]
+    ]|
+
+    Objects := Objects
+    |[
+        method Assert
+        [
+            result := Assert
+        ]
+    ]|
+]
+
