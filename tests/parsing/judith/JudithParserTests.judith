@@ -13,8 +13,43 @@ object JudithParserTests := Object
         object result := parser.parse("object foo := bar")
         Assert.that(result).isNotNull
     ]
+
+    method testParseAssignment
+    [
+        object result := parser.parse("x := y")
+        Assert.that(result).isNotNull
+    ]
+
+    method testParseIfStatement
+    [
+        object result := parser.parse("if false x := 1 || true x := 2 fi")
+        Assert.that(result).isNotNull
+    ]
+
+    method testParseDoStatement
+    [
+        object result := parser.parse("do false x := 1 || true x := x + 1 od")
+        Assert.that(result).isNotNull
+    ]
+
+    method testParseMethodCall
+    [
+        object result := parser.parse("foo.bar")
+        Assert.that(result).isNotNull
+    ]
+
+    method testParseBlock
+    [
+        object result := parser.parse("[]")
+        Assert.that(result).isNotNull
+    ]
 ]|
 
 JudithParserTests
   .testParseEmptyString
   .testParseObjectDeclaration
+  .testParseAssignment
+  .testParseIfStatement
+  .testParseDoStatement
+  .testParseMethodCall
+  .testParseBlock
