@@ -1,8 +1,9 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 
-object EmptyTests := Object |[
-
-    method parseSucceeds [
+object EmptyTests := Object
+|[
+    method parseSucceeds
+    [
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
@@ -12,7 +13,8 @@ object EmptyTests := Object |[
         Assert.that(parser.parse("foo").get(0)).equals("foo")
     ]
     
-    method doesNotProduceResult [
+    method doesNotProduceResult
+    [
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
@@ -21,7 +23,6 @@ object EmptyTests := Object |[
             )
         Assert.that(parser.parse("foo").get(0)).equals("foo")
     ]
-
 ]|
 
 EmptyTests

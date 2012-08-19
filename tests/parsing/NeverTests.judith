@@ -1,8 +1,9 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 
-object NeverTests := Object |[
-
-    method parseFails [
+object NeverTests := Object
+|[
+    method parseFails
+    [
         object parser := 
             ParserGenerator.concatenation(
                 List.copy
@@ -11,7 +12,6 @@ object NeverTests := Object |[
             )
         Assert.that(parser.parse("foo")).equals(null)
     ]
-
 ]|
 
 NeverTests

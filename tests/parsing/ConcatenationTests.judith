@@ -1,7 +1,7 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 
-object ConcatenationTests := Object |[
-
+object ConcatenationTests := Object
+|[
     object parser :=
         ParserGenerator.concatenation(
             List.copy
@@ -10,7 +10,8 @@ object ConcatenationTests := Object |[
                 .push(ParserGenerator.literal("bar"))
         )
 
-    method parseSucceeds [
+    method parseSucceeds
+    [
         object parseResult := parser.parse("foo bar")
         Assert.that(parseResult : List).isTrue
         Assert.that(parseResult.get(0)).equals("foo")
@@ -18,10 +19,10 @@ object ConcatenationTests := Object |[
         Assert.that(parseResult.get(2)).equals("bar")
     ]
     
-    method parseFails [
+    method parseFails
+    [
         Assert.that(parser.parse("foo ")).equals(null)
     ]
-
 ]|
 
 ConcatenationTests

@@ -1,22 +1,26 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 
-object RangeTests := Object |[
-
+object RangeTests := Object
+|[
     object parser := ParserGenerator.range("b", "y")
 
-    method parseSucceeds [
+    method parseSucceeds
+    [
         Assert.that(parser.parse("k").get(0)).equals("k")
     ]
     
-    method parseFails [
+    method parseFails
+    [
         Assert.that(parser.parse("a")).equals(null)
     ]
 
-    method rangeBeginIsInclusive [
+    method rangeBeginIsInclusive
+    [
         Assert.that(parser.parse("b").get(0)).equals("b")
     ]
     
-    method rangeEndIsInclusive [
+    method rangeEndIsInclusive
+    [
         Assert.that(parser.parse("y").get(0)).equals("y")
     ]
     
