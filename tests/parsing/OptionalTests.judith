@@ -1,4 +1,5 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
+object quote := Text.quote
 
 object OptionalTests := Object 
 |[
@@ -18,7 +19,7 @@ object OptionalTests := Object
     
     method testAsText
     [
-        Assert.that(parser.asText).equals(Text.quote + "a" + Text.quote + "?")
+        Assert.that(parser.asText).equals(quote + "a" + quote + "?")
     ]
 ]|
 
