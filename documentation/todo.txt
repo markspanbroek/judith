@@ -56,9 +56,9 @@ x Improve lambda
 
     * option 1
 
-        object parser := objects.parsing.Parser.copy
-        object r := parser.rules;
-        object l := parser.literal;
+        object parser := Objects.Parsing.Parser.copy
+        object r := parser.rules
+        object l := parser.literal
 
         # expression = (expression w ("and"|"or") w)? expression1
         r.expression := (r.expression + r.w + (l.text("and") or l.text("or")) + r.w).optional + r.expression1
@@ -67,7 +67,7 @@ x Improve lambda
 
     * option 2
 
-        object parser := objects.parsing.Parser.copy
+        object parser := Objects.Parsing.Parser.copy
         object rules := parser.rules
 
         rules.expression := "(expression w ('and'|'or') w)? expression1"
