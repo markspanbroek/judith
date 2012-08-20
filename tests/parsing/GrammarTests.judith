@@ -1,10 +1,10 @@
 object ParserGenerator := Objects.Parsing.ParserGenerator
 object Grammar := Objects.Parsing.Grammar
 
-object GrammarTests := Object 
+object GrammarTests := Object
 |[
     object grammar := null
-    
+
     method setup
     [
         grammar := Grammar.copy
@@ -15,45 +15,45 @@ object GrammarTests := Object
         self.setup
         grammar.addRule("foo", ParserGenerator.literal("foo"))
     ]
-    
+
     method testCanSetDefaultRule
     [
         self.setup
         grammar.addRule("foo", ParserGenerator.empty)
         grammar.setDefaultRule("foo")
     ]
-    
+
     method testDefaultRuleMustFirstBeAdded
     [
         self.setup
-        
+
         Assert.that([ grammar.setDefaultRule("foo") ]).throws(Exception)
     ]
-    
+
     method testCannotParseWithoutDefaultRule
     [
         self.setup
         grammar.addRule("foo", ParserGenerator.empty)
-        
+
         Assert.that([ grammar.parse("bar") ]).throws(Exception)
     ]
-    
+
     method testParsesDefaultRule
     [
         self.setup
         grammar.addRule("foo", ParserGenerator.literal("a"))
         grammar.setDefaultRule("foo")
-        
+
         Assert.that(grammar.parse("a").get(0)).equals("a")
     ]
-    
+
     method testRuleIndirection
     [
         self.setup
         grammar.addRule("foo", ParserGenerator.rule("bar"))
         grammar.addRule("bar", ParserGenerator.literal("a"))
         grammar.setDefaultRule("foo")
-        
+
         Assert.that(grammar.parse("a").get(0)).equals("a")
     ]
 ]|
