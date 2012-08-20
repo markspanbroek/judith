@@ -90,6 +90,16 @@
             od
         ]
 
+        method section(begin, end)
+        [
+            result := List.copy
+            object i := begin
+            do i < end
+                result.add(self.get(i))
+                i := i + 1
+            od
+        ]
+
         method do(command)
         [
             Assert.that(command : Command).isTrue

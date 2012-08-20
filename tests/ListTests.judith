@@ -72,6 +72,14 @@ object ListTests := Object
             .that(List.copy.add(1).add(2))
             .isNotEqualTo(List.copy.add(1).add(2).add(3))
     ]
+
+    method sectionReturnsPartOfList
+    [
+        object list := List.copy.add(1).add(2).add(3)
+        Assert.that(list.section(0,1)).equals(List.copy.add(1))
+        Assert.that(list.section(1,3)).equals(List.copy.add(2).add(3))
+        Assert.that(list.section(0,3)).equals(list)
+    ]
 ]|
 
 ListTests
@@ -83,3 +91,4 @@ ListTests
     .equalsChecksAllElements
     .equalsIsFalseForNonLists
     .equalsIsFalseForListsOfDiffertSizes
+    .sectionReturnsPartOfList
