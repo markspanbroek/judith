@@ -48,6 +48,30 @@ object ListTests := Object
         object list := List.copy.add(1).add(2).add(3)
         Assert.that(list.asText).equals("{1, 2, 3}")
     ]
+
+    method equalsChecksAllElements
+    [
+        Assert
+            .that(List.copy.add(1).add(2))
+            .equals(List.copy.add(1).add(2))
+        Assert
+            .that(List.copy.add(1).add(2))
+            .isNotEqualTo(List.copy.add(1).add(1))
+    ]
+
+    method equalsIsFalseForNonLists
+    [
+        Assert
+            .that(List.copy.add(1).add(2))
+            .isNotEqualTo("foo")
+    ]
+
+    method equalsIsFalseForListsOfDiffertSizes
+    [
+        Assert
+            .that(List.copy.add(1).add(2))
+            .isNotEqualTo(List.copy.add(1).add(2).add(3))
+    ]
 ]|
 
 ListTests
@@ -56,3 +80,6 @@ ListTests
     .doIsCalledForEachElement
     .allIsCalledForEachElement
     .asTextListsAllElements
+    .equalsChecksAllElements
+    .equalsIsFalseForNonLists
+    .equalsIsFalseForListsOfDiffertSizes

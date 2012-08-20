@@ -73,7 +73,22 @@
         [
             Assert.that(0 <= index and index < self.length).isTrue
             parent.remove(index)
-        ] 
+        ]
+
+        method equals(other)
+        [
+            if (other : List)
+                result := other.length = self.length
+            || true
+                result := false
+            fi
+
+            object i := 0
+            do (result and (i < self.length))
+                result := result and (self.get(i) = other.get(i))
+                i := i + 1
+            od
+        ]
 
         method do(command)
         [
