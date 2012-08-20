@@ -56,6 +56,16 @@ object GrammarTests := Object
 
         Assert.that(grammar.parse("a").get(0)).equals("a")
     ]
+
+    method testTransformation
+    [
+        self.setup
+        grammar.addRule("foo", ParserGenerator.literal("a"))
+        grammar.setDefaultRule("foo")
+        grammar.setTransform("foo", (x -> "b"))
+
+        Assert.that(grammar.parse("a").get(0)).equals("b")
+    ]
 ]|
 
 GrammarTests
@@ -65,3 +75,4 @@ GrammarTests
   .testCannotParseWithoutDefaultRule
   .testParsesDefaultRule
   .testRuleIndirection
+  .testTransformation

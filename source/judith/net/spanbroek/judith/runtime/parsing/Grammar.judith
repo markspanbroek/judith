@@ -1,29 +1,40 @@
 [
     object Dictionary := Objects.Dictionary
     object Parser := Objects.Parsing.Parser
+    object ParserGenerator := Objects.Parsing.ParserGenerator
 
     object Grammar := Parser
     |[
         object rules := Dictionary.copy
         object defaultRule := null
-    
+
         method addRule(name, expression)
         [
             rules.set(name, expression)
         ]
-        
+
         method setDefaultRule(name)
         [
             Assert.that(rules.has(name)).isTrue
             defaultRule := name
         ]
-        
+
+        method setTransform(rulename, transform)
+        [
+            Assert.that(rules.has(rulename)).isTrue
+
+            object rule := rules.get(rulename)
+            rule := ParserGenerator.transform(rule, transform)
+
+            rules.set(rulename, rule)
+        ]
+
         method copy
         [
             result := parent.copy
             rules := rules.copy
         ]
-        
+
         method run(context, index, result, continuation)
         [
             Assert.that(defaultRule).isNotNull
@@ -40,7 +51,7 @@
             result := rule.run(context, index, result, continuation)
         ]
     ]|
-    
+
     Objects.Parsing.replace(
         Objects.Parsing
         |[
