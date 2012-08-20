@@ -1,0 +1,24 @@
+object Assert := Objects.Assert
+object List := Objects.List
+object g := Objects.Parsing.ParserGenerator
+
+object TransformTests := Object
+|[
+    object parser := 
+      g.transform(
+        g.concatenation(List.copy
+          .add(g.literal("f"))
+          .add(g.literal("o"))
+          .add(g.literal("o"))
+        ),
+        (result -> result.length)
+      )
+
+    method transformIsApplied
+    [
+        Assert.that(parser.parse("foo").get(0)).equals(3)
+    ]
+]|
+
+TransformTests
+    .transformIsApplied

@@ -14,8 +14,8 @@
                     |[
                         method run(newindex, newresult)
                         [
-                            object slice := newresult.slice(result.length, newresult.length)
-                            context.doLater([continuation.run(newindex, result'.copy.push(transform.run(slice)))])
+                            object section := newresult.section(result'.length, newresult.length)
+                            context.doLater([continuation.run(newindex, result'.copy.push(transform.evaluate(section)))])
                         ]
                     ]|
 
