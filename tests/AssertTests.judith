@@ -1,130 +1,130 @@
 object AssertTests := Object |[
 
-  method doesNotThrowOnTrue
-  [
-      Assert.that(true).isTrue
-  ]
+    method doesNotThrowOnTrue
+    [
+        Assert.that(true).isTrue
+    ]
 
-  method throwsOnFalse 
-  [
-      object exception := null
+    method throwsOnFalse 
+    [
+        object exception := null
 
-      ExceptionHandler |[
-        method try 
-        [
-          Assert.that(false).isTrue
-        ]
-        method catch(exception')
-        [
-          exception := exception'
-        ]
-      ]|.run
+        ExceptionHandler |[
+            method try 
+            [
+                Assert.that(false).isTrue
+            ]
+            method catch(exception')
+            [
+                exception := exception'
+            ]
+        ]|.run
 
-      if not (exception : AssertionFailedException)
-        AssertionFailedException.throw
-      fi
-  ]
+        if not (exception : AssertionFailedException)
+            AssertionFailedException.throw
+        fi
+    ]
 
-  method throwsWhenNotEqual
-  [
-      object exception := null
+    method throwsWhenNotEqual
+    [
+        object exception := null
 
-      ExceptionHandler |[
-          method try
-          [
-              Assert.that(2).equals(1)
-          ]
-          method catch(exception')
-          [
-              exception := exception'
-          ]
-      ]|.run
+        ExceptionHandler |[
+            method try
+            [
+                Assert.that(2).equals(1)
+            ]
+            method catch(exception')
+            [
+                exception := exception'
+            ]
+        ]|.run
 
-      Assert.that(exception : AssertionFailedException)
-  ]
+        Assert.that(exception : AssertionFailedException)
+    ]
 
-  method doesNotThrowWhenEqual
-  [
-      Assert.that(1).equals(1)
-  ]
+    method doesNotThrowWhenEqual
+    [
+        Assert.that(1).equals(1)
+    ]
 
-  method descibesWhatsWrongWhenNotEqual
-  [
-      ExceptionHandler |[
-          method try
-          [
-              Assert.that(2).equals(1)
-          ]
-          method catch(exception)
-          [
-              Assert.that(exception.message).equals("Expected '1' but got '2'")
-          ]
-      ]|.run
-  ]
+    method descibesWhatsWrongWhenNotEqual
+    [
+        ExceptionHandler |[
+            method try
+            [
+                Assert.that(2).equals(1)
+            ]
+            method catch(exception)
+            [
+                Assert.that(exception.message).equals("Expected '1' but got '2'")
+            ]
+        ]|.run
+    ]
 
-  method executesCommandThatIsPassedToThrows
-  [
-      object wasExecuted := false
-      Assert.that([ wasExecuted := true Exception.throw ]).throws(Exception)
-      Assert.that(wasExecuted).isTrue
-  ]
+    method executesCommandThatIsPassedToThrows
+    [
+        object wasExecuted := false
+        Assert.that([ wasExecuted := true Exception.throw ]).throws(Exception)
+        Assert.that(wasExecuted).isTrue
+    ]
 
-  method catchesExceptionWhenExpected
-  [
-      Assert.that([ Exception.throw ]).throws(Exception)
-  ]
+    method catchesExceptionWhenExpected
+    [
+        Assert.that([ Exception.throw ]).throws(Exception)
+    ]
 
-  method throwsExceptionWhenExpectedExceptionDidNotOccur
-  [
-      object wasThrown := false
-      ExceptionHandler
-      |[
-          method try
-          [
-              Assert.that([]).throws(Exception)
-          ]
+    method throwsExceptionWhenExpectedExceptionDidNotOccur
+    [
+        object wasThrown := false
+        ExceptionHandler
+        |[
+            method try
+            [
+                Assert.that([]).throws(Exception)
+            ]
 
-          method catch(exception)
-          [
-              wasThrown := true
-          ]
-      ]|.run
+            method catch(exception)
+            [
+                wasThrown := true
+            ]
+        ]|.run
 
-      Assert.that(wasThrown).isTrue
-  ]
+        Assert.that(wasThrown).isTrue
+    ]
 
-  method throwsExceptionWhenExceptionOfWrongTypeOccurs
-  [
-      object wasThrown := false
-      ExceptionHandler
-      |[
-          method try
-          [
-              Assert.that([ Exception.throw ]).throws(AssertionFailedException)
-          ]
+    method throwsExceptionWhenExceptionOfWrongTypeOccurs
+    [
+        object wasThrown := false
+        ExceptionHandler
+        |[
+            method try
+            [
+                Assert.that([ Exception.throw ]).throws(AssertionFailedException)
+            ]
 
-          method catch(exception)
-          [
-              wasThrown := true
-          ]
-      ]|.run
+            method catch(exception)
+            [
+                wasThrown := true
+            ]
+        ]|.run
 
-      Assert.that(wasThrown).isTrue
-  ]
+        Assert.that(wasThrown).isTrue
+    ]
 
-  method throwsWhenNull
-  [
-      Assert
-        .that([ Assert.that(null).isNotNull ])
-        .throws(AssertionFailedException)
-  ]
+    method throwsWhenNull
+    [
+        Assert
+          .that([ Assert.that(null).isNotNull ])
+          .throws(AssertionFailedException)
+    ]
 
-  method throwsWhenNotNull
-  [
-      Assert
-        .that([ Assert.that(Object).isNull ])
-        .throws(AssertionFailedException)
-  ]
+    method throwsWhenNotNull
+    [
+        Assert
+          .that([ Assert.that(Object).isNull ])
+          .throws(AssertionFailedException)
+    ]
 ]|
 
 AssertTests
