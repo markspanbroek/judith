@@ -125,6 +125,32 @@ object AssertTests := Object |[
           .that([ Assert.that(Object).isNull ])
           .throws(AssertionFailedException)
     ]
+
+    method throwsWhenEqual
+    [
+        Assert
+          .that([ Assert.that(1).isNotEqualTo(1) ])
+          .throws(AssertionFailedException)
+    ]
+
+    method doesNotThrowWhenNotEqual
+    [
+        Assert.that(1).isNotEqualTo(2)
+    ]
+
+    method descibesWhatsWrongWhenEqual
+    [
+        ExceptionHandler |[
+            method try
+            [
+                Assert.that(1).isNotEqualTo(1)
+            ]
+            method catch(exception)
+            [
+                Assert.that(exception.message).equals("Unexpected '1'")
+            ]
+        ]|.run
+    ]
 ]|
 
 AssertTests
@@ -139,3 +165,6 @@ AssertTests
   .throwsExceptionWhenExceptionOfWrongTypeOccurs
   .throwsWhenNull
   .throwsWhenNotNull
+  .throwsWhenEqual
+  .doesNotThrowWhenNotEqual
+  .descibesWhatsWrongWhenEqual

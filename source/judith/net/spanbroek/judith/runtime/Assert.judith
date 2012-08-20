@@ -30,6 +30,14 @@ object Assert := null
             fi
         ]
 
+        method isNotEqualTo(unexpected)
+        [
+            if unexpected = subject
+                object message := "Unexpected '" + subject.asText + "'"
+                AssertionFailedException.copy.setMessage(message).throw
+            fi
+        ]
+
         method throws(expectedException)
         [
             object exception := null
