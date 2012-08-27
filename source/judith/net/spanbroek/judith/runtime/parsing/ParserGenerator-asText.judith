@@ -48,7 +48,7 @@
             ]|
         ]
 
-      method alternation(alternatives) [
+      method choice(alternatives) [
       
         object text := "("
         object i := 0
@@ -63,7 +63,7 @@
         od
         text := text + ")"
 
-        result := parent.alternation(alternatives) |[
+        result := parent.choice(alternatives) |[
         
           method asText [
             result := text

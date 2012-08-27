@@ -28,7 +28,7 @@
     )
 
    Parser.addRule("statement",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(g.rule("object"))
         .add(g.rule("assignment"))
         .add(g.rule("if"))
@@ -122,7 +122,7 @@
               .add(g.rule("expression"))
               .add(g.rule("w"))
               .add(
-                g.alternation(List.copy
+                g.choice(List.copy
                   .add(g.literal("and"))
                   .add(g.literal("or"))
                 )
@@ -143,7 +143,7 @@
               .add(g.rule("expression1"))
               .add(g.rule("w"))
               .add(
-                g.alternation(List.copy
+                g.choice(List.copy
                   .add(g.literal("="))
                   .add(g.literal("<="))
                   .add(g.literal(">="))
@@ -168,7 +168,7 @@
               .add(g.rule("expression2"))
               .add(g.rule("w"))
               .add(
-                g.alternation(List.copy
+                g.choice(List.copy
                   .add(g.literal("+"))
                   .add(g.literal("-"))
                 )
@@ -189,7 +189,7 @@
               .add(g.rule("expression3"))
               .add(g.rule("w"))
               .add(
-                g.alternation(List.copy
+                g.choice(List.copy
                   .add(g.literal("*"))
                   .add(g.literal("/"))
                 )
@@ -219,11 +219,11 @@
     )
 
     Parser.addRule("expression5",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(
           g.concatenation(List.copy
             .add(
-              g.alternation(List.copy
+              g.choice(List.copy
                 .add(g.literal("not"))
                 .add(g.literal("-"))
               )
@@ -237,7 +237,7 @@
     )
 
     Parser.addRule("expression6",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(g.rule("methodcall"))
         .add(g.rule("alteration"))
         .add(g.rule("expression7"))
@@ -245,7 +245,7 @@
     )
 
     Parser.addRule("expression7",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(g.rule("block"))
         .add(g.rule("lambda"))
         .add(g.rule("lambdablock"))
@@ -254,7 +254,7 @@
     )
 
     Parser.addRule("expression8",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(g.rule("braces"))
         .add(g.rule("identifier"))
         .add(g.rule("text"))
@@ -305,7 +305,7 @@
           g.repetition(
             g.concatenation(List.copy
               .add(g.rule("w"))
-              .add(g.alternation(List.copy
+              .add(g.choice(List.copy
                 .add(g.rule("object"))
                 .add(g.rule("method"))
               ))
@@ -415,7 +415,7 @@
     )
 
     Parser.addRule("boolean",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(g.literal("true"))
         .add(g.literal("false"))
       )
@@ -465,7 +465,7 @@
         .add(g.rule("letter"))
         .add(
           g.repetition(
-            g.alternation(List.copy
+            g.choice(List.copy
               .add(g.rule("digit"))
               .add(g.rule("letter"))
             )
@@ -479,7 +479,7 @@
     )
 
     Parser.addRule("letter",
-      g.alternation(List.copy
+      g.choice(List.copy
         .add(g.range("a","z"))
         .add(g.range("A","Z"))
         .add(g.literal("?"))
@@ -489,7 +489,7 @@
 
     Parser.addRule("w",
       g.repetition(
-        g.alternation(List.copy
+        g.choice(List.copy
           .add(g.literal(" "))
           .add(g.literal(Text.lineEnd))
           .add(g.rule("comment"))

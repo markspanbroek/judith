@@ -4,7 +4,7 @@
     
     ParserGenerator.replace(ParserGenerator 
     |[
-        method alternation(alternatives)
+        method choice(alternatives)
         [
             result := Parser
             |[ 

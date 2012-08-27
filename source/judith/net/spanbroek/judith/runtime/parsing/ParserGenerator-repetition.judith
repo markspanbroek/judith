@@ -4,13 +4,13 @@
     
     ParserGenerator.replace(ParserGenerator 
     |[
-        method repetition(operand) 
+        method repetition(operand)
         [  
-            result := self.alternation(
+            result := self.choice(
                 List.copy
                     .add(self.empty)
                     .add(self.repetitionplus(operand))
-            )          
+            )
         ]
     ]|)
 ]

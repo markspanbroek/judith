@@ -3,12 +3,12 @@ object ParserGenerator := Objects.Parsing.ParserGenerator
 object AlternativesTest := Object
 |[
     object parser :=
-        ParserGenerator.alternation(
+        ParserGenerator.choice(
           List.copy
             .push(ParserGenerator.literal("foo"))
             .push(ParserGenerator.literal("bar"))
         )
-    
+
     method parsingSucceedsWithLeftOperand
     [
         object parseResult := parser.parse("foo")
@@ -16,7 +16,7 @@ object AlternativesTest := Object
         Assert.that(parseResult.length).equals(1)
         Assert.that(parseResult.get(0)).equals("foo")
     ]
-    
+
     method parsingSucceedsWithRightOperand
     [
         object parseResult := parser.parse("bar")
@@ -24,7 +24,7 @@ object AlternativesTest := Object
         Assert.that(parseResult.length).equals(1)
         Assert.that(parseResult.get(0)).equals("bar")
     ]
-    
+
     method parsingFails
     [
         Assert.that(parser.parse("baz")).equals(null)

@@ -6,7 +6,7 @@
     |[
         method optional(operand) 
         [  
-            result := self.alternation(
+            result := self.choice(
                 List.copy
                     .add(self.empty)
                     .add(operand)
