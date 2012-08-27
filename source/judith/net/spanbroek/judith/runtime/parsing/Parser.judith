@@ -29,8 +29,7 @@
                 ]
             ]|
 
-            object self' := self
-            robot.add([self'.run(context, 0, List.copy, continuation)])
+            robot.add([self.run(context, 0, List.copy, continuation)])
             robot.execute
 
             result := parseResult.get
