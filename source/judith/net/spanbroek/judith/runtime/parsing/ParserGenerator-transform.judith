@@ -1,6 +1,7 @@
 [
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
+    object List := Objects.List
 
     object TransformingParser := Parser
     |[
@@ -23,11 +24,11 @@
             |[
                 method run(indexAfterParsing, resultAfterParsing)
                 [
-                    object section := resultAfterParsing.section(resultBeforeParsing.length, resultAfterParsing.length)
-                    context.doLater([continuation.run(indexAfterParsing, resultBeforeParsing.copy.push(transform.evaluate(section)))])
+                    object transformedResult := transform.evaluate(resultAfterParsing)
+                    context.doLater([continuation.run(indexAfterParsing, resultBeforeParsing.copy.push(transformedResult))])
                 ]
             ]|
-            context.doLater([operand.run(context, index, resultBeforeParsing, afterParsingDo)])
+            context.doLater([operand.run(context, index, List.copy, afterParsingDo)])
         ]
     ]|
 
