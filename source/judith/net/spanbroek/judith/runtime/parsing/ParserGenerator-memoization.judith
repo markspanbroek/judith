@@ -7,11 +7,11 @@
 
     Parser.replace(Parser
     |[
-        method createContext(input)
+        method createContext(input, robot)
         [
             object cache := Objects.Dictionary.copy
             
-            result := parent.createContext(input)
+            result := parent.createContext(input, robot)
             |[
                 method cache
                 [

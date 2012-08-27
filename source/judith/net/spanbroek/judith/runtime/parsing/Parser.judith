@@ -12,22 +12,14 @@
 
     object Parser := Object
     |[
-        method parse(input) 
+        method parse(input)
         [
             Assert.that(input : Text).isTrue
 
+            object robot := Robot.copy
             object parseResult := Reference.create(null)
             object continuation := self.createContinuation(parseResult)
-            object context := self.createContext(input)
-            object robot := Robot.copy
-
-            context := context
-            |[
-                method doLater(command)
-                [
-                    robot.add(command)
-                ]
-            ]|
+            object context := self.createContext(input, robot)
 
             robot.add([self.run(context, 0, List.copy, continuation)])
             robot.execute
@@ -35,13 +27,18 @@
             result := parseResult.get
         ]
 
-        method createContext(input)
+        method createContext(input, robot)
         [
             result := Object
             |[
                 method input
                 [
                     result := input
+                ]
+
+                method doLater(command)
+                [
+                    robot.add(command)
                 ]
             ]|
         ]
