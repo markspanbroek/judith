@@ -2,27 +2,44 @@
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
 
+    object TransformingParser := Parser
+    |[
+        object operand := null
+        object transform := null
+
+        method setOperand(operand')
+        [
+            operand := operand'
+        ]
+
+        method setTransform(transform')
+        [
+            transform := transform'
+        ]
+
+        method run(context, index, result', continuation)
+        [
+            object newcontinuation := Function
+            |[
+                method run(newindex, newresult)
+                [
+                    object section := newresult.section(result'.length, newresult.length)
+                    context.doLater([continuation.run(newindex, result'.copy.push(transform.evaluate(section)))])
+                ]
+            ]|
+            context.doLater([operand.run(context, index, result', newcontinuation)])
+        ]
+    ]|
+
     ParserGenerator.replace(ParserGenerator
     |[
         method transform(operand, transform)
         [
-            result := Parser
-            |[
-                method run(context, index, result', continuation)
-                [
-                    object newcontinuation := Function
-                    |[
-                        method run(newindex, newresult)
-                        [
-                            object section := newresult.section(result'.length, newresult.length)
-                            context.doLater([continuation.run(newindex, result'.copy.push(transform.evaluate(section)))])
-                        ]
-                    ]|
-
-                    context.doLater([operand.run(context, index, result', newcontinuation)])
-
-                ]
-            ]|
+            result :=
+                TransformingParser
+                    .copy
+                    .setOperand(operand)
+                    .setTransform(transform)
         ]
     ]|)
 ]
