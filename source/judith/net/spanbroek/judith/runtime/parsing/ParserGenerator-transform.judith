@@ -17,17 +17,17 @@
             transform := transform'
         ]
 
-        method run(context, index, result', continuation)
+        method run(context, index, resultBeforeParsing, continuation)
         [
-            object newcontinuation := Function
+            object afterParsingDo := Function
             |[
-                method run(newindex, newresult)
+                method run(indexAfterParsing, resultAfterParsing)
                 [
-                    object section := newresult.section(result'.length, newresult.length)
-                    context.doLater([continuation.run(newindex, result'.copy.push(transform.evaluate(section)))])
+                    object section := resultAfterParsing.section(resultBeforeParsing.length, resultAfterParsing.length)
+                    context.doLater([continuation.run(indexAfterParsing, resultBeforeParsing.copy.push(transform.evaluate(section)))])
                 ]
             ]|
-            context.doLater([operand.run(context, index, result', newcontinuation)])
+            context.doLater([operand.run(context, index, resultBeforeParsing, afterParsingDo)])
         ]
     ]|
 
