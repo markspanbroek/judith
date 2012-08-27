@@ -5,7 +5,7 @@
     object CacheEntry := Objects.Parsing.CacheEntry
     object Memoizer := Objects.Parsing.Memoizer
 
-    Parser.replace( Parser 
+    Parser.replace(Parser
     |[
         method createContext(input)
         [
@@ -19,18 +19,18 @@
                 ]
             ]|
         ]
-    ]| )
+    ]|)
 
-    ParserGenerator.replace( ParserGenerator 
+    ParserGenerator.replace(ParserGenerator
     |[
-        method rule(name) 
-        [      
-            result := Memoizer.memoize(parent.rule(name))      
+        method rule(name)
+        [
+            result := Memoizer.memoize(parent.rule(name))
         ]
-      
-        method repetitionplus(operand) 
+
+        method repetitionplus(operand)
         [
             result := Memoizer.memoize(parent.repetitionplus(operand))
         ]
-    ]| )
+    ]|)
 ]
