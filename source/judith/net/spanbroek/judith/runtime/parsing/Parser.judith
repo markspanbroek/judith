@@ -1,6 +1,7 @@
 [
     object Reference := Objects.Reference
     object Text := Objects.Text
+    object Assert := Objects.Assert
 
     object Robot := List.of(Command)
     |[

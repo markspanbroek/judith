@@ -2,6 +2,7 @@
     object Dictionary := Objects.Dictionary
     object Parser := Objects.Parsing.Parser
     object ParserGenerator := Objects.Parsing.ParserGenerator
+    object Assert := Objects.Assert
 
     object Grammar := Parser
     |[

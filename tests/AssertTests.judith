@@ -1,3 +1,4 @@
+object Assert := Objects.Assert
 object AssertionFailed := Objects.AssertionFailed
 
 object AssertTests := Object |[

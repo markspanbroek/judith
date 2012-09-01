@@ -1,6 +1,7 @@
 [
     object Parser := Objects.Parsing.Parser
     object CacheEntry := Objects.Parsing.CacheEntry
+    object Assert := Objects.Assert
 
     object Memoizer := Object
     |[

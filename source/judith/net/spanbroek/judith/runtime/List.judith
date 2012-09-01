@@ -1,6 +1,7 @@
 [
     object Number := Objects.Number
     object Reflection := Objects.Reflection
+    object Assert := Objects.Assert
 
     object Forwarder := Object
     |[

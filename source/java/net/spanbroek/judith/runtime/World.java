@@ -34,15 +34,15 @@ public class World extends Scope {
         DictionaryBuilder.build(this);
         ReflectionBuilder.build(this);
 
-        interpret("Number.judith");
-        interpret("Dictionary.judith");
         interpret("Exception.judith");
         interpret("world.judith");
         interpret("IO.judith");
         interpret("Reference.judith");
-        interpret("List.judith");
-        interpret("Counter.judith");
         interpret("Assert.judith");
+        interpret("Number.judith");
+        interpret("List.judith");
+        interpret("Dictionary.judith");
+        interpret("Counter.judith");
         interpret("Text.judith");
         interpret("parsing/Parser.judith");
         interpret("parsing/ParseResult.judith");

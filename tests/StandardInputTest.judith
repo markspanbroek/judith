@@ -1,3 +1,4 @@
 object input := Objects.IO.StandardInput
+object Assert := Objects.Assert
 
 Assert.that(input.readLine).equals("jumps over the lazy dog.")

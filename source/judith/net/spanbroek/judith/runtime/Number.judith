@@ -1,10 +1,11 @@
 [
     object Number := Objects.Number
-    
+    object Assert := Objects.Assert
+
     Number.replace(
         Number
         |[
-            method plus(x) 
+            method plus(x)
             [
                 Assert.that(x : Number).isTrue
                 result := parent.plus(x)

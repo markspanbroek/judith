@@ -1,5 +1,6 @@
 [
     object Text := Objects.Text
+    object Assert := Objects.Assert
 
     object Dictionary := Objects.Dictionary
     |[
