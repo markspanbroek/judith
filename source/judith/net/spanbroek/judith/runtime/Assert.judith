@@ -1,5 +1,18 @@
 object Assert := null
+object AssertionFailedException := null
 [
+    AssertionFailedException := Exception
+    |[
+        method asText
+        [
+            if self.message = ""
+                result := "Assertion failed."
+            || true
+                result := "Assertion failed: " + self.message
+            fi
+        ]
+    ]|
+
     object Assertion := Object
     |[
         object subject := null
@@ -90,6 +103,11 @@ object Assert := null
         method Assert
         [
             result := Assert
+        ]
+
+        method AssertionFailedException
+        [
+            result := AssertionFailedException
         ]
     ]|
 ]

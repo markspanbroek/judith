@@ -28,18 +28,6 @@ ExceptionHandler := ExceptionHandler
     ]
 ]|
 
-object AssertionFailedException := Exception 
-|[
-    method asText
-    [
-        if self.message = "" 
-            result := "Assertion failed."
-        || true 
-            result := "Assertion failed: " + self.message
-        fi
-    ]
-]|
-
 [
     object Text := Objects.Text
     
