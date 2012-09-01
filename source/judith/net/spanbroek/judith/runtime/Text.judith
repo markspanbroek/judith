@@ -1,0 +1,28 @@
+[
+    object Text := Objects.Text
+    
+    Text.replace(
+        Text 
+        |[
+            method excerpt(begin, end)
+            [
+                Assert.that(0 <= begin and begin < end and end <= self.length).isTrue
+                result := parent.excerpt(begin, end)
+            ]
+            
+            method equals(other) 
+            [
+                if other : Text 
+                    result := parent.equals(other)
+                || true 
+                    result := false
+                fi
+            ]
+            
+            method asText
+            [
+                result := self
+            ]
+        ]|
+    )
+]
