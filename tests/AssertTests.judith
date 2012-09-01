@@ -1,3 +1,5 @@
+object AssertionFailed := Objects.AssertionFailed
+
 object AssertTests := Object |[
 
     method doesNotThrowOnTrue
@@ -20,8 +22,8 @@ object AssertTests := Object |[
             ]
         ]|.run
 
-        if not (exception : AssertionFailedException)
-            AssertionFailedException.throw
+        if not (exception : AssertionFailed)
+            AssertionFailed.throw
         fi
     ]
 
@@ -40,7 +42,7 @@ object AssertTests := Object |[
             ]
         ]|.run
 
-        Assert.that(exception : AssertionFailedException)
+        Assert.that(exception : AssertionFailed)
     ]
 
     method doesNotThrowWhenEqual
@@ -100,7 +102,7 @@ object AssertTests := Object |[
         |[
             method try
             [
-                Assert.that([ Exception.throw ]).throws(AssertionFailedException)
+                Assert.that([ Exception.throw ]).throws(AssertionFailed)
             ]
 
             method catch(exception)
@@ -116,21 +118,21 @@ object AssertTests := Object |[
     [
         Assert
           .that([ Assert.that(null).isNotNull ])
-          .throws(AssertionFailedException)
+          .throws(AssertionFailed)
     ]
 
     method throwsWhenNotNull
     [
         Assert
           .that([ Assert.that(Object).isNull ])
-          .throws(AssertionFailedException)
+          .throws(AssertionFailed)
     ]
 
     method throwsWhenEqual
     [
         Assert
           .that([ Assert.that(1).isNotEqualTo(1) ])
-          .throws(AssertionFailedException)
+          .throws(AssertionFailed)
     ]
 
     method doesNotThrowWhenNotEqual

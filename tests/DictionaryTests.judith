@@ -11,22 +11,22 @@ object DictionaryTests := Object
 
     method getMethodThrowsWhenObjectNotPresent
     [
-        Assert.that([ dictionary.get("foo") ]).throws(AssertionFailedException)
+        Assert.that([ dictionary.get("foo") ]).throws(AssertionFailed)
     ]
 
     method hasMethodThrowsWhenNotGivenAString
     [
-        Assert.that([ dictionary.has(1) ]).throws(AssertionFailedException)
+        Assert.that([ dictionary.has(1) ]).throws(AssertionFailed)
     ]
 
     method getMethodThrowsWhenNotGivenAString
     [
-        Assert.that([ dictionary.get(1) ]).throws(AssertionFailedException)
+        Assert.that([ dictionary.get(1) ]).throws(AssertionFailed)
     ]
 
     method setMethodThrowsWhenNotGivenAString
     [
-        Assert.that([ dictionary.set(1, "1") ]).throws(AssertionFailedException)
+        Assert.that([ dictionary.set(1, "1") ]).throws(AssertionFailed)
     ]
 
     method storesAnObject

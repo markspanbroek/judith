@@ -1,7 +1,7 @@
 object Assert := null
-object AssertionFailedException := null
+object AssertionFailed := null
 [
-    AssertionFailedException := Exception
+    object AssertionFailed := Exception
     |[
         method asText
         [
@@ -30,7 +30,7 @@ object AssertionFailedException := null
         method isTrue
         [
             if not subject
-                AssertionFailedException.throw
+                AssertionFailed.throw
             fi
         ]        
         
@@ -39,7 +39,7 @@ object AssertionFailedException := null
             if not (expected = subject)
                 object message := "Expected '" + expected.asText + "'"
                 message := message + " but got '" + subject.asText + "'"
-                AssertionFailedException.copy.setMessage(message).throw
+                AssertionFailed.copy.setMessage(message).throw
             fi
         ]
 
@@ -47,7 +47,7 @@ object AssertionFailedException := null
         [
             if unexpected = subject
                 object message := "Unexpected '" + subject.asText + "'"
-                AssertionFailedException.copy.setMessage(message).throw
+                AssertionFailed.copy.setMessage(message).throw
             fi
         ]
 
@@ -69,7 +69,7 @@ object AssertionFailedException := null
             
             if not (exception : expectedException)
                 object message := "Expected exception to occur"
-                AssertionFailedException.copy.setMessage(message).throw
+                AssertionFailed.copy.setMessage(message).throw
             fi
         ]
         
@@ -77,7 +77,7 @@ object AssertionFailedException := null
         [
             if subject = null
                 object message := "Expected non-null object"
-                AssertionFailedException.copy.setMessage(message).throw
+                AssertionFailed.copy.setMessage(message).throw
             fi
         ]
         
@@ -85,7 +85,7 @@ object AssertionFailedException := null
         [
             if not (subject = null)
                 object message := "Expected null"
-                AssertionFailedException.copy.setMessage(message).throw
+                AssertionFailed.copy.setMessage(message).throw
             fi
         ]
     ]|
@@ -105,9 +105,9 @@ object AssertionFailedException := null
             result := Assert
         ]
 
-        method AssertionFailedException
+        method AssertionFailed
         [
-            result := AssertionFailedException
+            result := AssertionFailed
         ]
     ]|
 ]
