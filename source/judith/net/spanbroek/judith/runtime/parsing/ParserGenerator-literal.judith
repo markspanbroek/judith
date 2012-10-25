@@ -21,9 +21,9 @@
         ]
     ]|
 
-    ParserGenerator.replace(ParserGenerator 
+    ParserGenerator.replace(ParserGenerator
     |[
-        method literal(literal) 
+        method literal(literal)
         [
             result := LiteralParser.copy.setLiteral(literal)
         ]

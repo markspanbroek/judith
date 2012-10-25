@@ -7,7 +7,7 @@
         method begin
         [
             object EmptyParser := self.empty
-            
+
             result := Parser
             |[
                 method run(context, index, result, continuation)

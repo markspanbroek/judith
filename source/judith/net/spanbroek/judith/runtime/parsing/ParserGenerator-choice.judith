@@ -1,19 +1,19 @@
 [
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
-    
+
     ParserGenerator.replace(ParserGenerator 
     |[
         method choice(alternatives)
         [
             result := Parser
-            |[ 
+            |[
                 method run(context, index, result', continuation)
                 [
                     alternatives.do([alternative ->
                       context.doLater([alternative.run(context, index, result', continuation)])
                     ])
-                ] 
+                ]
             ]|
         ]
     ]|)

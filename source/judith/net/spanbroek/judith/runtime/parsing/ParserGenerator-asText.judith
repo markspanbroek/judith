@@ -14,7 +14,7 @@
                 ]
             ]|
         ]
-        
+
         method end
         [
             result := parent.end
@@ -36,7 +36,7 @@
                 ]
             ]|
         ]
-        
+
         method never
         [
             result := parent.never
@@ -48,8 +48,8 @@
             ]|
         ]
 
-      method choice(alternatives) [
-      
+      method choice(alternatives)[
+
         object text := "("
         object i := 0
         if i < alternatives.length 
@@ -76,10 +76,10 @@
       method concatenation(elements) [
       
         object text := "("
-        
+
         object i := 0
-        do i < elements.length 
-            if i > 0 
+        do i < elements.length
+            if i > 0
                 text := text + " "
             fi
             text := text + elements.get(i)
@@ -89,17 +89,17 @@
         text := text + ")"
 
         result := parent.concatenation(elements) |[
-            
+
           method asText [
             result := text
           ]
-        
+
         ]|
-      
+
       ]
-      
+
       method literal(literal) [
-      
+
         object text := Text.quote + literal + Text.quote
             
         result := parent.literal(literal) |[

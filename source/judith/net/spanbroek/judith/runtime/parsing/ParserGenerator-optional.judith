@@ -2,15 +2,15 @@
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
     
-    ParserGenerator.replace(ParserGenerator 
+    ParserGenerator.replace(ParserGenerator
     |[
-        method optional(operand) 
+        method optional(operand)
         [  
             result := self.choice(
                 List.copy
                     .add(self.empty)
                     .add(operand)
-            )          
+            )
         ]
     ]|)
 ]

@@ -1,35 +1,35 @@
 [
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
-    
-    ParserGenerator.replace(ParserGenerator 
+
+    ParserGenerator.replace(ParserGenerator
     |[
-        method concatenation(elements) 
+        method concatenation(elements)
         [
             object generator := self
 
-            if elements.length > 0 
-                result := Parser 
-                |[ 
-                    method run(context, index, result', continuation) 
-                    [  
+            if elements.length > 0
+                result := Parser
+                |[
+                    method run(context, index, result', continuation)
+                    [
                         object tail := elements.copy
                         object head := tail.get(0)
                         tail.remove(0)
-                
-                        object newcontinuation := Function 
-                        |[ 
-                            method run(newindex, newresult) 
+
+                        object newcontinuation := Function
+                        |[
+                            method run(newindex, newresult)
                             [
                                 object tailparser := generator.concatenation(tail)
                                 context.doLater([tailparser.run(context, newindex, newresult, continuation)])
-                            ] 
+                            ]
                         ]|
-                
+
                         context.doLater([head.run(context, index, result', newcontinuation)])
-                    ] 
+                    ]
                 ]|
-            || true 
+            || true
               result := generator.empty
             fi
         ]

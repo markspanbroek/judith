@@ -1,29 +1,29 @@
 [
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
-    
-    ParserGenerator.replace(ParserGenerator 
+
+    ParserGenerator.replace(ParserGenerator
     |[
-        method repetitionplus(operand) 
-        [      
+        method repetitionplus(operand)
+        [
             object generator := self
-          
-            result := Parser 
-            |[ 
-                method run(context, index, result', continuation) 
+
+            result := Parser
+            |[
+                method run(context, index, result', continuation)
                 [
-                    object newcontinuation := Function 
+                    object newcontinuation := Function
                     |[
-                        method run(index, result') 
+                        method run(index, result')
                         [
                             context.doLater([continuation.run(index, result')])
                             context.doLater([generator.repetitionplus(operand).run(context, index, result', continuation)])
                         ]
                     ]|
-            
+
                     context.doLater([operand.run(context, index, result', newcontinuation)])
-                ]        
-            ]|      
+                ]
+            ]|
         ]
     ]|)
 ]

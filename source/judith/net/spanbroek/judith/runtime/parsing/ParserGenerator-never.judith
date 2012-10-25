@@ -1,10 +1,10 @@
 [
     object ParserGenerator := Objects.Parsing.ParserGenerator
     object Parser := Objects.Parsing.Parser
-    
+
     ParserGenerator.replace(ParserGenerator 
     |[
-        method never 
+        method never
         [
             result := Parser
             |[
