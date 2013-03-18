@@ -49,6 +49,20 @@ object TextTests := Object |[
             .that("foo".startsWith("foo"))
             .isTrue
     ]
+
+    method concatenatesWithPlus
+    [
+        Assert
+            .that("foo" + "bar")
+            .equals("foobar")
+    ]
+
+    method concatenatesNonText
+    [
+        Assert
+            .that("foo" + 3)
+            .equals("foo3")
+    ]
 ]|
 
 TextTests
@@ -61,3 +75,5 @@ TextTests
     .startsWithReturnsFalse
     .startsWithShouldBeGivenText
     .startsWithItself
+    .concatenatesWithPlus
+    .concatenatesNonText

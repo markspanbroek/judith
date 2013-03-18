@@ -33,6 +33,11 @@
                     result := self.excerpt(0, start.length) = start
                 fi
             ]
+
+            method plus(x)
+            [
+                result := parent.plus(x.asText)
+            ]
         ]|
     )
 ]
