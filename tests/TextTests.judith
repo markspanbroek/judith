@@ -21,6 +21,34 @@ object TextTests := Object |[
     [
         Assert.that(Text.lineEnd.length >= 1).isTrue
     ]
+
+    method startsWithReturnsTrue
+    [
+        Assert
+            .that("foobar".startsWith("foo"))
+            .isTrue
+    ]
+
+    method startsWithReturnsFalse
+    [
+        Assert
+            .that("foobar".startsWith("bar"))
+            .isFalse
+    ]
+
+    method startsWithShouldBeGivenText
+    [
+        Assert
+            .that([ "foobar".startsWith(null) ])
+            .throws(AssertionFailed)
+    ]
+
+    method startsWithItself
+    [
+        Assert
+            .that("foo".startsWith("foo"))
+            .isTrue
+    ]
 ]|
 
 TextTests
@@ -29,3 +57,7 @@ TextTests
     .atmostReturnsFalse
     .quoteIsSingleCharacter
     .lineEndIsAtLeastOneCharacter
+    .startsWithReturnsTrue
+    .startsWithReturnsFalse
+    .startsWithShouldBeGivenText
+    .startsWithItself

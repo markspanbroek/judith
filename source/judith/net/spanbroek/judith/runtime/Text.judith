@@ -11,7 +11,7 @@
                 result := parent.excerpt(begin, end)
             ]
 
-            method equals(other) 
+            method equals(other)
             [
                 if other : Text
                     result := parent.equals(other)
@@ -23,6 +23,15 @@
             method asText
             [
                 result := self
+            ]
+
+            method startsWith(start)
+            [
+                Assert.that(start : Text).isTrue
+                result := start.length <= self.length
+                if result
+                    result := self.excerpt(0, start.length) = start
+                fi
             ]
         ]|
     )
