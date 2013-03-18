@@ -14,12 +14,12 @@
     object Assertion := Object
     |[
         object subject := null
-        
+
         method setSubject(subject')
         [
             subject := subject'
         ]
-        
+
         method create(subject)
         [
             result := self.copy.setSubject(subject)
@@ -30,8 +30,15 @@
             if not subject
                 AssertionFailed.throw
             fi
-        ]        
-        
+        ]
+
+        method isFalse
+        [
+            if subject
+                AssertionFailed.throw
+            fi
+        ]
+
         method equals(expected)
         [
             if not (expected = subject)
@@ -58,19 +65,19 @@
                 [
                     subject.execute
                 ]
-                
+
                 method catch(exception')
                 [
                     exception := exception'
                 ]
             ]|.run
-            
+
             if not (exception : expectedException)
                 object message := "Expected exception to occur"
                 AssertionFailed.copy.setMessage(message).throw
             fi
         ]
-        
+
         method isNotNull
         [
             if subject = null
@@ -78,7 +85,7 @@
                 AssertionFailed.copy.setMessage(message).throw
             fi
         ]
-        
+
         method isNull
         [
             if not (subject = null)
@@ -90,7 +97,7 @@
 
     object Assert := Object
     |[
-        method that(assertion) 
+        method that(assertion)
         [
             result := Assertion.create(assertion)
         ]
