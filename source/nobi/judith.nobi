@@ -24,7 +24,7 @@ expression6  = methodcall | alteration | expression7
 expression7  = block | lambda | lambdablock | expression8
 expression8  = braces | identifier | text | number | boolean
 
-methodcall   = expression6 "." identifier (expressions)?
+methodcall   = (expression6 ".")? identifier (expressions)?
 expressions  = "(" w expression (w "," w expression)* w ")"
 alteration   = expression6 w "|[" (w (object|method))* w "]|"
 lambda       = "(" w identifier (w "," w identifier)* w "->" w expression w ")"

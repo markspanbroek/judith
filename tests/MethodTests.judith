@@ -11,8 +11,30 @@ object MethodTests := Object
             ]|.run
         ).isTrue
     ]
+
+    method methodCallToSelf
+    [
+        object timesBarWasCalled := 0
+
+        Object
+        |[
+            method bar
+            [
+                timesBarWasCalled := timesBarWasCalled + 1
+            ]
+
+            method callBar
+            [
+                self.bar
+                bar
+            ]
+        ]|.callBar
+
+        Assert.that(timesBarWasCalled).equals(2)
+    ]
 ]|
 
 MethodTests
     .methodBodyHasInnerScope
+    .methodCallToSelf
 

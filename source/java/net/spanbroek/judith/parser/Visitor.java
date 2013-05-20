@@ -47,7 +47,7 @@ class Visitor extends DepthFirstAdapter {
         Assignment assignment = new Assignment(identifier, expression);
         stack.push(assignment);
     }
-    
+
     @Override
     public void outAIf(AIf node) {
         List<Conditional> conditionals = popList();
@@ -99,7 +99,7 @@ class Visitor extends DepthFirstAdapter {
         Block block = (Block)stack.pop();
         stack.push(new LambdaBlock(block.getStatements()));
     }
-    
+
     @Override
     public void outAIdentifierExpression8(AIdentifierExpression8 node) {
         String identifier = (String)stack.pop();
@@ -107,13 +107,13 @@ class Visitor extends DepthFirstAdapter {
     }
 
     @Override
-    public void outAParametersMethodcall(AParametersMethodcall node) {
+    public void outAParametersCallobject(AParametersCallobject node) {
         List<Expression> expressions = popList();
         String identifier = (String)stack.pop();
         Expression operand = (Expression)stack.pop();
         stack.push(
           new MethodCall(
-            operand, 
+            operand,
             identifier,
             expressions.toArray(new Expression[]{}),
             new Location(
@@ -126,13 +126,13 @@ class Visitor extends DepthFirstAdapter {
     }
 
     @Override
-    public void outASimpleMethodcall(ASimpleMethodcall node) {
+    public void outASimpleCallobject(ASimpleCallobject node) {
         String identifier = (String)stack.pop();
         Expression operand = (Expression)stack.pop();
         stack.push(
           new MethodCall(
-            operand, 
-            identifier, 
+            operand,
+            identifier,
             new Expression[]{},
             new Location(
               filename,
@@ -140,6 +140,41 @@ class Visitor extends DepthFirstAdapter {
               node.getIdentifier().getPos()
             )
           )
+        );
+    }
+
+    @Override
+    public void outAParametersCallself(AParametersCallself node) {
+        List<Expression> expressions = popList();
+        String identifier = (String)stack.pop();
+        stack.push(
+                new MethodCall(
+                        new Reference("self"),
+                        identifier,
+                        expressions.toArray(new Expression[]{}),
+                        new Location(
+                                filename,
+                                node.getIdentifierbrace().getLine(),
+                                node.getIdentifierbrace().getPos()
+                        )
+                )
+        );
+    }
+
+    @Override
+    public void outASimpleCallself(ASimpleCallself node) {
+        String identifier = (String)stack.pop();
+        stack.push(
+                new MethodCall(
+                        new Reference("self"),
+                        identifier,
+                        new Expression[]{},
+                        new Location(
+                                filename,
+                                node.getIdentifier().getLine(),
+                                node.getIdentifier().getPos()
+                        )
+                )
         );
     }
 
@@ -325,9 +360,9 @@ class Visitor extends DepthFirstAdapter {
         Expression right = (Expression)stack.pop();
         Expression left = (Expression)stack.pop();
         MethodCall methodCall = new MethodCall(
-          left, 
-          methodname, 
-          new Expression[]{right}, 
+          left,
+          methodname,
+          new Expression[]{right},
           new Location(filename, operator.getLine(), operator.getPos())
         );
         stack.push(methodCall);
@@ -336,9 +371,9 @@ class Visitor extends DepthFirstAdapter {
     private void unaryOperation(String methodname, Token operator) {
         Expression operand = (Expression)stack.pop();
         MethodCall methodCall = new MethodCall(
-          operand, 
-          methodname, 
-          new Expression[]{}, 
+          operand,
+          methodname,
+          new Expression[]{},
           new Location(filename, operator.getLine(), operator.getPos())
         );
         stack.push(methodCall);

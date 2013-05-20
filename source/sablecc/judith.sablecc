@@ -49,7 +49,7 @@ Tokens
   times        = '*';
 
   boolean         = 'true' | 'false';
-  identifier      = digit* letter (digit|letter)*; 
+  identifier      = digit* letter (digit|letter)*;
   identifierbrace = digit* letter (digit|letter)* '(';
   number          = digit+ ('.' digit+)?;
   text            = '"' [any-'"']* '"';
@@ -131,7 +131,7 @@ Productions
               | {alteration} alteration
               | {simple} expression7
               ;
-              
+
   expression7 = {block} block
               | {lambda} lambda
               | {lambdablock} lambdablock
@@ -145,9 +145,17 @@ Productions
               | {boolean} boolean
               ;
 
-  methodcall = {parameters} expression6 dot identifierbrace expressions
+  methodcall = {callobject} callobject
+             | {callself} callself
+             ;
+
+  callobject = {parameters} expression6 dot identifierbrace expressions
              | {simple} expression6 dot identifier
              ;
+
+  callself = {parameters} identifierbrace expressions
+           | {simple} identifier
+           ;
 
   expressions = expressionlist closebrace;
 
@@ -166,7 +174,7 @@ Productions
                  ;
 
   lambda = openbrace identifierlist arrow expression closebrace;
-  
+
   lambdablock = openbracket identifierlist arrow statements closebracket;
 
   braces = openbrace expression closebrace;
