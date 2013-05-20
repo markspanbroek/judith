@@ -230,7 +230,23 @@ public class Visitor extends net.spanbroek.judith.tree.Visitor {
 
     @Override
     public void visit(net.spanbroek.judith.tree.Reference node) {
-        stack.push(scope.get(node.getIdentifier()));
+        if (scope.contains(node.getIdentifier())) {
+            stack.push(scope.get(node.getIdentifier()));
+        } else {
+            Object operand = scope.get("self");
+
+            // call the method
+            try {
+                stack.push(operand.call(node.getIdentifier()));
+            }
+            catch(Exception exception) {
+                // update stack trace when exception is caught
+                exception.addToStackTrace(
+                  node.getLocation().toString() + ": " + node.getIdentifier()
+                );
+                throw exception;
+            }
+        }
     }
 
     @Override

@@ -32,9 +32,54 @@ object MethodTests := Object
 
         Assert.that(timesBarWasCalled).equals(2)
     ]
+
+    method methodCallToSelfAsExpression
+    [
+        object timesBarWasCalled := 0
+
+        Object
+        |[
+            method bar
+            [
+                timesBarWasCalled := timesBarWasCalled + 1
+            ]
+
+            method callBar
+            [
+                self.bar
+                object foo := bar
+            ]
+        ]|.callBar
+
+        Assert.that(timesBarWasCalled).equals(2)
+    ]
+
+    method variableTakesPreferenceOverMethodCall
+    [
+        object timesBarWasCalled := 0
+
+        Object
+        |[
+            method bar
+            [
+                timesBarWasCalled := timesBarWasCalled + 1
+            ]
+
+            method callBar
+            [
+                object bar := null
+                self.bar
+                object foo := bar
+            ]
+        ]|.callBar
+
+        Assert.that(timesBarWasCalled).equals(1)
+    ]
 ]|
 
 MethodTests
     .methodBodyHasInnerScope
     .methodCallToSelf
+    .methodCallToSelfAsExpression
+    .variableTakesPreferenceOverMethodCall
 

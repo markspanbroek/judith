@@ -103,7 +103,13 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void outAIdentifierExpression8(AIdentifierExpression8 node) {
         String identifier = (String)stack.pop();
-        stack.push(new Reference(identifier));
+        stack.push(new Reference(identifier,
+                        new Location(
+                                filename,
+                                node.getIdentifier().getLine(),
+                                node.getIdentifier().getPos()
+                        )
+        ));
     }
 
     @Override
