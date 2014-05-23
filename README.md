@@ -10,10 +10,8 @@ The obligatory Hello World example:
 	
 	output.write("Hello World!")
 	
-Basics
-------
-
-### Variables ###
+Variables
+---------
 
 When you first introduce a variable, you have to explicitly declare it using the
 _object_ keyword. For example:
@@ -32,24 +30,16 @@ After declaration any value may be assigned to the variable:
 As you have probably figured out by now, variables do not have a type. You are free
 to first assign a number to the _amount_ variable, and later on assign a string of text.
 
-### Objects ###
+Objects
+-------
 
 Anything that you can assign to a variable is an object. 
-This means that the number `3`
-is an object, the string of text `"hello"` is an object and objects from the object library
+This means that the number _3_ is an object, the string of text _"hello"_ is an object, and objects from the object library are all objects.
 
+Conditional execution
+---------------------
 
-Numbers
-
-Text
-
-Are all objects
-
-### Methods ###
-
-### Object library ###
-
-### Conditional execution ###
+Conditional execution is supported by _if_ statements. Multiple conditions can be specified, and are evaluated in order.
 
 	object output := Objects.IO.StandardOutput
 	
@@ -63,7 +53,10 @@ Are all objects
 		output.write("too high")
 	fi
 		
-### Repetition ###
+Repetition
+----------
+
+Repeated execution is supported by _do_ statements. Like the _if_ statement, multiple conditions can be specified. The _do_ statement will repeat as long as one of its conditions evaluates to true.
 
 	object output := Objects.IO.StandardOutput
 	
@@ -78,25 +71,12 @@ Are all objects
 	output.write("the answer is: " + answer)
 
 
-Object library
---------------
+Replace
+-------
 
-### Text ###
+The replace method is present on all objects, and can be used to replace an object instance with a different object instance. The only restriction is that the replacement should be a subtype of the object that is being replaced.
 
-### Numbers ###
-
-### IO ###
-
-
-Inheritance
------------
-
-### Parent ###
-
-Runtime refactoring
--------------------
-
-### Replace ###
+The replace method is especially suited for adding functionality to objects from the object library. The example below adds a factorial method to all numbers.
 
 	object output := Objects.IO.StandardOutput
 
@@ -113,13 +93,3 @@ Runtime refactoring
 	]|)
 
 	output.write("42! = " + 42.factorial)
-
-
-
-### Rename ###
-
-
-Testing
--------
-
-### Assert ###
