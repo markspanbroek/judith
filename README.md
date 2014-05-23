@@ -1,6 +1,8 @@
 The judith programming language
 ===============================
 
+[![Build Status](https://travis-ci.org/markspanbroek/judith.svg)](https://travis-ci.org/markspanbroek/judith)
+
 Introduction
 ------------
 
