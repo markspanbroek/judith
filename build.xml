@@ -55,7 +55,7 @@
 
   <target name='testStandardOutput' depends='jar'>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
-      <arg file='tests/StandardOutputTest.judith'/>
+      <arg file='tests/judith/StandardOutputTest.judith'/>
       <redirector outputproperty='output'/>
     </java>
     <fail>
@@ -69,14 +69,14 @@
   
   <target name='testStandardInput' depends='jar'>
     <java jar='build/jar/judith.jar' fork='true' failonerror='true'>
-      <arg file='tests/StandardInputTest.judith'/>
+      <arg file='tests/judith/StandardInputTest.judith'/>
       <redirector inputstring='jumps over the lazy dog.'/>
     </java>
   </target>
     
   <target name='test' depends='jar,testStandardOutput,testStandardInput'>
     <pathconvert pathsep=' ' property='tests'>
-      <fileset dir='tests'>
+      <fileset dir='tests/judith'>
         <include name='**/*Tests.judith'/>
       </fileset>
     </pathconvert>
