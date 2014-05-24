@@ -6,6 +6,7 @@ import net.spanbroek.judith.tree.Boolean;
 import net.spanbroek.judith.tree.Number;
 import net.spanbroek.judith.tree.Node;
 import net.spanbroek.judith.tree.*;
+
 import java.util.*;
 
 class Visitor extends DepthFirstAdapter {
@@ -19,31 +20,31 @@ class Visitor extends DepthFirstAdapter {
     }
 
     public Program getResult() {
-        return (Program)stack.peek();
+        return (Program) stack.peek();
     }
 
     @Override
     public void outAProgram(AProgram node) {
         List<Statement> statements = popList();
         stack.push(
-          new Program(
-            statements.toArray(new Statement[]{})
-          )
+                new Program(
+                        statements.toArray(new Statement[statements.size()])
+                )
         );
     }
 
     @Override
     public void outAObject(AObject node) {
-        Expression expression = (Expression)stack.pop();
-        String identifier = (String)stack.pop();
+        Expression expression = (Expression) stack.pop();
+        String identifier = (String) stack.pop();
         ObjectDeclaration object = new ObjectDeclaration(identifier, expression);
         stack.push(object);
     }
 
     @Override
     public void outAAssignment(AAssignment node) {
-        Expression expression = (Expression)stack.pop();
-        String identifier = (String)stack.pop();
+        Expression expression = (Expression) stack.pop();
+        String identifier = (String) stack.pop();
         Assignment assignment = new Assignment(identifier, expression);
         stack.push(assignment);
     }
@@ -52,7 +53,7 @@ class Visitor extends DepthFirstAdapter {
     public void outAIf(AIf node) {
         List<Conditional> conditionals = popList();
         If i = new If(
-          conditionals.toArray(new Conditional[]{})
+                conditionals.toArray(new Conditional[conditionals.size()])
         );
         stack.push(i);
     }
@@ -61,7 +62,7 @@ class Visitor extends DepthFirstAdapter {
     public void outADo(ADo node) {
         List<Conditional> conditionals = popList();
         Do d = new Do(
-          conditionals.toArray(new Conditional[]{})
+                conditionals.toArray(new Conditional[conditionals.size()])
         );
         stack.push(d);
     }
@@ -70,10 +71,10 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void outAConditional(AConditional node) {
         List<Statement> statements = popList();
-        Expression expression = (Expression)stack.pop();
+        Expression expression = (Expression) stack.pop();
         Conditional conditional = new Conditional(
-          expression,
-          statements.toArray(new Statement[]{})
+                expression,
+                statements.toArray(new Statement[statements.size()])
         );
         stack.push(conditional);
     }
@@ -81,9 +82,9 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void outANormalBlock(ANormalBlock node) {
         List<Statement> statements = popList();
-        statements.add(0, (Statement)stack.pop());
+        statements.add(0, (Statement) stack.pop());
         Block block = new Block(
-          statements.toArray(new Statement[]{})
+                statements.toArray(new Statement[statements.size()])
         );
         stack.push(block);
     }
@@ -96,68 +97,68 @@ class Visitor extends DepthFirstAdapter {
 
     @Override
     public void outABlockExpression7(ABlockExpression7 node) {
-        Block block = (Block)stack.pop();
+        Block block = (Block) stack.pop();
         stack.push(new LambdaBlock(block.getStatements()));
     }
 
     @Override
     public void outAIdentifierExpression8(AIdentifierExpression8 node) {
-        String identifier = (String)stack.pop();
+        String identifier = (String) stack.pop();
         stack.push(new Reference(identifier,
-                        new Location(
-                                filename,
-                                node.getIdentifier().getLine(),
-                                node.getIdentifier().getPos()
-                        )
+                new Location(
+                        filename,
+                        node.getIdentifier().getLine(),
+                        node.getIdentifier().getPos()
+                )
         ));
     }
 
     @Override
     public void outAParametersCallobject(AParametersCallobject node) {
         List<Expression> expressions = popList();
-        String identifier = (String)stack.pop();
-        Expression operand = (Expression)stack.pop();
+        String identifier = (String) stack.pop();
+        Expression operand = (Expression) stack.pop();
         stack.push(
-          new MethodCall(
-            operand,
-            identifier,
-            expressions.toArray(new Expression[]{}),
-            new Location(
-              filename,
-              node.getIdentifierbrace().getLine(),
-              node.getIdentifierbrace().getPos()
-            )
-          )
+                new MethodCall(
+                        operand,
+                        identifier,
+                        expressions.toArray(new Expression[expressions.size()]),
+                        new Location(
+                                filename,
+                                node.getIdentifierbrace().getLine(),
+                                node.getIdentifierbrace().getPos()
+                        )
+                )
         );
     }
 
     @Override
     public void outASimpleCallobject(ASimpleCallobject node) {
-        String identifier = (String)stack.pop();
-        Expression operand = (Expression)stack.pop();
+        String identifier = (String) stack.pop();
+        Expression operand = (Expression) stack.pop();
         stack.push(
-          new MethodCall(
-            operand,
-            identifier,
-            new Expression[]{},
-            new Location(
-              filename,
-              node.getIdentifier().getLine(),
-              node.getIdentifier().getPos()
-            )
-          )
+                new MethodCall(
+                        operand,
+                        identifier,
+                        new Expression[]{},
+                        new Location(
+                                filename,
+                                node.getIdentifier().getLine(),
+                                node.getIdentifier().getPos()
+                        )
+                )
         );
     }
 
     @Override
     public void outAParametersCallself(AParametersCallself node) {
         List<Expression> expressions = popList();
-        String identifier = (String)stack.pop();
+        String identifier = (String) stack.pop();
         stack.push(
                 new MethodCall(
                         new Reference("self"),
                         identifier,
-                        expressions.toArray(new Expression[]{}),
+                        expressions.toArray(new Expression[expressions.size()]),
                         new Location(
                                 filename,
                                 node.getIdentifierbrace().getLine(),
@@ -169,7 +170,7 @@ class Visitor extends DepthFirstAdapter {
 
     @Override
     public void outASimpleCallself(ASimpleCallself node) {
-        String identifier = (String)stack.pop();
+        String identifier = (String) stack.pop();
         stack.push(
                 new MethodCall(
                         new Reference("self"),
@@ -187,35 +188,34 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void outAAlteration(AAlteration node) {
         List<Node> alterationParts = popList();
-        Expression operand = (Expression)stack.pop();
+        Expression operand = (Expression) stack.pop();
         List<ObjectDeclaration> objects = new ArrayList<ObjectDeclaration>();
         List<Method> methods = new ArrayList<Method>();
-        for (Iterator<Node> i=alterationParts.iterator(); i.hasNext(); ) {
-            java.lang.Object alterationPart = i.next();
+        for (Node alterationPart : alterationParts) {
             if (alterationPart instanceof ObjectDeclaration) {
-                objects.add((ObjectDeclaration)alterationPart);
+                objects.add((ObjectDeclaration) alterationPart);
             }
             if (alterationPart instanceof Method) {
-                methods.add((Method)alterationPart);
+                methods.add((Method) alterationPart);
             }
         }
         Alteration alteration = new Alteration(
-            operand,
-            objects.toArray(new ObjectDeclaration[]{}),
-            methods.toArray(new Method[]{})
+                operand,
+                objects.toArray(new ObjectDeclaration[objects.size()]),
+                methods.toArray(new Method[methods.size()])
         );
         stack.push(alteration);
     }
 
     @Override
     public void outALambda(ALambda node) {
-        Expression expression = (Expression)stack.pop();
+        Expression expression = (Expression) stack.pop();
         List<String> identifiers = popList();
         stack.push(
-          new Lambda(
-            identifiers.toArray(new String[]{}),
-            expression
-          )
+                new Lambda(
+                        identifiers.toArray(new String[identifiers.size()]),
+                        expression
+                )
         );
     }
 
@@ -224,10 +224,10 @@ class Visitor extends DepthFirstAdapter {
         List<Statement> statements = popList();
         List<String> identifiers = popList();
         stack.push(
-          new LambdaBlock(
-            identifiers.toArray(new String[]{}),
-            statements.toArray(new Statement[]{})
-          )
+                new LambdaBlock(
+                        identifiers.toArray(new String[identifiers.size()]),
+                        statements.toArray(new Statement[statements.size()])
+                )
         );
     }
 
@@ -235,11 +235,11 @@ class Visitor extends DepthFirstAdapter {
     public void outAParametersMethod(AParametersMethod node) {
         List<Statement> statements = popList();
         List<String> identifiers = popList();
-        String identifier = (String)stack.pop();
+        String identifier = (String) stack.pop();
         Method method = new Method(
-          identifier,
-          identifiers.toArray(new String[]{}),
-          statements.toArray(new Statement[]{})
+                identifier,
+                identifiers.toArray(new String[identifiers.size()]),
+                statements.toArray(new Statement[statements.size()])
         );
         stack.push(method);
     }
@@ -247,11 +247,11 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void outASimpleMethod(ASimpleMethod node) {
         List<Statement> statements = popList();
-        String identifier = (String)stack.pop();
+        String identifier = (String) stack.pop();
         Method method = new Method(
-          identifier,
-          new String[]{},
-          statements.toArray(new Statement[]{})
+                identifier,
+                new String[]{},
+                statements.toArray(new Statement[statements.size()])
         );
         stack.push(method);
     }
@@ -269,7 +269,7 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void caseTText(TText node) {
         String text = node.getText();
-        text = text.substring(1,text.length()-1);
+        text = text.substring(1, text.length() - 1);
         stack.push(new Text(text));
     }
 
@@ -281,7 +281,7 @@ class Visitor extends DepthFirstAdapter {
     @Override
     public void caseTIdentifierbrace(TIdentifierbrace node) {
         String identifier = node.getText();
-        identifier = identifier.substring(0,identifier.length()-1);
+        identifier = identifier.substring(0, identifier.length() - 1);
         stack.push(identifier);
     }
 
@@ -363,24 +363,24 @@ class Visitor extends DepthFirstAdapter {
     }
 
     private void binaryOperation(String methodname, Token operator) {
-        Expression right = (Expression)stack.pop();
-        Expression left = (Expression)stack.pop();
+        Expression right = (Expression) stack.pop();
+        Expression left = (Expression) stack.pop();
         MethodCall methodCall = new MethodCall(
-          left,
-          methodname,
-          new Expression[]{right},
-          new Location(filename, operator.getLine(), operator.getPos())
+                left,
+                methodname,
+                new Expression[]{right},
+                new Location(filename, operator.getLine(), operator.getPos())
         );
         stack.push(methodCall);
     }
 
     private void unaryOperation(String methodname, Token operator) {
-        Expression operand = (Expression)stack.pop();
+        Expression operand = (Expression) stack.pop();
         MethodCall methodCall = new MethodCall(
-          operand,
-          methodname,
-          new Expression[]{},
-          new Location(filename, operator.getLine(), operator.getPos())
+                operand,
+                methodname,
+                new Expression[]{},
+                new Location(filename, operator.getLine(), operator.getPos())
         );
         stack.push(methodCall);
     }
@@ -451,12 +451,12 @@ class Visitor extends DepthFirstAdapter {
     private void addtoList() {
         java.lang.Object element = stack.pop();
         @SuppressWarnings("unchecked")
-        List<java.lang.Object> list = (List<java.lang.Object>)stack.peek();
+        List<java.lang.Object> list = (List<java.lang.Object>) stack.peek();
         list.add(element);
     }
 
     @SuppressWarnings("unchecked")
     private <T> List<T> popList() {
-        return (List<T>)stack.pop();
+        return (List<T>) stack.pop();
     }
 }
