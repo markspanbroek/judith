@@ -16,4 +16,14 @@ public class Boolean implements Expression {
         visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object that) {
+        return (that instanceof Boolean) &&
+                (((Boolean)that).value == this.value);
+    }
+
+    @Override
+    public String toString() {
+        return "" + value;
+    }
 }

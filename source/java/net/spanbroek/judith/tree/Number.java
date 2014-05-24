@@ -16,4 +16,15 @@ public class Number implements Expression {
         visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object that) {
+        return (that instanceof Number) &&
+                (((Number)that).value == this.value);
+
+    }
+
+    @Override
+    public String toString() {
+        return "" + value;
+    }
 }

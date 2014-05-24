@@ -16,4 +16,15 @@ public class Text implements Expression {
         visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object that) {
+        return (that instanceof Text) &&
+                (((Text)that).value.equals(this.value));
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
+
 }
