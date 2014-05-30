@@ -36,4 +36,14 @@ public class ExpressionParserTests {
         assertEquals(new Text("foo"), parser.parse("\"foo\""));
         assertEquals(new Text("bar'234"), parser.parse("\"bar'234\""));
     }
+
+    @Test
+    public void parsesIdentifiers() {
+        assertEquals("foo", parser.parse("foo"));
+        assertEquals("FOO", parser.parse("FOO"));
+        assertEquals("12foo", parser.parse("12foo"));
+        assertEquals("1foo23", parser.parse("1foo23"));
+        assertEquals("foo'", parser.parse("foo'"));
+        assertEquals("?foo", parser.parse("?foo"));
+    }
 }
