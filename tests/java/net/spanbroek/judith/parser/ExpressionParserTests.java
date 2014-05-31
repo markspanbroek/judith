@@ -65,6 +65,12 @@ public class ExpressionParserTests {
     }
 
     @Test
+    public void parsesPrefixOperations() {
+        assertEquals(operation("a", "minus"), parser.parse("-a"));
+        assertEquals(operation("a", "not"), parser.parse("not a"));
+    }
+
+    @Test
     public void parsesBraces() {
         MethodCall subtraction = operation("a", "minus", operation("b", "minus", "c"));
         assertEquals(subtraction, parser.parse("a-(b-c)"));
@@ -83,6 +89,10 @@ public class ExpressionParserTests {
 
     private void checkParsingOfBinaryOperator(String expectedMethodName, String operator) {
         assertEquals(operation("a", expectedMethodName, "b"), parser.parse("a " + operator + " b"));
+    }
+
+    private MethodCall operation(String left, String operand) {
+        return new MethodCall(new Reference(left), operand, new Expression[]{});
     }
 
     private MethodCall operation(String left, String operand, String right) {

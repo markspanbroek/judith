@@ -59,7 +59,7 @@ public class ExpressionParser extends Rule {
                 optional(expression4, w, "^", w), expression5
         );
         expression5.is(
-                expression6
+                choice(concat(choice("not", "-"), w, expression5), expression6)
         );
         expression6.is(
                 expression7
@@ -117,6 +117,7 @@ public class ExpressionParser extends Rule {
         operators.put("*", "star");
         operators.put("/", "slash");
         operators.put("^", "carrot");
+        operators.put("not", "not");
     }
 
     private void setupTransformations() {
@@ -148,6 +149,12 @@ public class ExpressionParser extends Rule {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 return transformBinaryOperation(objects);
+            }
+        });
+        expression5.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return transformPrefixOperation(objects);
             }
         });
         braces.transform(new Transformation() {
@@ -204,6 +211,15 @@ public class ExpressionParser extends Rule {
             Expression right = (Expression) objects.get(4);
             String operator = (String) objects.get(2);
             return new MethodCall(left, operators.get(operator), new Expression[]{right});
+        }
+        return objects.get(0);
+    }
+
+    private Object transformPrefixOperation(List<Object> objects) {
+        if (objects.size() > 1) {
+            String operator = (String) objects.get(0);
+            Expression operand = (Expression) objects.get(2);
+            return new MethodCall(operand, operators.get(operator), new Expression[]{});
         }
         return objects.get(0);
     }
