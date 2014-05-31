@@ -6,8 +6,8 @@ public class Reference implements Expression {
     private Location location = Location.undefined;
 
     public Reference(String identifier, Location location) {
-      this(identifier);
-      this.location = location;
+        this(identifier);
+        this.location = location;
     }
 
     public Reference(String identifier) {
@@ -26,4 +26,14 @@ public class Reference implements Expression {
         visitor.visit(this);
     }
 
+    @Override
+    public String toString() {
+        return identifier;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return that instanceof Reference &&
+                identifier.equals(((Reference) that).identifier);
+    }
 }

@@ -27,6 +27,7 @@ public class ExpressionParser extends Rule {
     Rule boolean_ = rule();
     Rule number = rule();
     Rule text = rule();
+    Rule reference = rule();
     Rule identifier = rule();
     Rule digit = rule();
     Rule letter = rule();
@@ -67,7 +68,7 @@ public class ExpressionParser extends Rule {
                 expression8
         );
         expression8.is(
-                choice(braces, text, number, boolean_, identifier)
+                choice(braces, text, number, boolean_, reference)
         );
         braces.is(
                 "(", w, this, w, ")"
@@ -80,6 +81,9 @@ public class ExpressionParser extends Rule {
         );
         text.is(
                 "\"", repeat(no('"')), "\""
+        );
+        reference.is(
+                identifier
         );
         identifier.is(
                 repeat(digit), letter, repeat(choice(digit, letter))
@@ -149,6 +153,12 @@ public class ExpressionParser extends Rule {
                 String originalText = context.getOriginalText();
                 String value = originalText.substring(1, originalText.length() - 1);
                 return new Text(value);
+            }
+        });
+        reference.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return new Reference((String) objects.get(0));
             }
         });
         identifier.transform(new Transformation() {

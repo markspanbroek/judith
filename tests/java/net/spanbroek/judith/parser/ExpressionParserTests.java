@@ -39,12 +39,12 @@ public class ExpressionParserTests {
 
     @Test
     public void parsesIdentifiers() {
-        assertEquals("foo", parser.parse("foo"));
-        assertEquals("FOO", parser.parse("FOO"));
-        assertEquals("12foo", parser.parse("12foo"));
-        assertEquals("1foo23", parser.parse("1foo23"));
-        assertEquals("foo'", parser.parse("foo'"));
-        assertEquals("?foo", parser.parse("?foo"));
+        assertEquals(new Reference("foo"), parser.parse("foo"));
+        assertEquals(new Reference("FOO"), parser.parse("FOO"));
+        assertEquals(new Reference("12foo"), parser.parse("12foo"));
+        assertEquals(new Reference("1foo23"), parser.parse("1foo23"));
+        assertEquals(new Reference("foo'"), parser.parse("foo'"));
+        assertEquals(new Reference("?foo"), parser.parse("?foo"));
     }
 
     @Test
@@ -61,8 +61,8 @@ public class ExpressionParserTests {
 
     @Test
     public void parsesBraces() {
-        MethodCall subtraction = operation(2, "minus", operation(1, "minus", 1));
-        assertEquals(subtraction, parser.parse("2-(1-1)"));
+        MethodCall subtraction = operation("a", "minus", operation("b", "minus", "c"));
+        assertEquals(subtraction, parser.parse("a-(b-c)"));
     }
 
     @Test
@@ -77,14 +77,14 @@ public class ExpressionParserTests {
     }
 
     private void checkParsingOfBinaryOperator(String parsedMethodName, String operator) {
-        assertEquals(operation(1, parsedMethodName, 2), parser.parse("1 " + operator + " 2"));
+        assertEquals(operation("a", parsedMethodName, "b"), parser.parse("a " + operator + " b"));
     }
 
-    private MethodCall operation(int left, String operand, int right) {
-        return new MethodCall(new Number(left), operand, new Expression[]{new Number(right)});
+    private MethodCall operation(String left, String operand, String right) {
+        return new MethodCall(new Reference(left), operand, new Expression[]{new Reference(right)});
     }
 
-    private MethodCall operation(int left, String operand, MethodCall right) {
-        return new MethodCall(new Number(left), operand, new Expression[]{right});
+    private MethodCall operation(String left, String operand, MethodCall right) {
+        return new MethodCall(new Reference(left), operand, new Expression[]{right});
     }
 }
