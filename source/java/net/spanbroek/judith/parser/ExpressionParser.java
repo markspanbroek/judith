@@ -44,7 +44,7 @@ public class ExpressionParser extends Rule {
 
     private void setupRules() {
         this.is(
-                expression1
+                optional(this, w, choice("and", "or"), w), expression1
         );
         expression1.is(
                 optional(expression1, w, choice("=", "<=", ">=", "<", ">", ":"), w), expression2
@@ -53,10 +53,10 @@ public class ExpressionParser extends Rule {
                 optional(expression2, w, choice("+", "-"), w), expression3
         );
         expression3.is(
-                expression4
+                optional(expression3, w, choice("*", "/"), w), expression4
         );
         expression4.is(
-                expression5
+                optional(expression4, w, "^", w), expression5
         );
         expression5.is(
                 expression6
@@ -104,6 +104,8 @@ public class ExpressionParser extends Rule {
 
     private void setupOperators() {
         operators = new HashMap<String, String>();
+        operators.put("and", "and");
+        operators.put("or", "or");
         operators.put("-", "minus");
         operators.put("+", "plus");
         operators.put("=", "equals");
@@ -112,9 +114,18 @@ public class ExpressionParser extends Rule {
         operators.put("<", "lessthan");
         operators.put(">", "morethan");
         operators.put(":", "colon");
+        operators.put("*", "star");
+        operators.put("/", "slash");
+        operators.put("^", "carrot");
     }
 
     private void setupTransformations() {
+        this.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return transformBinaryOperation(objects);
+            }
+        });
         expression1.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
@@ -122,6 +133,18 @@ public class ExpressionParser extends Rule {
             }
         });
         expression2.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return transformBinaryOperation(objects);
+            }
+        });
+        expression3.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return transformBinaryOperation(objects);
+            }
+        });
+        expression4.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 return transformBinaryOperation(objects);

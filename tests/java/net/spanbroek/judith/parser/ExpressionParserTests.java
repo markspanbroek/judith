@@ -49,6 +49,8 @@ public class ExpressionParserTests {
 
     @Test
     public void parsesBinaryOperations() {
+        checkParsingOfBinaryOperator("and", "and");
+        checkParsingOfBinaryOperator("or", "or");
         checkParsingOfBinaryOperator("plus", "+");
         checkParsingOfBinaryOperator("minus", "-");
         checkParsingOfBinaryOperator("equals", "=");
@@ -57,6 +59,9 @@ public class ExpressionParserTests {
         checkParsingOfBinaryOperator("lessthan", "<");
         checkParsingOfBinaryOperator("morethan", ">");
         checkParsingOfBinaryOperator("colon", ":");
+        checkParsingOfBinaryOperator("star", "*");
+        checkParsingOfBinaryOperator("slash", "/");
+        checkParsingOfBinaryOperator("carrot", "^");
     }
 
     @Test
@@ -76,8 +81,8 @@ public class ExpressionParserTests {
         assertEquals(new Number(1), parser.parse("( #comment\n 1 #comment\n )"));
     }
 
-    private void checkParsingOfBinaryOperator(String parsedMethodName, String operator) {
-        assertEquals(operation("a", parsedMethodName, "b"), parser.parse("a " + operator + " b"));
+    private void checkParsingOfBinaryOperator(String expectedMethodName, String operator) {
+        assertEquals(operation("a", expectedMethodName, "b"), parser.parse("a " + operator + " b"));
     }
 
     private MethodCall operation(String left, String operand, String right) {
