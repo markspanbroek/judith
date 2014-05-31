@@ -25,7 +25,7 @@ public class ExpressionParser extends Rule {
     Rule expression7 = rule();
     Rule expression8 = rule();
     Rule methodCall = rule();
-    Rule parameters = rule();
+    Rule expressions = rule();
     Rule braces = rule();
     Rule boolean_ = rule();
     Rule number = rule();
@@ -74,9 +74,9 @@ public class ExpressionParser extends Rule {
                 choice(braces, text, number, boolean_, reference)
         );
         methodCall.is(
-                expression6, ".", identifier, parameters
+                expression6, ".", identifier, expressions
         );
-        parameters.is(
+        expressions.is(
                 optional("(", w, this, repeat(w, ",", w, this), w, ")")
         );
         braces.is(
@@ -175,7 +175,7 @@ public class ExpressionParser extends Rule {
                 return new MethodCall(callee, methodName, parameters);
             }
         });
-        parameters.transform(new Transformation() {
+        expressions.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 List<Expression> result = new ArrayList<Expression>();
