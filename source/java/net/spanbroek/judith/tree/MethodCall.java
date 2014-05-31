@@ -1,5 +1,7 @@
 package net.spanbroek.judith.tree;
 
+import java.util.Arrays;
+
 public class MethodCall implements Expression, Statement{
 
     private Expression operand;
@@ -40,4 +42,19 @@ public class MethodCall implements Expression, Statement{
         visitor.visit(this);
     }
 
+    @Override
+    public String toString() {
+        String parameterString = Arrays.toString(parameters);
+        parameterString = parameterString.substring(1, parameterString.length() -1);
+        return operand + "." + identifier + '('+ parameterString +')';
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return that instanceof MethodCall &&
+                operand.equals(((MethodCall) that).operand) &&
+                identifier.equals(((MethodCall) that).identifier) &&
+                Arrays.equals(parameters, ((MethodCall) that).parameters) &&
+                location.equals(((MethodCall) that).location);
+    }
 }
