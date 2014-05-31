@@ -1,13 +1,15 @@
 package net.spanbroek.judith.parser;
 
-import net.spanbroek.judith.tree.*;
 import net.spanbroek.judith.tree.Boolean;
+import net.spanbroek.judith.tree.*;
+import net.spanbroek.judith.tree.Number;
 import net.spanbroek.parsing.Context;
 import net.spanbroek.parsing.Rule;
 import net.spanbroek.parsing.Transformation;
-import net.spanbroek.judith.tree.Number;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static net.spanbroek.parsing.Parsing.*;
 
@@ -31,8 +33,11 @@ public class ExpressionParser extends Rule {
     Rule w = rule();
     Rule comment = rule();
 
+    Map<String, String> operators;
+
     public ExpressionParser() {
         setupRules();
+        setupOperators();
         setupTransformations();
     }
 
@@ -41,7 +46,7 @@ public class ExpressionParser extends Rule {
                 expression1
         );
         expression1.is(
-                expression2
+                optional(expression1, w, choice("=", "<=", ">=", "<", ">", ":"), w), expression2
         );
         expression2.is(
                 optional(expression2, w, choice("+", "-"), w), expression3
@@ -93,17 +98,29 @@ public class ExpressionParser extends Rule {
         );
     }
 
+    private void setupOperators() {
+        operators = new HashMap<String, String>();
+        operators.put("-", "minus");
+        operators.put("+", "plus");
+        operators.put("=", "equals");
+        operators.put("<=", "atmost");
+        operators.put(">=", "atleast");
+        operators.put("<", "lessthan");
+        operators.put(">", "morethan");
+        operators.put(":", "colon");
+    }
+
     private void setupTransformations() {
+        expression1.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return transformBinaryOperation(objects);
+            }
+        });
         expression2.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                if (objects.size() > 1) {
-                    Expression left = (Expression) objects.get(0);
-                    Expression right = (Expression) objects.get(4);
-                    String operator = objects.get(2).equals("+") ? "plus" : "minus";
-                    return new MethodCall(left, operator, new Expression[]{right});
-                }
-                return objects.get(0);
+                return transformBinaryOperation(objects);
             }
         });
         braces.transform(new Transformation() {
@@ -146,5 +163,15 @@ public class ExpressionParser extends Rule {
                 return context.getOriginalText();
             }
         });
+    }
+
+    private Object transformBinaryOperation(List<Object> objects) {
+        if (objects.size() > 1) {
+            Expression left = (Expression) objects.get(0);
+            Expression right = (Expression) objects.get(4);
+            String operator = (String) objects.get(2);
+            return new MethodCall(left, operators.get(operator), new Expression[]{right});
+        }
+        return objects.get(0);
     }
 }
