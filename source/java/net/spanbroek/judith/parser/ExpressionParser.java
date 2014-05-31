@@ -7,6 +7,7 @@ import net.spanbroek.parsing.Context;
 import net.spanbroek.parsing.Rule;
 import net.spanbroek.parsing.Transformation;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class ExpressionParser extends Rule {
     Rule expression6 = rule();
     Rule expression7 = rule();
     Rule expression8 = rule();
+    Rule methodCall = rule();
+    Rule parameters = rule();
     Rule braces = rule();
     Rule boolean_ = rule();
     Rule number = rule();
@@ -62,13 +65,19 @@ public class ExpressionParser extends Rule {
                 choice(concat(choice("not", "-"), w, expression5), expression6)
         );
         expression6.is(
-                expression7
+                choice(methodCall, expression7)
         );
         expression7.is(
                 expression8
         );
         expression8.is(
                 choice(braces, text, number, boolean_, reference)
+        );
+        methodCall.is(
+                expression6, ".", identifier, parameters
+        );
+        parameters.is(
+                optional("(", w, this, repeat(w, ",", w, this), w, ")")
         );
         braces.is(
                 "(", w, this, w, ")"
@@ -155,6 +164,25 @@ public class ExpressionParser extends Rule {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 return transformPrefixOperation(objects);
+            }
+        });
+        methodCall.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                Expression callee = (Expression) objects.get(0);
+                String methodName = (String) objects.get(2);
+                Expression[] parameters = (Expression[]) objects.get(3);
+                return new MethodCall(callee, methodName, parameters);
+            }
+        });
+        parameters.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                List<Expression> result = new ArrayList<Expression>();
+                for (int i = 2; i < objects.size(); i += 4) {
+                    result.add((Expression) objects.get(i));
+                }
+                return result.toArray(new Expression[result.size()]);
             }
         });
         braces.transform(new Transformation() {
