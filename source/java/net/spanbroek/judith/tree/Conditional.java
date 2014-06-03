@@ -1,5 +1,7 @@
 package net.spanbroek.judith.tree;
 
+import java.util.Arrays;
+
 public class Conditional implements Node {
 
     private Expression expression;
@@ -22,4 +24,19 @@ public class Conditional implements Node {
         visitor.visit(this);
     }
 
+    @Override
+    public String toString() {
+        String result = expression + " ";
+        for (Statement statement : statements) {
+            result += statement;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return that instanceof Conditional &&
+                expression.equals(((Conditional) that).expression) &&
+                Arrays.equals(statements, ((Conditional) that).statements);
+    }
 }

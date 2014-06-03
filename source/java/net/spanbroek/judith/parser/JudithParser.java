@@ -16,8 +16,13 @@ import static net.spanbroek.parsing.Parsing.*;
 
 public class JudithParser extends Rule {
 
+    Rule statements = rule();
     Rule statement = rule();
+    Rule object = rule();
     Rule assignment = rule();
+    Rule if_ = rule();
+    Rule conditionals = rule();
+    Rule conditional = rule();
     Rule expression = rule();
     Rule expression1 = rule();
     Rule expression2 = rule();
@@ -49,11 +54,26 @@ public class JudithParser extends Rule {
     }
 
     private void setupRules() {
+        statements.is(
+                optional(statement, repeat(w, statement))
+        );
         statement.is(
-                assignment
+                choice(object, assignment, if_)
+        );
+        object.is(
+                "object", w, identifier, w, ":=", w, expression
         );
         assignment.is(
                 identifier, w, ":=", w, expression
+        );
+        if_.is(
+                "if", w, conditionals, w, "fi"
+        );
+        conditionals.is(
+                conditional, repeat(w, "||", w, conditional)
+        );
+        conditional.is(
+                expression, w, statements
         );
         expression.is(
                 optional(expression, w, choice("and", "or"), w), expression1
@@ -139,12 +159,55 @@ public class JudithParser extends Rule {
     }
 
     private void setupTransformations() {
+        statements.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                List<Statement> result = new ArrayList<Statement>();
+                for (int i=0; i<objects.size(); i+=2) {
+                    result.add((Statement)objects.get(i));
+                }
+                return result.toArray(new Statement[result.size()]);
+            }
+        });
+        object.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                String identifier = (String) objects.get(2);
+                Expression expression = (Expression) objects.get(6);
+                return new ObjectDeclaration(identifier, expression);
+            }
+        });
         assignment.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 String identifier = (String) objects.get(0);
                 Expression expression = (Expression) objects.get(4);
                 return new Assignment(identifier, expression);
+            }
+        });
+        if_.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                Conditional[] conditionals = (Conditional[]) objects.get(2);
+                return new If(conditionals);
+            }
+        });
+        conditionals.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                List<Conditional> result = new ArrayList<Conditional>();
+                for (int i=0; i<objects.size(); i+=4) {
+                    result.add((Conditional)objects.get(i));
+                }
+                return result.toArray(new Conditional[result.size()]);
+            }
+        });
+        conditional.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                Expression expression = (Expression)objects.get(0);
+                Statement[] statements = (Statement[])objects.get(2);
+                return new Conditional(expression, statements);
             }
         });
         expression.transform(new Transformation() {

@@ -22,4 +22,16 @@ public class ObjectDeclaration implements Statement {
         visitor.visit(this);
     }
 
+    @Override
+    public String toString() {
+        return "object " + identifier + " := " + expression;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return that instanceof ObjectDeclaration &&
+                identifier.equals(((ObjectDeclaration)that).identifier) &&
+                expression.equals(((ObjectDeclaration)that).expression);
+    }
+
 }
