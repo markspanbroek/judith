@@ -22,4 +22,15 @@ public class Assignment implements Statement {
         visitor.visit(this);
     }
 
+    @Override
+    public String toString() {
+        return identifier + " := " + expression;
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return that instanceof Assignment &&
+                identifier.equals(((Assignment)that).identifier) &&
+                expression.equals(((Assignment)that).expression);
+    }
 }

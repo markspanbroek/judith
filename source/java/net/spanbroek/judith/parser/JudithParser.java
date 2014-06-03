@@ -14,8 +14,11 @@ import java.util.Map;
 
 import static net.spanbroek.parsing.Parsing.*;
 
-public class ExpressionParser extends Rule {
+public class JudithParser extends Rule {
 
+    Rule statement = rule();
+    Rule assignment = rule();
+    Rule expression = rule();
     Rule expression1 = rule();
     Rule expression2 = rule();
     Rule expression3 = rule();
@@ -39,15 +42,21 @@ public class ExpressionParser extends Rule {
 
     Map<String, String> operators;
 
-    public ExpressionParser() {
+    public JudithParser() {
         setupRules();
         setupOperators();
         setupTransformations();
     }
 
     private void setupRules() {
-        this.is(
-                optional(this, w, choice("and", "or"), w), expression1
+        statement.is(
+                assignment
+        );
+        assignment.is(
+                identifier, w, ":=", w, expression
+        );
+        expression.is(
+                optional(expression, w, choice("and", "or"), w), expression1
         );
         expression1.is(
                 optional(expression1, w, choice("=", "<=", ">=", "<", ">", ":"), w), expression2
@@ -77,10 +86,10 @@ public class ExpressionParser extends Rule {
                 expression6, ".", identifier, expressions
         );
         expressions.is(
-                optional("(", w, this, repeat(w, ",", w, this), w, ")")
+                optional("(", w, expression, repeat(w, ",", w, expression), w, ")")
         );
         braces.is(
-                "(", w, this, w, ")"
+                "(", w, expression, w, ")"
         );
         boolean_.is(
                 choice("true", "false")
@@ -130,7 +139,15 @@ public class ExpressionParser extends Rule {
     }
 
     private void setupTransformations() {
-        this.transform(new Transformation() {
+        assignment.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                String identifier = (String) objects.get(0);
+                Expression expression = (Expression) objects.get(4);
+                return new Assignment(identifier, expression);
+            }
+        });
+        expression.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 return transformBinaryOperation(objects);

@@ -3,6 +3,7 @@ package net.spanbroek.judith.parser;
 import net.spanbroek.judith.tree.*;
 import net.spanbroek.judith.tree.Boolean;
 import net.spanbroek.judith.tree.Number;
+import net.spanbroek.parsing.Parser;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,11 +11,11 @@ import static org.junit.Assert.assertEquals;
 
 public class ExpressionParserTests {
 
-    private ExpressionParser parser;
+    private Parser parser;
 
     @Before
     public void setUp() {
-        parser = new ExpressionParser();
+        parser = new JudithParser().expression;
     }
 
     @Test
