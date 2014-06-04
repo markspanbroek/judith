@@ -39,6 +39,8 @@ public class JudithParser extends Rule {
     Rule lambda = rule();
     Rule lambdaBlock = rule();
     Rule braces = rule();
+    Rule method = rule();
+    Rule parameterNames = rule();
     Rule identifiers = rule();
     Rule boolean_ = rule();
     Rule number = rule();
@@ -131,6 +133,12 @@ public class JudithParser extends Rule {
         braces.is(
                 "(", w, expression, w, ")"
         );
+        method.is(
+                "method", w, identifier, parameterNames, w, "[", w, statements, w, "]"
+        );
+        parameterNames.is(
+                optional("(", w, identifiers, w, ")")
+        );
         boolean_.is(
                 choice("true", "false")
         );
@@ -183,8 +191,8 @@ public class JudithParser extends Rule {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 List<Statement> result = new ArrayList<Statement>();
-                for (int i=0; i<objects.size(); i+=2) {
-                    result.add((Statement)objects.get(i));
+                for (int i = 0; i < objects.size(); i += 2) {
+                    result.add((Statement) objects.get(i));
                 }
                 return result.toArray(new Statement[result.size()]);
             }
@@ -223,8 +231,8 @@ public class JudithParser extends Rule {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 List<Conditional> result = new ArrayList<Conditional>();
-                for (int i=0; i<objects.size(); i+=4) {
-                    result.add((Conditional)objects.get(i));
+                for (int i = 0; i < objects.size(); i += 4) {
+                    result.add((Conditional) objects.get(i));
                 }
                 return result.toArray(new Conditional[result.size()]);
             }
@@ -232,8 +240,8 @@ public class JudithParser extends Rule {
         conditional.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                Expression expression = (Expression)objects.get(0);
-                Statement[] statements = (Statement[])objects.get(2);
+                Expression expression = (Expression) objects.get(0);
+                Statement[] statements = (Statement[]) objects.get(2);
                 return new Conditional(expression, statements);
             }
         });
@@ -284,7 +292,7 @@ public class JudithParser extends Rule {
             public Object transform(List<Object> objects, Context context) {
                 Object object = objects.get(0);
                 if (object instanceof Block) {
-                    return new LambdaBlock(((Block)object).getStatements());
+                    return new LambdaBlock(((Block) object).getStatements());
                 }
                 return object;
             }
@@ -324,20 +332,44 @@ public class JudithParser extends Rule {
                 return new LambdaBlock(identifiers, statements);
             }
         });
+        braces.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return objects.get(2);
+            }
+        });
+        method.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                String name = (String) objects.get(2);
+                String[] parameterNames = (String[]) objects.get(3);
+                Statement[] statements = (Statement[]) objects.get(7);
+                return new Method(name, parameterNames, statements);
+            }
+        });
+        parameterNames.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                if (objects.size() > 0) {
+                    return objects.get(2);
+                }
+                return new String[]{};
+            }
+        });
         identifiers.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 List<String> result = new ArrayList<String>();
-                for (int i=0; i<objects.size(); i+=4) {
+                for (int i = 0; i < objects.size(); i += 4) {
                     result.add((String) objects.get(i));
                 }
                 return result.toArray(new String[result.size()]);
             }
         });
-        braces.transform(new Transformation() {
+        reference.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return objects.get(2);
+                return new Reference((String) objects.get(0));
             }
         });
         boolean_.transform(new Transformation() {
@@ -360,12 +392,6 @@ public class JudithParser extends Rule {
                 String originalText = context.getOriginalText();
                 String value = originalText.substring(1, originalText.length() - 1);
                 return new Text(value);
-            }
-        });
-        reference.transform(new Transformation() {
-            @Override
-            public Object transform(List<Object> objects, Context context) {
-                return new Reference((String) objects.get(0));
             }
         });
         identifier.transform(new Transformation() {
