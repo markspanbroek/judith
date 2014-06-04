@@ -74,7 +74,7 @@ public class JudithParser extends Rule {
                 optional(statement, repeat(w, statement))
         );
         statement.is(
-                choice(object, assignment, if_, do_, block)
+                choice(object, assignment, if_, do_, methodCall, block)
         );
         object.is(
                 "object", w, identifier, w, ":=", w, expression

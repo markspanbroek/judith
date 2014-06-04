@@ -38,6 +38,12 @@ public class StatementParserTests {
     }
 
     @Test
+    public void parsesMethodCall() {
+        MethodCall methodCall = new MethodCall(new Reference("object"), "method", new Expression[]{});
+        assertEquals(methodCall, parser.parse("object.method"));
+    }
+
+    @Test
     public void parsesIfStatementWithMultipleConditions() {
         Statement[] statements1 = {new Assignment("a", new Number(1))};
         Statement[] statements2 = {new Assignment("b", new Number(2))};
