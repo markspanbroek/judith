@@ -85,6 +85,26 @@ public class ExpressionParserTests {
     }
 
     @Test
+    public void parsesLambdas() {
+        Lambda lambda = new Lambda(new String[]{"a", "b"}, methodCall("a", "plus", "b"));
+        assertEquals(lambda, parser.parse("( a , b -> a+b )"));
+    }
+
+    @Test
+    public void parsesLambdaBlock() {
+        Statement[] statements = new Statement[]{new Assignment("a", new Reference("b"))};
+        LambdaBlock lambda = new LambdaBlock(new String[]{"a", "b"}, statements);
+        assertEquals(lambda, parser.parse("[ a , b -> a := b ]"));
+    }
+
+    @Test
+    public void parsesBlock() {
+        Statement[] statements = new Statement[]{new Assignment("a", new Number(1))};
+        LambdaBlock lambda = new LambdaBlock(statements);
+        assertEquals(lambda, parser.parse("[ a := 1 ]"));
+    }
+
+    @Test
     public void parsesBraces() {
         MethodCall subtraction = methodCall("a", "minus", methodCall("b", "minus", "c"));
         assertEquals(subtraction, parser.parse("a-(b-c)"));

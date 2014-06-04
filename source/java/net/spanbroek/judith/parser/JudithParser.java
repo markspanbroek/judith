@@ -35,8 +35,11 @@ public class JudithParser extends Rule {
     Rule expression7 = rule();
     Rule expression8 = rule();
     Rule methodCall = rule();
-    Rule expressions = rule();
+    Rule parameters = rule();
+    Rule lambda = rule();
+    Rule lambdaBlock = rule();
     Rule braces = rule();
+    Rule identifiers = rule();
     Rule boolean_ = rule();
     Rule number = rule();
     Rule text = rule();
@@ -105,16 +108,25 @@ public class JudithParser extends Rule {
                 choice(methodCall, expression7)
         );
         expression7.is(
-                expression8
+                choice(block, lambda, lambdaBlock, expression8)
         );
         expression8.is(
                 choice(braces, text, number, boolean_, reference)
         );
         methodCall.is(
-                expression6, ".", identifier, expressions
+                expression6, ".", identifier, parameters
         );
-        expressions.is(
+        parameters.is(
                 optional("(", w, expression, repeat(w, ",", w, expression), w, ")")
+        );
+        lambda.is(
+                "(", w, identifiers, w, "->", w, expression, w, ")"
+        );
+        lambdaBlock.is(
+                "[", w, identifiers, w, "->", w, statements, w, "]"
+        );
+        identifiers.is(
+                identifier, repeat(w, ",", w, identifier)
         );
         braces.is(
                 "(", w, expression, w, ")"
@@ -267,6 +279,16 @@ public class JudithParser extends Rule {
                 return transformPrefixOperation(objects);
             }
         });
+        expression7.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                Object object = objects.get(0);
+                if (object instanceof Block) {
+                    return new LambdaBlock(((Block)object).getStatements());
+                }
+                return object;
+            }
+        });
         methodCall.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
@@ -276,7 +298,7 @@ public class JudithParser extends Rule {
                 return new MethodCall(callee, methodName, parameters);
             }
         });
-        expressions.transform(new Transformation() {
+        parameters.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
                 List<Expression> result = new ArrayList<Expression>();
@@ -284,6 +306,32 @@ public class JudithParser extends Rule {
                     result.add((Expression) objects.get(i));
                 }
                 return result.toArray(new Expression[result.size()]);
+            }
+        });
+        lambda.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                String[] identifiers = (String[]) objects.get(2);
+                Expression expression = (Expression) objects.get(6);
+                return new Lambda(identifiers, expression);
+            }
+        });
+        lambdaBlock.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                String[] identifiers = (String[]) objects.get(2);
+                Statement[] statements = (Statement[]) objects.get(6);
+                return new LambdaBlock(identifiers, statements);
+            }
+        });
+        identifiers.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                List<String> result = new ArrayList<String>();
+                for (int i=0; i<objects.size(); i+=4) {
+                    result.add((String) objects.get(i));
+                }
+                return result.toArray(new String[result.size()]);
             }
         });
         braces.transform(new Transformation() {
