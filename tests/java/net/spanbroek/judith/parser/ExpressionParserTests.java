@@ -85,6 +85,14 @@ public class ExpressionParserTests {
     }
 
     @Test
+    public void parsesAlteration() {
+        ObjectDeclaration[] objects = {new ObjectDeclaration("x", new Number(1))};
+        Method[] methods = {new Method("y", new String[]{}, new Statement[]{})};
+        Alteration alteration = new Alteration(new Reference("a"), objects, methods);
+        assertEquals(alteration, parser.parse("a |[ object x := 1 method y [] ]|"));
+    }
+
+    @Test
     public void parsesLambdas() {
         Lambda lambda = new Lambda(new String[]{"a", "b"}, methodCall("a", "plus", "b"));
         assertEquals(lambda, parser.parse("( a , b -> a+b )"));

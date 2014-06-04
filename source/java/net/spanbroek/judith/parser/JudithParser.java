@@ -36,6 +36,7 @@ public class JudithParser extends Rule {
     Rule expression8 = rule();
     Rule methodCall = rule();
     Rule parameters = rule();
+    Rule alteration = rule();
     Rule lambda = rule();
     Rule lambdaBlock = rule();
     Rule braces = rule();
@@ -60,7 +61,15 @@ public class JudithParser extends Rule {
         setupTransformations();
     }
 
+    @Override
+    public Program parse(String input) {
+        return (Program) super.parse(input);
+    }
+
     private void setupRules() {
+        this.is(
+                w, statements, w
+        );
         statements.is(
                 optional(statement, repeat(w, statement))
         );
@@ -107,7 +116,7 @@ public class JudithParser extends Rule {
                 choice(concat(choice("not", "-"), w, expression5), expression6)
         );
         expression6.is(
-                choice(methodCall, expression7)
+                choice(methodCall, alteration, expression7)
         );
         expression7.is(
                 choice(block, lambda, lambdaBlock, expression8)
@@ -120,6 +129,9 @@ public class JudithParser extends Rule {
         );
         parameters.is(
                 optional("(", w, expression, repeat(w, ",", w, expression), w, ")")
+        );
+        alteration.is(
+                expression6, w, "|[", repeat(w, choice(object, method)), w, "]|"
         );
         lambda.is(
                 "(", w, identifiers, w, "->", w, expression, w, ")"
@@ -187,6 +199,12 @@ public class JudithParser extends Rule {
     }
 
     private void setupTransformations() {
+        this.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return new Program((Statement[]) objects.get(1));
+            }
+        });
         statements.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
@@ -314,6 +332,24 @@ public class JudithParser extends Rule {
                     result.add((Expression) objects.get(i));
                 }
                 return result.toArray(new Expression[result.size()]);
+            }
+        });
+        alteration.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                Expression operand = (Expression) objects.get(0);
+                List<ObjectDeclaration> objectDeclarationList = new ArrayList<ObjectDeclaration>();
+                List<Method> methodList = new ArrayList<Method>();
+                for (int i=4; i<objects.size() - 1; i+=2) {
+                    if (objects.get(i) instanceof ObjectDeclaration) {
+                        objectDeclarationList.add((ObjectDeclaration) objects.get(i));
+                    } else {
+                        methodList.add((Method) objects.get(i));
+                    }
+                }
+                ObjectDeclaration[] objectDeclarations = objectDeclarationList.toArray(new ObjectDeclaration[objectDeclarationList.size()]);
+                Method[] methods = methodList.toArray(new Method[methodList.size()]);
+                return new Alteration(operand, objectDeclarations, methods);
             }
         });
         lambda.transform(new Transformation() {

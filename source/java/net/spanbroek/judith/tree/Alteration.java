@@ -1,5 +1,7 @@
 package net.spanbroek.judith.tree;
 
+import java.util.Arrays;
+
 public class Alteration implements Expression {
 
     private Expression operand;
@@ -28,4 +30,23 @@ public class Alteration implements Expression {
         visitor.visit(this);
     }
 
+    @Override
+    public String toString() {
+        String result = operand + "\n|[";
+        for (ObjectDeclaration object : objects) {
+            result += "\n  " + object;
+        }
+        for (Method method : methods) {
+            result += "\n  " + method;
+        }
+        return result + "\n]|";
+    }
+
+    @Override
+    public boolean equals(Object that) {
+        return that instanceof Alteration &&
+                operand.equals(((Alteration)that).operand) &&
+                Arrays.equals(objects, ((Alteration)that).objects) &&
+                Arrays.equals(methods, ((Alteration)that).methods);
+    }
 }
