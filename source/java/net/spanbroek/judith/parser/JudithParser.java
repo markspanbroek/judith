@@ -24,6 +24,7 @@ public class JudithParser extends Rule {
     Rule do_ = rule();
     Rule conditionals = rule();
     Rule conditional = rule();
+    Rule block = rule();
     Rule expression = rule();
     Rule expression1 = rule();
     Rule expression2 = rule();
@@ -59,7 +60,7 @@ public class JudithParser extends Rule {
                 optional(statement, repeat(w, statement))
         );
         statement.is(
-                choice(object, assignment, if_, do_)
+                choice(object, assignment, if_, do_, block)
         );
         object.is(
                 "object", w, identifier, w, ":=", w, expression
@@ -78,6 +79,9 @@ public class JudithParser extends Rule {
         );
         conditional.is(
                 expression, w, statements
+        );
+        block.is(
+                "[", w, statements, w, "]"
         );
         expression.is(
                 optional(expression, w, choice("and", "or"), w), expression1
@@ -219,6 +223,12 @@ public class JudithParser extends Rule {
                 Expression expression = (Expression)objects.get(0);
                 Statement[] statements = (Statement[])objects.get(2);
                 return new Conditional(expression, statements);
+            }
+        });
+        block.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                return new Block((Statement[]) objects.get(2));
             }
         });
         expression.transform(new Transformation() {

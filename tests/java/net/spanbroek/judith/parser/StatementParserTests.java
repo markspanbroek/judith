@@ -32,15 +32,15 @@ public class StatementParserTests {
 
     @Test
     public void parsesIfStatement() {
-        Statement[] statements = { new Assignment("a", new Number(1)) };
-        Conditional[] conditionals = { new Conditional(new Boolean(true), statements) };
+        Statement[] statements = {new Assignment("a", new Number(1))};
+        Conditional[] conditionals = {new Conditional(new Boolean(true), statements)};
         assertEquals(new If(conditionals), parser.parse("if true a := 1 fi"));
     }
 
     @Test
     public void parsesIfStatementWithMultipleConditions() {
-        Statement[] statements1 = { new Assignment("a", new Number(1)) };
-        Statement[] statements2 = { new Assignment("b", new Number(2)) };
+        Statement[] statements1 = {new Assignment("a", new Number(1))};
+        Statement[] statements2 = {new Assignment("b", new Number(2))};
         Conditional conditional1 = new Conditional(new Boolean(true), statements1);
         Conditional conditional2 = new Conditional(new Boolean(false), statements2);
         Conditional[] conditionals = {conditional1, conditional2};
@@ -49,8 +49,14 @@ public class StatementParserTests {
 
     @Test
     public void parsesDoStatement() {
-        Statement[] statements = { new Assignment("a", new Number(1)) };
-        Conditional[] conditionals = { new Conditional(new Boolean(true), statements) };
+        Statement[] statements = {new Assignment("a", new Number(1))};
+        Conditional[] conditionals = {new Conditional(new Boolean(true), statements)};
         assertEquals(new Do(conditionals), parser.parse("do true a := 1 od"));
+    }
+
+    @Test
+    public void parsesBlock() {
+        Statement[] statements = {new Assignment("a", new Number(1)), new Assignment("b", new Number(2))};
+        assertEquals(new Block(statements), parser.parse("[ a:=1 b:=2 ]"));
     }
 }
