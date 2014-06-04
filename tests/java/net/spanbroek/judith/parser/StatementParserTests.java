@@ -46,4 +46,11 @@ public class StatementParserTests {
         Conditional[] conditionals = {conditional1, conditional2};
         assertEquals(new If(conditionals), parser.parse("if true a := 1 || false b := 2 fi"));
     }
+
+    @Test
+    public void parsesDoStatement() {
+        Statement[] statements = { new Assignment("a", new Number(1)) };
+        Conditional[] conditionals = { new Conditional(new Boolean(true), statements) };
+        assertEquals(new Do(conditionals), parser.parse("do true a := 1 od"));
+    }
 }

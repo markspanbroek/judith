@@ -21,6 +21,7 @@ public class JudithParser extends Rule {
     Rule object = rule();
     Rule assignment = rule();
     Rule if_ = rule();
+    Rule do_ = rule();
     Rule conditionals = rule();
     Rule conditional = rule();
     Rule expression = rule();
@@ -58,7 +59,7 @@ public class JudithParser extends Rule {
                 optional(statement, repeat(w, statement))
         );
         statement.is(
-                choice(object, assignment, if_)
+                choice(object, assignment, if_, do_)
         );
         object.is(
                 "object", w, identifier, w, ":=", w, expression
@@ -68,6 +69,9 @@ public class JudithParser extends Rule {
         );
         if_.is(
                 "if", w, conditionals, w, "fi"
+        );
+        do_.is(
+                "do", w, conditionals, w, "od"
         );
         conditionals.is(
                 conditional, repeat(w, "||", w, conditional)
@@ -190,6 +194,13 @@ public class JudithParser extends Rule {
             public Object transform(List<Object> objects, Context context) {
                 Conditional[] conditionals = (Conditional[]) objects.get(2);
                 return new If(conditionals);
+            }
+        });
+        do_.transform(new Transformation() {
+            @Override
+            public Object transform(List<Object> objects, Context context) {
+                Conditional[] conditionals = (Conditional[]) objects.get(2);
+                return new Do(conditionals);
             }
         });
         conditionals.transform(new Transformation() {
