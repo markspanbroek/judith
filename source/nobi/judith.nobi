@@ -1,45 +1,45 @@
 # judith language specification
-# 2010-03-20
-# Mark Spanbroek
 
-program      = w statements w
-statements   = (statement (w statement)*)?
-statement    = object | assignment | if | do | methodcall | block
+program        = w statements w
+statements     = (statement (w statement)*)?
+statement      = object | assignment | if | do | methodCall | block
 
-object       = "object" w identifier w ":=" w expression
-assignment   = identifier w ":=" w expression
-if           = "if" w conditionals w "fi"
-do           = "do" w conditionals w "od"
-conditionals = conditional (w "||" w conditional)*
-conditional  = expression w statements
-block        = "[" w statements w "]"
+object         = "object" w identifier w ":=" w expression
+assignment     = identifier w ":=" w expression
+if             = "if" w conditionals w "fi"
+do             = "do" w conditionals w "od"
+conditionals   = conditional (w "||" w conditional)*
+conditional    = expression w statements
+block          = "[" w statements w "]"
 
-expression   = (expression w ("and"|"or") w)? expression1
-expression1  = (expression1 w ("="|"<="|">="|"<"|">"|":") w)? expression2
-expression2  = (expression2 w ("+"|"-") w)? expression3
-expression3  = (expression3 w ("*"|"/") w)? expression4
-expression4  = (expression4 w "^" w)? expression5
-expression5  = ("not"|"-") w expression5 | expression6
-expression6  = methodcall | alteration | expression7
-expression7  = block | lambda | lambdablock | expression8
-expression8  = braces | identifier | text | number | boolean
+expression     = (expression w ("and"|"or") w)? expression1
+expression1    = (expression1 w ("="|"<="|">="|"<"|">"|":") w)? expression2
+expression2    = (expression2 w ("+"|"-") w)? expression3
+expression3    = (expression3 w ("*"|"/") w)? expression4
+expression4    = (expression4 w "^" w)? expression5
+expression5    = ("not"|"-") w expression5 | expression6
+expression6    = methodCall | alteration | expression7
+expression7    = block | lambda | lambdaBlock | expression8
+expression8    = braces | text | number | boolean | reference
 
-methodcall   = (expression6 ".")? identifier (expressions)?
-expressions  = "(" w expression (w "," w expression)* w ")"
-alteration   = expression6 w "|[" (w (object|method))* w "]|"
-lambda       = "(" w identifier (w "," w identifier)* w "->" w expression w ")"
-lambdablock  = "[" w identifier (w "," w identifier)* w "->" w statements w "]"
-braces       = "(" w expression w ")"
-method       = "method" w identifier (identifiers)? w "[" w statements w "]"
-identifiers  = "(" w identifier (w "," w identifier)* w ")"
+methodCall     = expression6 "." identifier parameters
+parameters     = ( "(" w expression (w "," w expression)* w ")" )?
+alteration     = expression6 w "|[" (w (object|method))* w "]|"
+lambda         = "(" w identifiers w "->" w expression w ")"
+lambdaBlock    = "[" w identifiers w "->" w statements w "]"
+braces         = "(" w expression w ")"
+method         = "method" w identifier parameterNames w "[" w statements w "]"
+parameterNames = ( "(" w identifiers w ")" )?
+identifiers    = identifier (w "," w identifier)*
+reference      = identifier
 
-boolean      = "true" | "false"
-number       = digit+ ("." digit+)?
-text         = ["] [~"]* ["]
-identifier   = digit* letter (digit|letter)*
+boolean        = "true" | "false"
+number         = digit+ ("." digit+)?
+text           = ["] [~"]* ["]
+identifier     = digit* letter (digit|letter)*
 
-digit        = [0..9]
-letter       = [a..z] | [A..Z] | "?" | "'"
+digit          = [0..9]
+letter         = [a..z] | [A..Z] | "?" | "'"
 
-w            = (" " | [0x0a] | comment)*
-comment      = "#" [~0x0a]*
+w              = (" " | [0x0a] | comment)*
+comment        = "#" [~0x0a]*
