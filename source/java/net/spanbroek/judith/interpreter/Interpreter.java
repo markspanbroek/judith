@@ -1,9 +1,12 @@
 package net.spanbroek.judith.interpreter;
 
-import net.spanbroek.judith.parser.Parser;
-import net.spanbroek.judith.tree.*;
-import net.spanbroek.judith.runtime.*;
 import net.spanbroek.judith.Exception;
+import net.spanbroek.judith.parser.JudithParser;
+import net.spanbroek.judith.runtime.Scope;
+import net.spanbroek.judith.runtime.World;
+import net.spanbroek.judith.tree.Program;
+import net.spanbroek.judith.tree.Statement;
+
 import java.io.*;
 
 public class Interpreter {
@@ -33,8 +36,13 @@ public class Interpreter {
     }
 
     public void interpret(Reader reader, String filename) throws IOException {
-        Program program = Parser.parse(reader, filename);
+        Program program = new JudithParser(filename).parse(readFully(reader));
         interpret(program);
+    }
+
+    static String readFully(Reader reader) {
+        java.util.Scanner s = new java.util.Scanner(reader).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     public void interpret(String string) {

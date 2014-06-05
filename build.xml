@@ -6,25 +6,7 @@
     </fileset>
   </path>
 
-  <target name='sablecc.check'>
-    <uptodate
-        property='sablecc.notneeded'
-        srcfile='source/sablecc/judith.sablecc'
-        targetfile='build/java/net/spanbroek/judith/parser/lexer/Lexer.java'
-    />
-  </target>
-  
-  <target name='sablecc' depends='sablecc.check' unless='sablecc.notneeded'>
-    <mkdir dir='build/java'/>
-    <taskdef name='sablecc' classname='org.sablecc.ant.taskdef.Sablecc'>
-      <classpath refid='classpath'/>
-    </taskdef>
-    <sablecc src='source/sablecc' outputdirectory='build/java'>
-      <include name='**/*.sablecc'/>
-    </sablecc>
-  </target>
-
-  <target name='compile' depends='sablecc'>
+  <target name='compile'>
     <mkdir dir='build/classes'/>
     <javac destdir='build/classes' debug='true' includeantruntime="false">
       <src path="build/java"/>
@@ -50,6 +32,7 @@
     >
       <fileset dir='build/classes'/>
       <fileset dir='source/jar'/>
+      <zipgroupfileset dir='libraries' includes='parsing-java.jar'/>
     </jar>
   </target>
 

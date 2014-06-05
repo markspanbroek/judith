@@ -16,6 +16,8 @@ import static net.spanbroek.parsing.Parsing.*;
 
 public class JudithParser extends Rule {
 
+    private String filename;
+
     Rule statements = rule();
     Rule statement = rule();
     Rule object = rule();
@@ -56,6 +58,11 @@ public class JudithParser extends Rule {
     Map<String, String> operators;
 
     public JudithParser() {
+        this("unknown");
+    }
+
+    public JudithParser(String filename) {
+        this.filename = filename;
         setupRules();
         setupOperators();
         setupTransformations();
@@ -272,37 +279,37 @@ public class JudithParser extends Rule {
         expression.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return transformBinaryOperation(objects);
+                return transformBinaryOperation(objects, context);
             }
         });
         expression1.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return transformBinaryOperation(objects);
+                return transformBinaryOperation(objects, context);
             }
         });
         expression2.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return transformBinaryOperation(objects);
+                return transformBinaryOperation(objects, context);
             }
         });
         expression3.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return transformBinaryOperation(objects);
+                return transformBinaryOperation(objects, context);
             }
         });
         expression4.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return transformBinaryOperation(objects);
+                return transformBinaryOperation(objects, context);
             }
         });
         expression5.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return transformPrefixOperation(objects);
+                return transformPrefixOperation(objects, context);
             }
         });
         expression7.transform(new Transformation() {
@@ -321,7 +328,7 @@ public class JudithParser extends Rule {
                 Expression callee = (Expression) objects.get(0);
                 String methodName = (String) objects.get(2);
                 Expression[] parameters = (Expression[]) objects.get(3);
-                return new MethodCall(callee, methodName, parameters);
+                return new MethodCall(callee, methodName, parameters, getLocation(context));
             }
         });
         parameters.transform(new Transformation() {
@@ -405,7 +412,7 @@ public class JudithParser extends Rule {
         reference.transform(new Transformation() {
             @Override
             public Object transform(List<Object> objects, Context context) {
-                return new Reference((String) objects.get(0));
+                return new Reference((String) objects.get(0), getLocation(context));
             }
         });
         boolean_.transform(new Transformation() {
@@ -444,22 +451,37 @@ public class JudithParser extends Rule {
         });
     }
 
-    private Object transformBinaryOperation(List<Object> objects) {
+    private Object transformBinaryOperation(List<Object> objects, Context context) {
         if (objects.size() > 1) {
             Expression left = (Expression) objects.get(0);
             Expression right = (Expression) objects.get(4);
             String operator = (String) objects.get(2);
-            return new MethodCall(left, operators.get(operator), new Expression[]{right});
+            return new MethodCall(
+                    left,
+                    operators.get(operator),
+                    new Expression[]{right},
+                    getLocation(context));
         }
         return objects.get(0);
     }
 
-    private Object transformPrefixOperation(List<Object> objects) {
+    private Object transformPrefixOperation(List<Object> objects, Context context) {
         if (objects.size() > 1) {
             String operator = (String) objects.get(0);
             Expression operand = (Expression) objects.get(2);
-            return new MethodCall(operand, operators.get(operator), new Expression[]{});
+            return new MethodCall(
+                    operand,
+                    operators.get(operator),
+                    new Expression[]{},
+                    getLocation(context));
         }
         return objects.get(0);
+    }
+
+    private Location getLocation(Context context) {
+        return new Location(
+                filename,
+                context.getPosition().getLineNumber(),
+                context.getPosition().getColumnNumber());
     }
 }
